@@ -43,6 +43,7 @@ kotlin {
             implementation(compose.components.resources)
             implementation(compose.components.uiToolingPreview)
             implementation(project(":lib"))
+            implementation("androidx.navigation:navigation-compose:2.6.0")
         }
         desktopMain.dependencies {
             implementation(compose.desktop.currentOs)
