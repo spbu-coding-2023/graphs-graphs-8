@@ -3,5 +3,7 @@
 
 # Ignore Gradle build output directory
 build
+local.properties
 
+.kotlin/
 /.idea/
