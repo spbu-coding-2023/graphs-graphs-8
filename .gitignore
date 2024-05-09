@@ -2,12 +2,15 @@
 .gradle
 
 # Ignore Gradle build output directory
-build
+**/build/
+!src/**/build/
+
 local.properties
 
 .kotlin/
 /.idea/
 kls_database.db
+
 # ---- macOS ----
 # General
 .DS_Store
@@ -16,7 +19,6 @@ kls_database.db
 
 # Icon must end with two \r
 Icon
-
 
 # Thumbnails
 ._*
@@ -37,9 +39,6 @@ Network Trash Folder
 Temporary Items
 .apdisk
 
-# ---- Gradle ----
-**/build/
-!src/**/build/
 
 # Ignore Gradle GUI config
 gradle-app.setting
