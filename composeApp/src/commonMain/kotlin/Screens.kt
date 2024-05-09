@@ -37,7 +37,7 @@ fun MainScreen(navController: NavController){
             TextField(
                 value = search,
                 textStyle = bigStyle,
-                placeholder = { Text(text = "Search a graph", style = bigStyle) },
+                placeholder = { Text(text = "Enter graph name", style = bigStyle) },
                 onValueChange = { search = it },
                 modifier = Modifier
                     .weight(1f)
