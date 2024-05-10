@@ -7,9 +7,3 @@ mergeable:
         no_empty:
           enabled: true
           message: "Description should not be empty."
-
-      - do: approvals
-        min:
-          count: 1
-        required:
-          assignees: true
