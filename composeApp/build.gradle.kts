@@ -1,3 +1,5 @@
+import com.android.build.gradle.internal.lint.AndroidLintAnalysisTask
+import com.android.build.gradle.internal.lint.LintModelWriterTask
 import org.jetbrains.compose.desktop.application.dsl.TargetFormat
 
 plugins {
@@ -72,6 +74,13 @@ android {
     }
     dependencies {
         debugImplementation(libs.compose.ui.tooling)
+        tasks.withType<AndroidLintAnalysisTask>{
+            dependsOn("generateResourceAccessorsForAndroidUnitTest")
+        }
+        tasks.withType<LintModelWriterTask>{
+            dependsOn("generateResourceAccessorsForAndroidUnitTest")
+        }
+
     }
 }
 
