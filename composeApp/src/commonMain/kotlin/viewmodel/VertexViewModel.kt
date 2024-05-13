@@ -1,4 +1,7 @@
 package viewmodel
 
-class VertexViewModel {
+import androidx.lifecycle.ViewModel
+
+class VertexViewModel(index: Int): ViewModel() {
+    val index : Int = index
 }

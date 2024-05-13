@@ -6,10 +6,12 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.runtime.*
@@ -22,11 +24,8 @@ import androidx.compose.ui.zIndex
 import androidx.navigation.NavController
 import androidx.lifecycle.ViewModel
 import lib.graph.Graph
-import model.GraphViewModel
-import ui.VertexView
-import ui.bigStyle
-import ui.bounceClick
-import ui.defaultStyle
+import view.views.GraphView
+import viewmodel.GraphViewModel
 
 sealed class Screen(val route: String){
     object MainScreen: Screen("main_screen")
@@ -57,7 +56,7 @@ class MainScreenViewModel : ViewModel(){
 fun MainScreen(navController: NavController){
     val graphs = remember { mutableStateListOf<String>() }
     var search by  remember { mutableStateOf("") }
-    Column(modifier = Modifier.fillMaxSize().padding(16.dp)) {
+    Column(modifier = Modifier.fillMaxSize().background(DefaultColors.background).padding(16.dp)) {
         Row(modifier = Modifier.fillMaxWidth().height(100.dp)) {
             // Search tab
             TextField(
@@ -70,10 +69,10 @@ fun MainScreen(navController: NavController){
                     .fillMaxHeight()
                     .border(
                         width = 4.dp,
-                        color = MaterialTheme.colors.primary,
-                        shape = RoundedCornerShape(30.dp)
+                        color = DefaultColors.primary,
+                        shape = RoundedCornerShape(45.dp)
                     ),
-                shape = RoundedCornerShape(30.dp),
+                shape = RoundedCornerShape(45.dp),
                 trailingIcon = {
                     Icon(
                         Icons.Filled.Search, contentDescription = "SearchIcon", modifier = Modifier
@@ -95,13 +94,13 @@ fun MainScreen(navController: NavController){
                 modifier = Modifier
                     .padding(horizontal = 10.dp)
                     .size(100.dp)
-                    .clip(shape = RoundedCornerShape(25.dp))
+                    .clip(shape = RoundedCornerShape(45.dp))
                     .clickable { }
-                    .background(MaterialTheme.colors.primary)
+                    .background(DefaultColors.primary)
                     .border(
                         width = 5.dp,
                         color = Color.Black,
-                        shape = RoundedCornerShape(25.dp)
+                        shape = RoundedCornerShape(45.dp)
                     )
                     .bounceClick(),
             ) {
@@ -116,15 +115,15 @@ fun MainScreen(navController: NavController){
             IconButton(
                 onClick = { navController.navigate(Screen.SettingsScreen.route) },
                 modifier = Modifier
-                    .padding(horizontal = 20.dp)
+                    .padding(horizontal = 10.dp)
                     .size(100.dp)
-                    .clip(shape = RoundedCornerShape(25.dp))
+                    .clip(shape = RoundedCornerShape(45.dp))
                     .clickable { }
-                    .background(MaterialTheme.colors.primary)
+                    .background(DefaultColors.primary)
                     .border(
                         width = 5.dp,
                         color = Color.Black,
-                        shape = RoundedCornerShape(25.dp)
+                        shape = RoundedCornerShape(45.dp)
                     )
                     .bounceClick(),
 
@@ -137,26 +136,46 @@ fun MainScreen(navController: NavController){
             }
         }
 
+        Spacer(modifier = Modifier.height(30.dp))
+
         LazyColumn(modifier = Modifier.fillMaxWidth()) {
-            items(graphs) { graph ->
-                if ( !graph.startsWith(search) ) return@items
+            itemsIndexed(graphs) { index, graph ->
+                if (!graph.startsWith(search)) return@itemsIndexed
+                Row(modifier = Modifier.padding(vertical = 15.dp)) {
                     Button(
-                        onClick = {navController.navigate(Screen.GraphScreen.route)},
+                        onClick = { navController.navigate(Screen.GraphScreen.route) },
                         modifier = Modifier
-                            .padding(20.dp)
                             .fillMaxWidth()
                             .height(100.dp)
+                            .weight(1f)
                             .clip(shape = RoundedCornerShape(45.dp))
-
                             .border(
                                 width = 5.dp,
                                 color = Color.Black,
                                 shape = RoundedCornerShape(45.dp)
-                            )
-                            .background(MaterialTheme.colors.primary)
+                            ),
+                        colors = ButtonDefaults.buttonColors(backgroundColor = DefaultColors.primary)
                     ) {
                         Text(text = graph, style = bigStyle, modifier = Modifier.clip(RoundedCornerShape(45.dp)))
                     }
+
+                    Spacer(modifier = Modifier.width(10.dp))
+
+                    IconButton(
+                        onClick = { graphs.removeAt(index) },
+                        modifier = Modifier
+                            .padding(horizontal = 10.dp)
+                            .size(100.dp)
+                            .clip(shape = RoundedCornerShape(45.dp))
+                            .background(Color(0xe8,0x08,0x3e))
+                            .border(5.dp , color = Color.Black, shape = RoundedCornerShape(45.dp))
+                            .bounceClick(),
+                    ){
+                        Icon(Icons.Filled.Delete, contentDescription = "Remove graph", modifier = Modifier
+                            .padding(5.dp)
+                            .fillMaxSize())
+                    }
+                }
             }
         }
     }
@@ -164,37 +183,35 @@ fun MainScreen(navController: NavController){
 
 @Composable
 fun GraphScreen(navController: NavController, graphViewModel : GraphViewModel = GraphViewModel()) {
-    val graph = remember { mutableListOf(4) }
     Button(
         onClick = { navController.navigate(Screen.MainScreen.route) },
         modifier = Modifier
             .offset (x = 16.dp, y = 16.dp)
             .clip(shape = RoundedCornerShape(45.dp))
             .border(5.dp, color = Color.Black, shape = RoundedCornerShape(45.dp))
-            .background(MaterialTheme.colors.primary)
+            .background(DefaultColors.primary)
             .size(120.dp, 70.dp)
             .zIndex(1f)
     ) {
         Text("Home", style = defaultStyle)
     }
     Button(
-        onClick = { graph.add(2) },
+        onClick = { graphViewModel.addVertex()},
         modifier = Modifier
             .offset(x = 156.dp, y = 16.dp)
             .clip(shape = RoundedCornerShape(45.dp))
             .border(5.dp, color = Color.Black, shape = RoundedCornerShape(45.dp))
-            .background(MaterialTheme.colors.primary)
+            .background(DefaultColors.primary)
             .size(120.dp, 70.dp)
-            .zIndex(1f)
+            .zIndex(1f),
+        colors = ButtonDefaults.buttonColors(backgroundColor = DefaultColors.primary)
     ) {
         Text("Add", style = defaultStyle)
     }
 
-    Box( modifier = Modifier.fillMaxSize()){
-        for (vertex in graph){
-            VertexView(vertex)
-        }
-    }
+    Box(modifier = Modifier.fillMaxSize()){
+        GraphView(graphViewModel)
+    }   
 }
 
 @Composable
@@ -205,7 +222,8 @@ fun SettingsScreen(navController: NavController){
             modifier = Modifier
                 .padding(16.dp)
                 .border(width = 3.dp, color = Color.Black)
-                .bounceClick()) {
+                .bounceClick(),
+            colors = ButtonDefaults.buttonColors(backgroundColor = DefaultColors.background)) {
             Text("Назад", style = defaultStyle)
         }
     }
