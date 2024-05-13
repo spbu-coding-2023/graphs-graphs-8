@@ -6,7 +6,8 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import lib.graph.Graph
 
-class GraphViewModel(graph : Graph = Graph()): ViewModel() {
+class GraphViewModel(name : String, graph : Graph = Graph()): ViewModel() {
+    val name by mutableStateOf(name)
     val vertices = mutableStateListOf<VertexViewModel>()
     init {
         for (vertex in graph.vertices) {

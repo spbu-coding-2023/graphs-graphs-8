@@ -30,7 +30,7 @@ fun VertexView(vertexViewModel: VertexViewModel) {
         .offset {IntOffset(offsetX.roundToInt(), offsetY.roundToInt())}
         .clip(shape = CircleShape)
         .size(120.dp)
-        .background(DefaultColors.background)
+        .background(DefaultColors.primary)
         .border(5.dp, Color.Black, CircleShape)
         .pointerInput(Unit) {
             detectDragGestures { change, dragAmount ->
