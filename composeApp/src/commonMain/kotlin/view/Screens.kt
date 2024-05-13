@@ -1,5 +1,6 @@
-package mainscreen
+package view
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -17,10 +18,15 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.zIndex
 import androidx.navigation.NavController
-import bounceClick
-import visualizer.styling.bigStyle
-import visualizer.styling.defaultStyle
+import androidx.lifecycle.ViewModel
+import lib.graph.Graph
+import model.GraphViewModel
+import ui.VertexView
+import ui.bigStyle
+import ui.bounceClick
+import ui.defaultStyle
 
 sealed class Screen(val route: String){
     object MainScreen: Screen("main_screen")
@@ -28,16 +34,36 @@ sealed class Screen(val route: String){
     object SettingsScreen: Screen("settings_screen")
 }
 
+class MainScreenViewModel : ViewModel(){
+    val graphs = mutableStateOf(arrayListOf<Graph>())
+    val searchText = mutableStateOf("")
+
+    fun addGraph(graph: Graph){
+        graphs.value.add(graph)
+    }
+    fun removeGraph(index : Int){
+        if (index in graphs.value.indices){
+            graphs.value.removeAt(index)
+        }
+        else throw IllegalArgumentException("graph index out of range")
+    }
+
+    fun changeSearchText(text: String){
+        searchText.value = text
+    }
+}
+
 @Composable
 fun MainScreen(navController: NavController){
     val graphs = remember { mutableStateListOf<String>() }
     var search by  remember { mutableStateOf("") }
-    Column(modifier = Modifier.fillMaxSize()) {
+    Column(modifier = Modifier.fillMaxSize().padding(16.dp)) {
         Row(modifier = Modifier.fillMaxWidth().height(100.dp)) {
+            // Search tab
             TextField(
                 value = search,
                 textStyle = bigStyle,
-                placeholder = { Text(text = "Search a graph", style = bigStyle) },
+                placeholder = { Text(text = "Enter graph name", style = bigStyle) },
                 onValueChange = { search = it },
                 modifier = Modifier
                     .weight(1f)
@@ -45,9 +71,9 @@ fun MainScreen(navController: NavController){
                     .border(
                         width = 4.dp,
                         color = MaterialTheme.colors.primary,
-                        shape = RoundedCornerShape(10.dp)
+                        shape = RoundedCornerShape(30.dp)
                     ),
-                shape = RoundedCornerShape(10.dp),
+                shape = RoundedCornerShape(30.dp),
                 trailingIcon = {
                     Icon(
                         Icons.Filled.Search, contentDescription = "SearchIcon", modifier = Modifier
@@ -71,9 +97,10 @@ fun MainScreen(navController: NavController){
                     .size(100.dp)
                     .clip(shape = RoundedCornerShape(25.dp))
                     .clickable { }
+                    .background(MaterialTheme.colors.primary)
                     .border(
                         width = 5.dp,
-                        color = MaterialTheme.colors.primary,
+                        color = Color.Black,
                         shape = RoundedCornerShape(25.dp)
                     )
                     .bounceClick(),
@@ -93,9 +120,10 @@ fun MainScreen(navController: NavController){
                     .size(100.dp)
                     .clip(shape = RoundedCornerShape(25.dp))
                     .clickable { }
+                    .background(MaterialTheme.colors.primary)
                     .border(
                         width = 5.dp,
-                        color = MaterialTheme.colors.primary,
+                        color = Color.Black,
                         shape = RoundedCornerShape(25.dp)
                     )
                     .bounceClick(),
@@ -112,29 +140,61 @@ fun MainScreen(navController: NavController){
         LazyColumn(modifier = Modifier.fillMaxWidth()) {
             items(graphs) { graph ->
                 if ( !graph.startsWith(search) ) return@items
-                Row(modifier = Modifier.padding(30.dp)) {
-                    Text(
-                        graph,
-                        style = bigStyle,
+                    Button(
+                        onClick = {navController.navigate(Screen.GraphScreen.route)},
                         modifier = Modifier
+                            .padding(20.dp)
                             .fillMaxWidth()
+                            .height(100.dp)
                             .clip(shape = RoundedCornerShape(45.dp))
+
                             .border(
-                            width = 5.dp,
-                            color = MaterialTheme.colors.primary,
+                                width = 5.dp,
+                                color = Color.Black,
                                 shape = RoundedCornerShape(45.dp)
-                        )
-                            .padding(vertical = 16.dp, horizontal = 30.dp)
-                    )
-                }
+                            )
+                            .background(MaterialTheme.colors.primary)
+                    ) {
+                        Text(text = graph, style = bigStyle, modifier = Modifier.clip(RoundedCornerShape(45.dp)))
+                    }
             }
         }
     }
 }
 
 @Composable
-fun GraphScreen(navController: NavController){
-    Text("Здесь будут графы", style= defaultStyle)
+fun GraphScreen(navController: NavController, graphViewModel : GraphViewModel = GraphViewModel()) {
+    val graph = remember { mutableListOf(4) }
+    Button(
+        onClick = { navController.navigate(Screen.MainScreen.route) },
+        modifier = Modifier
+            .offset (x = 16.dp, y = 16.dp)
+            .clip(shape = RoundedCornerShape(45.dp))
+            .border(5.dp, color = Color.Black, shape = RoundedCornerShape(45.dp))
+            .background(MaterialTheme.colors.primary)
+            .size(120.dp, 70.dp)
+            .zIndex(1f)
+    ) {
+        Text("Home", style = defaultStyle)
+    }
+    Button(
+        onClick = { graph.add(2) },
+        modifier = Modifier
+            .offset(x = 156.dp, y = 16.dp)
+            .clip(shape = RoundedCornerShape(45.dp))
+            .border(5.dp, color = Color.Black, shape = RoundedCornerShape(45.dp))
+            .background(MaterialTheme.colors.primary)
+            .size(120.dp, 70.dp)
+            .zIndex(1f)
+    ) {
+        Text("Add", style = defaultStyle)
+    }
+
+    Box( modifier = Modifier.fillMaxSize()){
+        for (vertex in graph){
+            VertexView(vertex)
+        }
+    }
 }
 
 @Composable

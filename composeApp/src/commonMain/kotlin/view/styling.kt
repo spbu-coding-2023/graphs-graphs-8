@@ -1,4 +1,4 @@
-package visualizer.styling
+package view
 
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.text.TextStyle
