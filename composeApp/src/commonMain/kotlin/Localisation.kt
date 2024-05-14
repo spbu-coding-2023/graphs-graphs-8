@@ -1,3 +1,4 @@
+
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
 import view.screens.SettingsJSON
@@ -11,8 +12,6 @@ class TranslationList(val transList: List<TranslationPair>)
 
 fun localisation(text: String): String{
     try {
-
-        println("HEREEEE")
         val language = Json.decodeFromString<SettingsJSON>(File("src/settings.json").readText()).language
         val data = Json.decodeFromString<TranslationList>(File("src/localisation/$language.json").readText())
         for (wordPair in data.transList) {
@@ -20,11 +19,10 @@ fun localisation(text: String): String{
                 return wordPair.localisation
             }
         }
-        println("HEREEEE")
         return text
     }
     catch (ex: Exception){
-        println(ex)
+        println("Localisation Error with code $text")
         return text
     }
 }
