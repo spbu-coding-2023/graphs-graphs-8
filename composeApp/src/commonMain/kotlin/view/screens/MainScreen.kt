@@ -19,6 +19,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import localisation
 import view.DefaultColors
 import view.bigStyle
 import view.bounceClick
@@ -33,7 +34,7 @@ fun MainScreen(navController: NavController, mainScreenViewModel: MainScreenView
             TextField(
                 value = search,
                 textStyle = bigStyle,
-                placeholder = { Text(text = "Enter graph name", style = bigStyle) },
+                placeholder = { Text(text = localisation("enter_graph_name"), style = bigStyle) },
                 onValueChange = { search = it },
                 modifier = Modifier
                     .weight(1f)

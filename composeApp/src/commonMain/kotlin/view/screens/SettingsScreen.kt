@@ -15,6 +15,7 @@ import androidx.navigation.NavController
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
+import localisation
 import view.DefaultColors
 import view.bounceClick
 import view.defaultStyle
@@ -28,7 +29,7 @@ enum class SettingType{
 }
 
 fun resetSettings(){
-    File("src/settings.json").writeText(Json.encodeToString(SettingsJSON("en-EN")))
+    File("src/settings.json").writeText(Json.encodeToString(SettingsJSON("en-US")))
 }
 
 fun makeSetting(name: SettingType, value: String){
@@ -48,22 +49,14 @@ fun makeSetting(name: SettingType, value: String){
 @Composable
 fun SettingsScreen(navController: NavController){
     Column{
-        Text(text = "我没错", fontSize = 28.sp)
-        Button(onClick = {navController.navigate(Screen.MainScreen.route)},
-            modifier = Modifier
-                .padding(16.dp)
-                .border(width = 3.dp, color = Color.Black)
-                .bounceClick(),
-            colors = ButtonDefaults.buttonColors(backgroundColor = DefaultColors.primary)) {
-            Text("Назад", style = defaultStyle)
-        }
+        Text(text = localisation("settings"), fontSize = 28.sp, modifier = Modifier.padding(horizontal = 20.dp, vertical = 20.dp))
         Button(onClick = {makeSetting(SettingType.LANGUAGE, "cn-CN")},
             modifier = Modifier
                 .padding(horizontal = 16.dp, vertical = 20.dp)
                 .border(width = 3.dp, color = Color.Black)
                 .bounceClick(),
             colors = ButtonDefaults.buttonColors(backgroundColor = DefaultColors.primary)) {
-            Text("Chinese", style = defaultStyle)
+            Text("汉语", style = defaultStyle)
         }
         Button(onClick = {makeSetting(SettingType.LANGUAGE, "ru-RU")},
             modifier = Modifier
@@ -71,7 +64,7 @@ fun SettingsScreen(navController: NavController){
                 .border(width = 3.dp, color = Color.Black)
                 .bounceClick(),
             colors = ButtonDefaults.buttonColors(backgroundColor = DefaultColors.primary)) {
-            Text("Russian", style = defaultStyle)
+            Text("Русский", style = defaultStyle)
         }
         Button(onClick = {makeSetting(SettingType.LANGUAGE, "en-US")},
             modifier = Modifier
@@ -81,5 +74,14 @@ fun SettingsScreen(navController: NavController){
             colors = ButtonDefaults.buttonColors(backgroundColor = DefaultColors.primary)) {
             Text("English", style = defaultStyle)
         }
+        Button(onClick = {navController.navigate(Screen.MainScreen.route)},
+            modifier = Modifier
+                .padding(16.dp)
+                .border(width = 3.dp, color = Color.Black)
+                .bounceClick(),
+            colors = ButtonDefaults.buttonColors(backgroundColor = DefaultColors.error)) {
+            Text(localisation("back"), style = defaultStyle, color = Color.White)
+        }
+
     }
 }
