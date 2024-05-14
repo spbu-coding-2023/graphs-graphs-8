@@ -82,6 +82,5 @@ fun SettingsScreen(navController: NavController){
             colors = ButtonDefaults.buttonColors(backgroundColor = DefaultColors.error)) {
             Text(localisation("back"), style = defaultStyle, color = Color.White)
         }
-
     }
 }
