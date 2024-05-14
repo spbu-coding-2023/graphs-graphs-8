@@ -1,7 +1,6 @@
 package lib.graph
 
-
-abstract class Graph(){
+abstract class GraphAbstract(){
     protected val graph = mutableMapOf<Int, MutableList<Int>>()
     var size = graph.size
         private set
@@ -33,17 +32,4 @@ abstract class Graph(){
     }
 
     operator fun iterator() = graph.entries.iterator()
-}
-
-class DirectedGraph: Graph(){
-    override fun addEdge(from: Int, to: Int) {
-        graph[from]?.add(to) ?: {graph[from] = mutableListOf(to)}
-    }
-}
-
-class UndirectedGraph: Graph(){
-    override fun addEdge(from: Int, to: Int) {
-        graph[from]?.add(to) ?: {graph[from] = mutableListOf(to)}
-        graph[to]?.add(from) ?: {graph[to] = mutableListOf(from)}
-    }
 }
