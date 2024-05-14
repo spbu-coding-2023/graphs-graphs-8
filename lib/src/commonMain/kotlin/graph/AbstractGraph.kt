@@ -1,9 +1,8 @@
-package lib.graph
+package graph
 
-abstract class BaseGraph(){
+abstract class AbstractGraph {
     protected val graph = mutableMapOf<Int, MutableList<Int>>()
-    var size = graph.size
-        private set
+    private var size = graph.size
 
     // temporary
     init{
@@ -18,7 +17,7 @@ abstract class BaseGraph(){
     }
 
     fun addVertex(number: Int){
-        graph.putIfAbsent(number, mutableListOf<Int>())
+        graph.putIfAbsent(number, mutableListOf())
     }
 
     abstract fun addEdge(from: Int, to: Int)
@@ -28,7 +27,7 @@ abstract class BaseGraph(){
     }
 
     fun forEach(action : (MutableList<Int>) -> Unit ) {
-        graph.forEach { number, list -> action(list) }
+        graph.forEach { (number, list) -> action(list) }
     }
 
     operator fun iterator() = graph.entries.iterator()
