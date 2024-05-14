@@ -41,6 +41,8 @@ fun GraphScreen(navController: NavController, mainScreenViewModel : MainScreenVi
     ) {
         Text("Home", style = defaultStyle)
     }
+
+    // Add vertex
     Button(
         onClick = { graphModel.addVertex()},
         modifier = Modifier
