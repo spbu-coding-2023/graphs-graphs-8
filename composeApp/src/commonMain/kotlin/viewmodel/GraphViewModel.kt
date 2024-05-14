@@ -5,13 +5,14 @@ import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import lib.graph.Graph
+import lib.graph.UndirectedGraph
 
-class GraphViewModel(name : String, graph : Graph = Graph()): ViewModel() {
+class GraphViewModel(name : String, graph : Graph = UndirectedGraph()): ViewModel() {
     val name by mutableStateOf(name)
     val vertices = mutableStateListOf<VertexViewModel>()
     init {
-        for (vertex in graph.vertices) {
-            vertices.add(VertexViewModel(vertex))
+        for (vertex in graph){
+            vertices.add(VertexViewModel(vertex.key,vertex.value))
         }
     }
 
