@@ -20,7 +20,7 @@ import view.defaultStyle
 fun SettingsScreen(navController: NavController){
     Column{
         Text(text = "Тут наверно будут настройки", fontSize = 28.sp)
-        Button(onClick = {navController.navigate(Screen.MainScreen.route)},
+        Button(onClick = {navController.popBackStack()},
             modifier = Modifier
                 .padding(16.dp)
                 .border(width = 3.dp, color = Color.Black)

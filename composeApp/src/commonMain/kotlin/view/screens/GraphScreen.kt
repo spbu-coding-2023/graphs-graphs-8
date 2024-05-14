@@ -10,6 +10,8 @@ import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
@@ -20,9 +22,11 @@ import view.DefaultColors
 import view.defaultStyle
 import view.views.GraphView
 import viewmodel.GraphViewModel
+import viewmodel.MainScreenViewModel
 
 @Composable
-fun GraphScreen(navController: NavController, graphViewModel : GraphViewModel = GraphViewModel("")) {
+fun GraphScreen(navController: NavController, mainScreenViewModel : MainScreenViewModel, graphId : Int) {
+    val graphModel by mutableStateOf(mainScreenViewModel.getGraph(graphId))
 
     // To MainScreen
     Button(
@@ -37,8 +41,10 @@ fun GraphScreen(navController: NavController, graphViewModel : GraphViewModel = 
     ) {
         Text("Home", style = defaultStyle)
     }
+
+    // Add vertex
     Button(
-        onClick = { graphViewModel.addVertex()},
+        onClick = { graphModel.addVertex()},
         modifier = Modifier
             .offset(x = 156.dp, y = 16.dp)
             .clip(shape = RoundedCornerShape(45.dp))
@@ -51,6 +57,6 @@ fun GraphScreen(navController: NavController, graphViewModel : GraphViewModel = 
     }
 
     Box(modifier = Modifier.fillMaxSize()){
-        GraphView(graphViewModel)
+        GraphView(graphModel)
     }
 }
