@@ -6,5 +6,5 @@
 
 You can run it by 
 ```
-gradle desktopRun -DmainClass=MainKt --quiet
+./gradlew run
 ```
