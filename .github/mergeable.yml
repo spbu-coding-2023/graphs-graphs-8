@@ -3,7 +3,3 @@ mergeable:
 
   - when: pull_request.*, pull_request_review.*
     validate:
-      - do: description
-        no_empty:
-          enabled: true
-          message: "Description should not be empty."
