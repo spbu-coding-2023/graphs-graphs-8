@@ -1,7 +1,7 @@
 import kotlin.test.Test
 import kotlin.test.assertTrue
 
-class JvmGraphTest {
+class JvmUnDigraphTest {
 
     @Test
     fun `graph test example`() {
