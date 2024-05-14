@@ -11,4 +11,8 @@ class MainScreenViewModel: ViewModel() {
     fun addGraph(name : String) {
         graphs.add(GraphViewModel(name))
     }
+
+    fun getGraph(graphId: Int): GraphViewModel {
+        return graphs[graphId]
+    }
 }

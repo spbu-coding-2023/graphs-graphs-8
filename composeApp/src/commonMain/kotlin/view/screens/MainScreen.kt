@@ -25,7 +25,7 @@ import view.bounceClick
 import viewmodel.MainScreenViewModel
 
 @Composable
-fun MainScreen(navController: NavController, mainScreenViewModel: MainScreenViewModel = MainScreenViewModel()){
+fun MainScreen(navController: NavController, mainScreenViewModel: MainScreenViewModel){
     var search by remember { mutableStateOf("") }
     Column(modifier = Modifier.fillMaxSize().background(DefaultColors.background).padding(16.dp)) {
         Row(modifier = Modifier.fillMaxWidth().height(100.dp)) {
@@ -116,7 +116,7 @@ fun MainScreen(navController: NavController, mainScreenViewModel: MainScreenView
                 // To GraphScreen
                 Row(modifier = Modifier.padding(vertical = 15.dp)) {
                     Button(
-                        onClick = { navController.navigate(Screen.GraphScreen.route) },
+                        onClick = { navController.navigate("${Screen.GraphScreen.route}/$index") },
                         modifier = Modifier
                             .fillMaxWidth()
                             .height(100.dp)
