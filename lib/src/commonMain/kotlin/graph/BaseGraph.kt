@@ -1,6 +1,6 @@
 package lib.graph
 
-abstract class GraphAbstract(){
+abstract class BaseGraph(){
     protected val graph = mutableMapOf<Int, MutableList<Int>>()
     var size = graph.size
         private set

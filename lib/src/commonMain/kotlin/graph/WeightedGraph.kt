@@ -1,6 +1,6 @@
 package graph
 
-import lib.graph.GraphAbstract
+import lib.graph.BaseGraph
 
 //class WeightedGraph: GraphAbstract {
 //}
