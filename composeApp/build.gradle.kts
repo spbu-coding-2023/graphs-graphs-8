@@ -8,6 +8,7 @@ plugins {
     alias(libs.plugins.composeMultiplatform)
     alias(libs.plugins.composeCompiler)
     id("org.jetbrains.kotlin.plugin.serialization") version "1.9.24"
+    id("org.jetbrains.kotlinx.kover") version "0.7.6"
 }
 
 kotlin {
@@ -95,5 +96,41 @@ compose.desktop {
             packageName = "org.example.project"
             packageVersion = "1.0.0"
         }
+    }
+}
+
+koverReport {
+    filters {
+        // filters for all reports
+        excludes{
+//            packages("viewmodel.*")
+        }
+    }
+
+    verify {
+        // verification rules for all reports
+    }
+
+    defaults {
+        mergeWith("release")
+        xml { /* default XML report config */ }
+        html { /* default HTML report config */ }
+        verify { /* default verification config */ }
+        log { /* default logging config */ }
+    }
+
+    androidReports("release") {
+        filters {
+            // override report filters for all reports for `release` build variant
+            // all filters specified by the level above cease to work
+            excludes{
+                classes("viewmodel.*")
+            }
+        }
+
+        xml { /* XML report config for `release` build variant */ }
+        html { /* HTML report config for `release` build variant */ }
+        verify { /* verification config for `release` build variant */ }
+        log { /* logging config for `release` build variant */ }
     }
 }

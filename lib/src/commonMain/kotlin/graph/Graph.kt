@@ -1,4 +1,4 @@
-package lib.graph
+package graph
 
 class Graph: GraphAbstract(){
     override fun addEdge(from: Int, to: Int) {

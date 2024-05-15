@@ -1,5 +1,3 @@
-import org.jetbrains.kotlin.gradle.plugin.KotlinPlatformType
-
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
     alias(libs.plugins.androidLibrary)
@@ -40,5 +38,35 @@ android {
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_21
         targetCompatibility = JavaVersion.VERSION_21
+    }
+}
+
+koverReport {
+    filters {
+        // filters for all reports
+    }
+
+    verify {
+        // verification rules for all reports
+    }
+
+    defaults {
+        mergeWith("release")
+        xml { /* default XML report config */ }
+        html { /* default HTML report config */ }
+        verify { /* default verification config */ }
+        log { /* default logging config */ }
+    }
+
+    androidReports("release") {
+        filters {
+            // override report filters for all reports for `release` build variant
+            // all filters specified by the level above cease to work
+        }
+
+        xml { /* XML report config for `release` build variant */ }
+        html { /* HTML report config for `release` build variant */ }
+        verify { /* verification config for `release` build variant */ }
+        log { /* logging config for `release` build variant */ }
     }
 }

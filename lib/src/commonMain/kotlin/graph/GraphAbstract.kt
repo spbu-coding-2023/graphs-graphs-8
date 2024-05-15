@@ -1,4 +1,4 @@
-package lib.graph
+package graph
 
 abstract class GraphAbstract(){
     protected val graph = mutableMapOf<Int, MutableList<Int>>()
