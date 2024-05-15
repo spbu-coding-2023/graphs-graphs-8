@@ -12,7 +12,7 @@ class TranslationList(val transList: List<TranslationPair>)
 
 fun localisation(text: String): String{
     try {
-        val language = Json.decodeFromString<SettingsJSON>(File("src/settings.json").readText()).language
+        val language = getLocalisation()
         val data = Json.decodeFromString<TranslationList>(File("src/localisation/$language.json").readText())
         for (wordPair in data.transList) {
             if (wordPair.code == text){
@@ -25,4 +25,9 @@ fun localisation(text: String): String{
         println("Localisation Error with code $text")
         return text
     }
+}
+
+fun getLocalisation(): String{
+    val language = Json.decodeFromString<SettingsJSON>(File("src/settings.json").readText()).language
+    return language
 }
