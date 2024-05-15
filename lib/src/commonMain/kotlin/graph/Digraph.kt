@@ -1,4 +1,4 @@
-package lib.graph
+package graph
 
 class Digraph: GraphAbstract(){
     override fun addEdge(from: Int, to: Int) {
