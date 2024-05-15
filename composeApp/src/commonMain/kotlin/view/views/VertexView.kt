@@ -23,7 +23,7 @@ import viewmodel.VertexViewModel
 import kotlin.math.roundToInt
 
 @Composable
-fun VertexView(vertexVM: VertexViewModel, graphViewModel: GraphViewModel) {
+fun VertexView(vertexVM: VertexViewModel, graphVM: GraphViewModel) {
     val number = vertexVM.number
 
     Box(modifier = Modifier
@@ -48,8 +48,9 @@ fun VertexView(vertexVM: VertexViewModel, graphViewModel: GraphViewModel) {
     }
 
     vertexVM.edges.forEach{ otherNumber ->
-        val otherX = (graphViewModel.vertices.find{ vertexVM -> vertexVM.number == otherNumber})!!.offsetX
-        val otherY = (graphViewModel.vertices.find{vertexVM -> vertexVM.number == otherNumber})!!.offsetY
+        val otherVM = graphVM.graphView[otherNumber]!!
+        val otherX = otherVM.offsetX
+        val otherY = otherVM.offsetY
         Canvas(modifier = Modifier.fillMaxSize().zIndex(-1f)){
             drawLine(
                 start = Offset(vertexVM.offsetX + vertexVM.vertexSize/2, vertexVM.offsetY + vertexVM.vertexSize/2),

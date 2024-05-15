@@ -6,7 +6,7 @@ import viewmodel.VertexViewModel
 
 @Composable
 fun GraphView(graphViewModel : GraphViewModel) {
-    graphViewModel.vertices.forEach{ vertexvm ->
-        VertexView(vertexvm, graphViewModel)
+    for (vertexVM  in graphViewModel.graphView.values){
+        VertexView(vertexVM, graphViewModel)
     }
 }
