@@ -1,0 +1,24 @@
+{
+  "transList": [
+    {
+      "code": "settings",
+      "localisation": "设置"
+    },
+    {
+      "code": "back",
+      "localisation": "回去"
+    },
+    {
+      "code": "enter_graph_name",
+      "localisation": "输入图表名称"
+    },
+    {
+      "code": "home",
+      "localisation": "返回主屏幕"
+    },
+    {
+      "code": "add",
+      "localisation": "添加"
+    }
+  ]
+}

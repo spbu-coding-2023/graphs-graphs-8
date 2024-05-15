@@ -1,0 +1,24 @@
+{
+  "transList": [
+    {
+      "code": "settings",
+      "localisation": "Настройки"
+    },
+    {
+      "code": "back",
+      "localisation": "Назад"
+    },
+    {
+      "code": "enter_graph_name",
+      "localisation": "Введите название графа"
+    },
+    {
+      "code": "home",
+      "localisation": "На главную"
+    },
+    {
+      "code": "add",
+      "localisation": "Добавить"
+    }
+  ]
+}

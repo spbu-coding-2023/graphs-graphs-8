@@ -18,6 +18,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import androidx.navigation.NavController
+import localisation
 import view.DefaultColors
 import view.defaultStyle
 import view.views.GraphView
@@ -35,25 +36,25 @@ fun GraphScreen(navController: NavController, mainScreenViewModel : MainScreenVi
             .offset (x = 16.dp, y = 16.dp)
             .clip(shape = RoundedCornerShape(45.dp))
             .border(5.dp, color = Color.Black, shape = RoundedCornerShape(45.dp))
-            .size(120.dp, 70.dp)
+            .size(240.dp, 80.dp)
             .zIndex(1f),
         colors = ButtonDefaults.buttonColors(DefaultColors.primary)
     ) {
-        Text("Home", style = defaultStyle)
+        Text(localisation("home"), style = defaultStyle)
     }
 
     // Add vertex
     Button(
         onClick = { graphModel.addVertex()},
         modifier = Modifier
-            .offset(x = 156.dp, y = 16.dp)
+            .offset(x = 266.dp, y = 16.dp)
             .clip(shape = RoundedCornerShape(45.dp))
             .border(5.dp, color = Color.Black, shape = RoundedCornerShape(45.dp))
-            .size(120.dp, 70.dp)
+            .size(240.dp, 80.dp)
             .zIndex(1f),
         colors = ButtonDefaults.buttonColors(backgroundColor = DefaultColors.primary)
     ) {
-        Text("Add", style = defaultStyle)
+        Text(localisation("add"), style = defaultStyle)
     }
 
     Box(modifier = Modifier.fillMaxSize()){

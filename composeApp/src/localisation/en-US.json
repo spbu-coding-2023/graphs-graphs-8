@@ -1,0 +1,24 @@
+{
+  "transList": [
+    {
+      "code": "settings",
+      "localisation": "Settings"
+    },
+    {
+      "code": "back",
+      "localisation": "Back"
+    },
+    {
+      "code": "enter_graph_name",
+      "localisation": "Enter graph name"
+    },
+    {
+      "code": "home",
+      "localisation": "Home"
+    },
+    {
+      "code": "add",
+      "localisation": "Add"
+    }
+  ]
+}
