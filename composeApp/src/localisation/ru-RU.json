@@ -17,7 +17,15 @@
       "localisation": "На главную"
     },
     {
-      "code": "add",
+      "code": "add_vertex",
+      "localisation": "Добавить вершину"
+    },
+    {
+      "code": "add_edge",
+      "localisation": "Добавить ребро"
+    },
+    {
+      "code": "open_edge",
       "localisation": "Добавить"
     }
   ]

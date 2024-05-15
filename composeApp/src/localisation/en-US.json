@@ -17,7 +17,15 @@
       "localisation": "Home"
     },
     {
-      "code": "add",
+      "code": "add_vertex",
+      "localisation": "Add vertex"
+    },
+    {
+      "code": "open_edge",
+      "localisation":"Add edge"
+    },
+    {
+      "code": "add_edge",
       "localisation": "Add"
     }
   ]

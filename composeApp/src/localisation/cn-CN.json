@@ -17,8 +17,16 @@
       "localisation": "返回主屏幕"
     },
     {
-      "code": "add",
+      "code": "add_vertex",
       "localisation": "添加"
+    },
+    {
+      "code": "open_edge",
+      "localisation":"TODO"
+    },
+    {
+      "code": "add_edge",
+      "localisation": "TODO"
     }
   ]
 }
