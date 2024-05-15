@@ -1,6 +1,8 @@
 version: 2
 mergeable:
   - when: pull_request.*, pull_request_review.*
+    branches-ignore:
+      -"main"
     validate:
       - do: approvals
         min:
