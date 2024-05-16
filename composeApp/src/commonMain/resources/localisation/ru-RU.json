@@ -27,6 +27,18 @@
     {
       "code": "open_edge",
       "localisation": "Добавить"
+    },
+    {
+      "code": "add",
+      "localisation": "Добавить"
+    },
+    {
+      "code": "write_name",
+      "localisation": "Введите название"
+    },
+    {
+      "code": "enter_new_graph_name",
+      "localisation": "Создание нового графа"
     }
   ]
 }

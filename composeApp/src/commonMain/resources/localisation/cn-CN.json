@@ -27,6 +27,18 @@
     {
       "code": "add_edge",
       "localisation": "TODO"
+    },
+    {
+      "code": "add",
+      "localisation": "TODO"
+    },
+    {
+      "code": "write_name",
+      "localisation": "TODO"
+    },
+    {
+      "code": "enter_new_graph_name",
+      "localisation": "TODO"
     }
   ]
 }
