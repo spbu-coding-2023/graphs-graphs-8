@@ -13,5 +13,7 @@ object DefaultColors{
     val primary = Color(0xff,0xf1,0x4a)
     val primarySelected = Color(0xcf,0xc0,0x07)
     val error = Color.Red
+    val darkGreen = Color(0x00,0x64,0x00)
+    val simpleGreen = Color(0x00,0xe4,0x00)
     val background = Color.White
 }
