@@ -21,10 +21,10 @@ class GraphViewModel(name: String, graph: Graph = Graph()) : ViewModel() {
 
     fun addEdge(source: Int, destination: Int) {
         if (graphView[source] == null) {
-            throw IllegalArgumentException("Can't create edge from non-existent vertex")
+            return
         }
-        val EdgesCopy = graphView[source]?.edges?.toMutableList()!!
-        EdgesCopy.add(destination)
-        graphView[source]?.edges = EdgesCopy
+        val edgesCopy = graphView[source]?.edges?.toMutableList()!!
+        edgesCopy.add(destination)
+        graphView[source]?.edges = edgesCopy
     }
 }
