@@ -44,7 +44,7 @@ fun GraphScreen(navController: NavController, mainScreenViewModel: MainScreenVie
 
         // Add vertex
         Button(
-            onClick = { graphModel.addVertex() },
+            onClick = { graphModel.addVertex(graphModel.size) },
             modifier = Modifier
                 .clip(shape = RoundedCornerShape(45.dp))
                 .border(5.dp, color = Color.Black, shape = RoundedCornerShape(45.dp))

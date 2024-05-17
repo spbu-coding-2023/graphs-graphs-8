@@ -2,32 +2,21 @@ package graph
 
 abstract class GraphAbstract() {
     protected val graph = mutableMapOf<Int, MutableList<Int>>()
+    val vertices
+        get() = graph.keys
+    val entries
+        get() = graph.entries
     var size = graph.size
         private set
 
-    // temporary
-    init {
-        graph[2] = mutableListOf(1, 3, 4, 5, 6, 0)
-        graph[4] = mutableListOf(4, 5)
-        graph[5] = mutableListOf(4, 2)
-        graph[6] = mutableListOf(1, 2, 4, 5)
-        graph[1] = mutableListOf(2, 4, 5, 6)
-        graph[3] = mutableListOf(1, 2, 4, 5, 6)
-        graph[0] = mutableListOf(1, 2, 3, 4, 5, 6)
-        size = 7
-    }
-
     fun addVertex(number: Int) {
         graph.putIfAbsent(number, mutableListOf<Int>())
+        size++
     }
 
     abstract fun addEdge(from: Int, to: Int)
 
-    fun getGraphProp(): MutableMap<Int, MutableList<Int>> {
-        return graph
-    }
-
-    fun edgesFrom(from: Int): MutableList<Int> {
+    fun edgesOf(from: Int): MutableList<Int> {
         return graph[from] ?: mutableListOf()
     }
 
