@@ -27,6 +27,18 @@
     {
       "code": "add_edge",
       "localisation": "Add"
+    },
+    {
+      "code": "add",
+      "localisation": "Add"
+    },
+    {
+      "code": "write_name",
+      "localisation": "Write name"
+    },
+    {
+      "code": "enter_new_graph_name",
+      "localisation": "Create new graph"
     }
   ]
 }
