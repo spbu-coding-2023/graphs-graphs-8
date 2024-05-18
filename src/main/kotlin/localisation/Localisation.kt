@@ -15,7 +15,7 @@ class TranslationList(val transList: List<TranslationPair>)
 fun localisation(text: String): String{
     val language = getLocalisation()
     try {
-        val data = Json.decodeFromString<TranslationList>(object {}.javaClass.getResourceAsStream("localisation/$language.json")?.bufferedReader()!!.readText())
+        val data = Json.decodeFromString<TranslationList>(File("src/main/resources/localisation/$language.json").readText())
         for (wordPair in data.transList) {
             if (wordPair.code == text){
                 return wordPair.localisation
