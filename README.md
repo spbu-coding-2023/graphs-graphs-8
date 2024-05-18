@@ -1,4 +1,4 @@
 You can run it by
 ```
-./gradlew
+./gradlew run
 ```
