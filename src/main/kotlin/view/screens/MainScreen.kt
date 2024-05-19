@@ -34,7 +34,7 @@ fun MainScreen(navController: NavController, mainScreenViewModel: MainScreenView
     var search by remember { mutableStateOf("") }
     var graphName by remember { mutableStateOf("") }
     val dialogState = remember { mutableStateOf(false) }
-    val options = listOf(localisation("undirected"), localisation("directed"))
+    val options = listOf("undirected", "directed")
     val expanded = remember { mutableStateOf(false) }
     val selectedOptionText = remember { mutableStateOf(options[0]) }
 
@@ -218,7 +218,7 @@ fun MainScreen(navController: NavController, mainScreenViewModel: MainScreenView
                                 expanded.value = false
                             }
                         ) {
-                            Text(text = selectionOption)
+                            Text(text = localisation(selectionOption))
                         }
                     }
                 }
