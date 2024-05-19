@@ -1,8 +1,9 @@
-package graph
+package model.graph.unweighted
 
-import model.graph.Edge
+import graph.Graph
+import model.graph.edges.Edge
 
-class UndirectedGraph<V> : Graph<V, Edge<V>>() {
+class UndirectedGraph<V> : UnweightedGraph<V>() {
     override fun addEdge(from: V, to: V) {
         val edge1 = Edge(from, to)
         val edge2 = Edge(to, from)

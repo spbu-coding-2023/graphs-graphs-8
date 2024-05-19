@@ -1,4 +1,4 @@
-package model.graph
+package model.graph.edges
 
 class WeightedEdge<V>(source: V, destination: V, _weight: Int) :
     Edge<V>(source, destination) {

@@ -1,6 +1,6 @@
 package graph
 
-import model.graph.Edge
+import model.graph.edges.Edge
 
 abstract class Graph<V, E : Edge<V>>() {
     protected val graph = mutableMapOf<V, MutableList<E>>()
@@ -17,8 +17,6 @@ abstract class Graph<V, E : Edge<V>>() {
         graph.putIfAbsent(vertex, mutableListOf<E>())
         size++
     }
-
-    abstract fun addEdge(from: V, to: V)
 
     fun edgesOf(from: V): MutableList<E> {
         return graph[from] ?: mutableListOf()

@@ -1,7 +1,7 @@
 package model.algos
 
-import graph.WeightedGraph
+import model.graph.weighted.WeightedGraph
 
 fun <V> FordBellman(graph: WeightedGraph<V>) {
-    
+
 }

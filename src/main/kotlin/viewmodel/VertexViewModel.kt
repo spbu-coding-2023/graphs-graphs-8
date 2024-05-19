@@ -3,11 +3,10 @@ package viewmodel
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.unit.dp
 import androidx.lifecycle.ViewModel
-import model.graph.Edge
+import model.graph.edges.Edge
 
-class VertexViewModel<V, E : Edge<V>>(_vertex: V, _edges: MutableList<Edge<V>> = mutableListOf()) :
+class VertexViewModel<V>(_vertex: V, _edges: MutableList<Edge<V>> = mutableListOf()) :
     ViewModel() {
     val vertex: V = _vertex
     var edges by mutableStateOf(_edges)

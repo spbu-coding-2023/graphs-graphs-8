@@ -1,5 +1,5 @@
-package model.graph
+package model.graph.edges
 
-open class Edge<out V>(val from: V, val to: V) {
+open class Edge<V>(val from: V, val to: V) {
     open val weight = 1
 }

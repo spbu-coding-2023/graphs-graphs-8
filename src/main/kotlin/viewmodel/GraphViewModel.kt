@@ -2,18 +2,17 @@ package viewmodel
 
 import androidx.compose.runtime.*
 import androidx.lifecycle.ViewModel
-import graph.UndirectedGraph
-import model.graph.Edge
+import model.graph.unweighted.UndirectedGraph
+import model.graph.edges.Edge
 
-class GraphViewModel<out V, out E : Edge<V>>(
-    name: String,
+class GraphViewModel<V, E : Edge<V>>(
+    _name: String,
     graph: UndirectedGraph<V> = UndirectedGraph<V>()
-) :
-    ViewModel() {
-    val name by mutableStateOf(name)
+) : ViewModel() {
+    val name = _name
     val size
         get() = graphModel.size
-    val graphView = mutableStateMapOf<V, VertexViewModel<V, E>>()
+    val graphView = mutableStateMapOf<V, VertexViewModel<V>>()
     val graphModel = graph
 
     init {
