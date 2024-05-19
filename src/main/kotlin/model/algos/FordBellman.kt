@@ -1,14 +1,14 @@
 package model.algos
 
+import graph.Graph
 import model.graph.edges.Edge
-import model.graph.weighted.WeightedGraph
 
 typealias Path<V> = List<Edge<V>>
 typealias Paths<V> = Map<V, Path<V>>
 
 object FordBellman {
     //should be : Pair<Int, Path<V>>
-    fun <V> findShortestPath(from: V, to: V, graph: WeightedGraph<V>): Pair<Int?, Path<V>?> {
+    fun <V> findShortestPath(from: V, to: V, graph: Graph<V>): Pair<Int?, Path<V>?> {
         val distances = mutableMapOf<V, Int?>()
         val minSources = mutableMapOf<V, Edge<V>>()
         for (vertex in graph.vertices) {
@@ -56,7 +56,7 @@ object FordBellman {
         return Pair(distances[to], pathAnswer)
     }
 
-    fun <V> findShortestPath(from: V, graph: WeightedGraph<V>): Pair<Map<V, Int>, Paths<V>> {
+    fun <V> findShortestPath(from: V, graph: Graph<V>): Pair<Map<V, Int>, Paths<V>> {
         TODO()
     }
 }

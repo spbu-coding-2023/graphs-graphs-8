@@ -1,10 +1,9 @@
-package model.graph.unweighted
+package model.graph.directed
 
-import graph.Graph
 import model.graph.edges.Edge
 
-class DirectedGraph<V> : UnweightedGraph<V>() {
-    override fun addEdge(from: V, to: V) {
+class DirectedUnweightedGraph<V> : DirectedGraph<V>() {
+    override fun addEdge(from: V, to: V, weight: Int) {
         val edge = Edge(from, to)
         graph[from]?.add(edge) ?: { graph[from] = mutableListOf(edge) }
     }
