@@ -25,6 +25,7 @@ dependencies {
     val nav_version = "2.8.0-alpha02"
     implementation("org.jetbrains.androidx.navigation:navigation-compose:$nav_version")
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.3")
+    testImplementation(kotlin("test"))
 }
 
 compose.desktop {
@@ -36,5 +37,11 @@ compose.desktop {
             packageName = "GraphVisualizer"
             packageVersion = "1.0.0"
         }
+    }
+}
+
+tasks {
+    test {
+        useJUnitPlatform()
     }
 }

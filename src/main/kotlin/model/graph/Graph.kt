@@ -10,6 +10,16 @@ abstract class Graph<V, E : Edge<V>>() {
     val vertices
         get() = graph.keys
 
+    val edges: List<E>
+        get() {
+            val edges = mutableListOf<E>()
+            for (vertex in vertices) {
+                val edgesOf = edgesOf(vertex)
+                edges.addAll(edgesOf)
+            }
+            return edges.toList()
+        }
+
     var size = graph.size
         private set
 

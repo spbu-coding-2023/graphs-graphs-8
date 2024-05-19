@@ -39,13 +39,3 @@ That's a Krishtall
 Да здравствует Петербург, да здравствует 52
 Да здравствует Петербург, да здравствует 52 (Ау; YEEI, а)
 Да здравствует 52 (Ау), YEEI, long live (Это второй)
-LOCALISATION ERROR 2024-05-19T10:24:55.832074053 -- Key enter_graph_name is not found in en-US
-EXCEPTION IS java.lang.NullPointerException
-LOCALISATION ERROR 2024-05-19T10:24:56.018568022 -- Key enter_graph_name is not found in en-US
-EXCEPTION IS java.lang.NullPointerException
-LOCALISATION ERROR 2024-05-19T10:24:58.007027956 -- Key home is not found in en-US
-EXCEPTION IS java.lang.NullPointerException
-LOCALISATION ERROR 2024-05-19T10:24:58.008030377 -- Key add_vertex is not found in en-US
-EXCEPTION IS java.lang.NullPointerException
-LOCALISATION ERROR 2024-05-19T10:24:58.008838806 -- Key open_edge is not found in en-US
-EXCEPTION IS java.lang.NullPointerException
