@@ -1,6 +1,7 @@
 package graph
 
-import graph.GraphAbstract
+import model.graph.WeightedEdge
 
-//class WeightedGraph: GraphAbstract {
-//}
+abstract class WeightedGraph<V> : Graph<V, WeightedEdge<V>>() {
+
+}

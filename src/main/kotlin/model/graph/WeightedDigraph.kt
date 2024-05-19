@@ -1,4 +1,0 @@
-package graph
-
-class WeightedDigraph {
-}
