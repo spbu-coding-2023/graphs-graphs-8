@@ -6,7 +6,6 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
@@ -34,9 +33,12 @@ fun MainScreen(navController: NavController, mainScreenViewModel: MainScreenView
     var search by remember { mutableStateOf("") }
     var graphName by remember { mutableStateOf("") }
     val dialogState = remember { mutableStateOf(false) }
-    val options = listOf("undirected", "directed")
-    val expanded = remember { mutableStateOf(false) }
-    val selectedOptionText = remember { mutableStateOf(options[0]) }
+    val optionsDUD = listOf("undirected", "directed")
+    val expandedDUD = remember { mutableStateOf(false) }
+    val selectedOptionTextDUD = remember { mutableStateOf(optionsDUD[0]) }
+    val optionsWUW = listOf("weighted", "unweighted")
+    val expandedWUW = remember { mutableStateOf(false) }
+    val selectedOptionTextWUW= remember { mutableStateOf(optionsWUW[0]) }
 
     Column(modifier = Modifier.fillMaxSize().background(DefaultColors.background).padding(16.dp)) {
         Row(modifier = Modifier.fillMaxWidth().height(100.dp)) {
@@ -163,7 +165,7 @@ fun MainScreen(navController: NavController, mainScreenViewModel: MainScreenView
                 colors = if(graphName != "") ButtonDefaults.buttonColors(backgroundColor = DefaultColors.simpleGreen) else ButtonDefaults.buttonColors(backgroundColor = DefaultColors.darkGreen),
                 onClick = {
                     if(graphName != ""){
-                        mainScreenViewModel.addGraph(graphName)
+                        mainScreenViewModel.addGraph(graphName, Pair(selectedOptionTextDUD.toString(), selectedOptionTextWUW.toString()))
                         dialogState.value = false
                     }
                 },
@@ -196,10 +198,10 @@ fun MainScreen(navController: NavController, mainScreenViewModel: MainScreenView
                     .height(60.dp)
                     .clip(RoundedCornerShape(25.dp))
                     .border(BorderStroke(2.dp, Color.LightGray), RoundedCornerShape(25.dp))
-                    .clickable { expanded.value = !expanded.value },
+                    .clickable { expandedDUD.value = !expandedDUD.value },
             ) {
                 Text(
-                    text = selectedOptionText.value,
+                    text = selectedOptionTextDUD.value,
                     fontSize = 20.sp,
                     modifier = Modifier.padding(start = 20.dp)
                 )
@@ -208,14 +210,49 @@ fun MainScreen(navController: NavController, mainScreenViewModel: MainScreenView
                     Modifier.align(Alignment.CenterEnd)
                 )
                 DropdownMenu(
-                    expanded = expanded.value,
-                    onDismissRequest = { expanded.value = false }
+                    expanded = expandedDUD.value,
+                    onDismissRequest = { expandedDUD.value = false }
                 ) {
-                    options.forEach { selectionOption ->
+                    optionsDUD.forEach { selectionOption ->
                         DropdownMenuItem(
                             onClick = {
-                                selectedOptionText.value = selectionOption
-                                expanded.value = false
+                                selectedOptionTextDUD.value = selectionOption
+                                expandedDUD.value = false
+                            }
+                        ) {
+                            Text(text = localisation(selectionOption))
+                        }
+                    }
+                }
+            }
+            Box(
+                contentAlignment = Alignment.CenterStart,
+                modifier = Modifier
+                    .padding(horizontal = 350.dp, vertical = 260.dp)
+                    .width(300.dp)
+                    .height(60.dp)
+                    .clip(RoundedCornerShape(25.dp))
+                    .border(BorderStroke(2.dp, Color.LightGray), RoundedCornerShape(25.dp))
+                    .clickable { expandedWUW.value = !expandedWUW.value },
+            ) {
+                Text(
+                    text = selectedOptionTextWUW.value,
+                    fontSize = 20.sp,
+                    modifier = Modifier.padding(start = 20.dp)
+                )
+                Icon(
+                    Icons.Filled.ArrowDropDown, "contentDescription",
+                    Modifier.align(Alignment.CenterEnd)
+                )
+                DropdownMenu(
+                    expanded = expandedWUW.value,
+                    onDismissRequest = { expandedWUW.value = false }
+                ) {
+                    optionsWUW.forEach { selectionOption ->
+                        DropdownMenuItem(
+                            onClick = {
+                                selectedOptionTextWUW.value = selectionOption
+                                expandedWUW.value = false
                             }
                         ) {
                             Text(text = localisation(selectionOption))
@@ -228,9 +265,8 @@ fun MainScreen(navController: NavController, mainScreenViewModel: MainScreenView
         Spacer(modifier = Modifier.height(30.dp))
 
         LazyColumn(modifier = Modifier.fillMaxWidth()) {
-            itemsIndexed(mainScreenViewModel.graphs) { index, graph ->
-                if (!graph.name.startsWith(search)) return@itemsIndexed
-
+            for (index in 0..mainScreenViewModel.graphs.typeList.size) {
+                if (!mainScreenViewModel.graphs.getName(index).startsWith(search)) return@LazyColumn
                 // To GraphScreen
                 Row(modifier = Modifier.padding(vertical = 15.dp)) {
                     Button(
@@ -247,7 +283,7 @@ fun MainScreen(navController: NavController, mainScreenViewModel: MainScreenView
                             ),
                         colors = ButtonDefaults.buttonColors(backgroundColor = DefaultColors.primary)
                     ) {
-                        Text(text = graph.name, style = bigStyle, modifier = Modifier.clip(RoundedCornerShape(45.dp)))
+                        Text(text = mainScreenViewModel.graphs.getName(index), style = bigStyle, modifier = Modifier.clip(RoundedCornerShape(45.dp)))
                     }
 
                     Spacer(modifier = Modifier.width(10.dp))

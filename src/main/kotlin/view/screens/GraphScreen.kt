@@ -17,7 +17,7 @@ import model.graph.edges.Edge
 import view.DefaultColors
 import view.defaultStyle
 import view.views.GraphView
-import viewmodel.GraphViewModel
+import viewmodel.UndirectedUnweightedGraphViewModel
 import viewmodel.MainScreenViewModel
 
 @Composable
@@ -91,7 +91,7 @@ fun GraphScreen(
 }
 
 @Composable
-fun AddEdgeMenu(graphModel: GraphViewModel<Int, Edge<Int>>) {
+fun AddEdgeMenu(graphModel: UndirectedUnweightedGraphViewModel<Int, Edge<Int>>) {
     var source by remember { mutableStateOf("") }
     var destination by remember { mutableStateOf("") }
     Row {

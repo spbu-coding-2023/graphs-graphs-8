@@ -21,13 +21,13 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
 import model.graph.edges.Edge
 import view.DefaultColors
-import viewmodel.GraphViewModel
+import viewmodel.UndirectedUnweightedGraphViewModel
 import viewmodel.VertexViewModel
 import kotlin.math.atan2
 import kotlin.math.roundToInt
 
 @Composable
-fun VertexView(vertexVM: VertexViewModel<Int>, graphVM: GraphViewModel<Int, Edge<Int>>) {
+fun VertexView(vertexVM: VertexViewModel<Int>, graphVM: UndirectedUnweightedGraphViewModel<Int, Edge<Int>>) {
     val vertex = vertexVM.vertex
 
     Box(modifier = Modifier
