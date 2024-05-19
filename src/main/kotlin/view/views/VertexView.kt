@@ -50,10 +50,11 @@ fun VertexView(vertexVM: VertexViewModel<Int>, graphVM: GraphViewModel<Int, Edge
         )
     }
 
-    vertexVM.edges.forEach { otherNumber ->
-        val otherVM = graphVM.graphView[otherNumber]!!
-        val otherX = otherVM.offsetX
-        val otherY = otherVM.offsetY
+    vertexVM.edges.forEach { edge ->
+        val otherVertex = edge.to
+        val otherVertexView = graphVM.graphView[otherVertex]!!
+        val otherX = otherVertexView.offsetX
+        val otherY = otherVertexView.offsetY
         Canvas(modifier = Modifier.fillMaxSize().zIndex(-1f)) {
             drawLine(
                 start = Offset(
