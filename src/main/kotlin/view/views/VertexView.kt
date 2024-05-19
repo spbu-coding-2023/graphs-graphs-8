@@ -17,17 +17,18 @@ import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
+import model.graph.edges.Edge
 import view.DefaultColors
 import viewmodel.GraphViewModel
 import viewmodel.VertexViewModel
 import kotlin.math.roundToInt
 
 @Composable
-fun VertexView(vertexVM: VertexViewModel, graphVM: GraphViewModel) {
-    val number = vertexVM.number
+fun VertexView(vertexVM: VertexViewModel<Int>, graphVM: GraphViewModel<Int, Edge<Int>>) {
+    val vertex = vertexVM.vertex
 
     Box(modifier = Modifier
-        .offset {IntOffset(vertexVM.offsetX.roundToInt(), vertexVM.offsetY.roundToInt())}
+        .offset { IntOffset(vertexVM.offsetX.roundToInt(), vertexVM.offsetY.roundToInt()) }
         .clip(shape = CircleShape)
         .size(120.dp)
         .background(DefaultColors.primary)
@@ -39,24 +40,31 @@ fun VertexView(vertexVM: VertexViewModel, graphVM: GraphViewModel) {
                 vertexVM.offsetY += dragAmount.y
             }
         }
-    ){
-        Text(text = "$number",
+    ) {
+        Text(
+            text = "$vertex",
             fontSize = 40.sp,
             modifier = Modifier
                 .fillMaxSize()
-                .wrapContentSize(),)
+                .wrapContentSize(),
+        )
     }
 
-    vertexVM.edges.forEach{ otherNumber ->
-        val otherVM = graphVM.graphView[otherNumber]!!
-        val otherX = otherVM.offsetX
-        val otherY = otherVM.offsetY
-        Canvas(modifier = Modifier.fillMaxSize().zIndex(-1f)){
+    vertexVM.edges.forEach { edge ->
+        val otherVertex = edge.to
+        val otherVertexView = graphVM.graphView[otherVertex]!!
+        val otherX = otherVertexView.offsetX
+        val otherY = otherVertexView.offsetY
+        Canvas(modifier = Modifier.fillMaxSize().zIndex(-1f)) {
             drawLine(
-                start = Offset(vertexVM.offsetX + vertexVM.vertexSize/2, vertexVM.offsetY + vertexVM.vertexSize/2),
-                end = Offset( otherX + vertexVM.vertexSize/2, otherY + vertexVM.vertexSize/2),
+                start = Offset(
+                    vertexVM.offsetX + vertexVM.vertexSize / 2,
+                    vertexVM.offsetY + vertexVM.vertexSize / 2
+                ),
+                end = Offset(otherX + vertexVM.vertexSize / 2, otherY + vertexVM.vertexSize / 2),
                 strokeWidth = 10f,
-                color = Color.Black)
+                color = Color.Black
+            )
         }
     }
 }
