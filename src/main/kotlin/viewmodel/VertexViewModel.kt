@@ -12,5 +12,5 @@ class VertexViewModel<V>(_vertex: V, _edges: MutableList<Edge<V>> = mutableListO
     var edges by mutableStateOf(_edges)
     var offsetX by mutableStateOf(1000f)
     var offsetY by mutableStateOf(540f)
-    val vertexSize = 120f
+    val vertexSize = 100f
 }

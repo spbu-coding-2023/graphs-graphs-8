@@ -22,23 +22,23 @@
     },
     {
       "code": "open_edge",
-      "localisation":"TODO"
+      "localisation":"开放边缘"
     },
     {
       "code": "add_edge",
-      "localisation": "TODO"
+      "localisation": "添加边缘"
     },
     {
       "code": "add",
-      "localisation": "TODO"
+      "localisation": "添加"
     },
     {
       "code": "write_name",
-      "localisation": "TODO"
+      "localisation": "写名字"
     },
     {
       "code": "enter_new_graph_name",
-      "localisation": "TODO"
+      "localisation": "创建新图表"
     }
   ]
 }

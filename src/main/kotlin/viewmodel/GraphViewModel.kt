@@ -1,6 +1,8 @@
 package viewmodel
 
-import androidx.compose.runtime.*
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateMapOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import model.graph.unweighted.UndirectedGraph
 import model.graph.edges.Edge
@@ -26,10 +28,12 @@ class GraphViewModel<V, E : Edge<V>>(
         graphModel.addVertex(vertex)
     }
 
+
     fun addEdge(from: V, to: V) {
         if (graphView[from] == null) {
             return
         }
+        for (i in graphView[from]?.edges!!) if(i.to == to) return
         val edgesCopy = graphView[from]?.edges?.toMutableList()!!
         edgesCopy.add(Edge(from, to))
         graphView[from]?.edges = edgesCopy
