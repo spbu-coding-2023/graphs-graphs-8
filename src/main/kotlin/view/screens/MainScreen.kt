@@ -1,5 +1,6 @@
 package view.screens
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -9,10 +10,7 @@ import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.Delete
-import androidx.compose.material.icons.filled.Search
-import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material.icons.filled.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -21,8 +19,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.window.DialogState
 import androidx.compose.ui.window.DialogWindow
-import androidx.compose.ui.window.rememberDialogState
 import androidx.navigation.NavController
 import localisation.localisation
 import view.DefaultColors
@@ -36,6 +34,10 @@ fun MainScreen(navController: NavController, mainScreenViewModel: MainScreenView
     var search by remember { mutableStateOf("") }
     var graphName by remember { mutableStateOf("") }
     val dialogState = remember { mutableStateOf(false) }
+    val options = listOf(localisation("undirected"), localisation("directed"))
+    val expanded = remember { mutableStateOf(false) }
+    val selectedOptionText = remember { mutableStateOf(options[0]) }
+
     Column(modifier = Modifier.fillMaxSize().background(DefaultColors.background).padding(16.dp)) {
         Row(modifier = Modifier.fillMaxWidth().height(100.dp)) {
             // Search tab
@@ -118,7 +120,14 @@ fun MainScreen(navController: NavController, mainScreenViewModel: MainScreenView
             }
         }
 
-        DialogWindow(visible = dialogState.value, title = "New Graph",onCloseRequest = { dialogState.value = false }, state = rememberDialogState(size = DpSize(960.dp, 640.dp))) {
+        DialogWindow(
+            visible = dialogState.value,
+            title = "New Graph",
+            resizable = false,
+            onCloseRequest = { dialogState.value = false },
+            state = DialogState(size = DpSize(960.dp, 680.dp))
+        )
+        {
             Text(text = localisation("enter_new_graph_name"), modifier = Modifier.padding(horizontal = 20.dp, vertical = 15.dp), style = defaultStyle)
             TextField(
                 value = graphName,
@@ -178,6 +187,41 @@ fun MainScreen(navController: NavController, mainScreenViewModel: MainScreenView
                 },
             ) {
                 Text(text= localisation("back"), color = Color.White, fontSize = 28.sp)
+            }
+            Box(
+                contentAlignment = Alignment.CenterStart,
+                modifier = Modifier
+                    .padding(horizontal = 350.dp, vertical = 180.dp)
+                    .width(300.dp)
+                    .height(60.dp)
+                    .clip(RoundedCornerShape(25.dp))
+                    .border(BorderStroke(2.dp, Color.LightGray), RoundedCornerShape(25.dp))
+                    .clickable { expanded.value = !expanded.value },
+            ) {
+                Text(
+                    text = selectedOptionText.value,
+                    fontSize = 20.sp,
+                    modifier = Modifier.padding(start = 20.dp)
+                )
+                Icon(
+                    Icons.Filled.ArrowDropDown, "contentDescription",
+                    Modifier.align(Alignment.CenterEnd)
+                )
+                DropdownMenu(
+                    expanded = expanded.value,
+                    onDismissRequest = { expanded.value = false }
+                ) {
+                    options.forEach { selectionOption ->
+                        DropdownMenuItem(
+                            onClick = {
+                                selectedOptionText.value = selectionOption
+                                expanded.value = false
+                            }
+                        ) {
+                            Text(text = selectionOption)
+                        }
+                    }
+                }
             }
         }
 
