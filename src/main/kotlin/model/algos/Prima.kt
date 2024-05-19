@@ -1,10 +1,10 @@
 package model.algos
 
 import model.graph.edges.WeightedEdge
-import model.graph.weighted.WeightedGraph
+import model.graph.weighted.WeightedUndirectedGraph
 
 object Prim {
-    fun <V> findSpanningTree(graph: WeightedGraph<V>): List<WeightedEdge<V>> {
+    fun <V> findSpanningTree(graph: WeightedUndirectedGraph<V>): List<WeightedEdge<V>> {
         val visitedVertices = mutableSetOf<V>()
         val edges = mutableListOf<WeightedEdge<V>>()
 
