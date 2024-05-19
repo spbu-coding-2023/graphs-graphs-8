@@ -9,10 +9,13 @@ class MainScreenViewModel : ViewModel() {
     val graphs = GraphStorage()
 
     fun addGraph(name: String, type: Pair<String, String>) {
+        println(type.first)
+        println(type.second)
         when (type){
             Pair("undirected", "unweighted") -> {
                 graphs.typeList.add(ViewModelType.UU)
                 graphs.undirectedUnweightedGraphs.add(UndirectedUnweightedGraphViewModel<Int, Edge<Int>>(name))
+
             }
             Pair("directed", "unweighted") -> {
                 graphs.typeList.add(ViewModelType.DU)
@@ -41,7 +44,6 @@ class MainScreenViewModel : ViewModel() {
     }
 
     inner class GraphStorage(){
-
         fun getName(index: Int) : String{
             when(graphs.typeList[index]){
                 ViewModelType.UU -> {
@@ -91,6 +93,18 @@ class MainScreenViewModel : ViewModel() {
                     graphs.directedWeightedGraphs.removeAt(findGraph(index))
                 }
             }
+        }
+        fun getUU(index: Int) : UndirectedUnweightedGraphViewModel<Int, Edge<Int>>{
+            return undirectedUnweightedGraphs[findGraph(index)]
+        }
+        fun getDU(index: Int) : DirectedUnweightedGraphViewModel<Int, Edge<Int>>{
+            return directedUnweightedGraphs[findGraph(index)]
+        }
+        fun getUD(index: Int) : UndirectedWeightedGraphViewModel<Int, WeightedEdge<Int>>{
+            return undirectedWeightedGraphs[findGraph(index)]
+        }
+        fun getDW(index: Int) : DirectedWeightedGraphViewModel<Int, WeightedEdge<Int>>{
+            return directedWeightedGraphs[findGraph(index)]
         }
         var undirectedUnweightedGraphs = mutableStateListOf<UndirectedUnweightedGraphViewModel<Int, Edge<Int>>>()
         var directedUnweightedGraphs = mutableStateListOf<DirectedUnweightedGraphViewModel<Int, Edge<Int>>>()

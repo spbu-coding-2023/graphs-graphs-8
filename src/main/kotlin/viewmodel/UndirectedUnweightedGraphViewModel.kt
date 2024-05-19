@@ -15,6 +15,7 @@ class UndirectedUnweightedGraphViewModel<V, E : Edge<V>>(
     }
 
     fun addVertex(vertex: V) {
+        size += 1
         graphView.putIfAbsent(vertex, VertexViewModel(vertex))
         graphModel.addVertex(vertex)
     }

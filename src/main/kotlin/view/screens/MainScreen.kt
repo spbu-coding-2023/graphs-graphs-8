@@ -6,6 +6,7 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
@@ -36,7 +37,7 @@ fun MainScreen(navController: NavController, mainScreenViewModel: MainScreenView
     val optionsDUD = listOf("undirected", "directed")
     val expandedDUD = remember { mutableStateOf(false) }
     val selectedOptionTextDUD = remember { mutableStateOf(optionsDUD[0]) }
-    val optionsWUW = listOf("weighted", "unweighted")
+    val optionsWUW = listOf("unweighted", "weighted")
     val expandedWUW = remember { mutableStateOf(false) }
     val selectedOptionTextWUW= remember { mutableStateOf(optionsWUW[0]) }
 
@@ -165,7 +166,7 @@ fun MainScreen(navController: NavController, mainScreenViewModel: MainScreenView
                 colors = if(graphName != "") ButtonDefaults.buttonColors(backgroundColor = DefaultColors.simpleGreen) else ButtonDefaults.buttonColors(backgroundColor = DefaultColors.darkGreen),
                 onClick = {
                     if(graphName != ""){
-                        mainScreenViewModel.addGraph(graphName, Pair(selectedOptionTextDUD.toString(), selectedOptionTextWUW.toString()))
+                        mainScreenViewModel.addGraph(graphName, Pair(selectedOptionTextDUD.value.toString(), selectedOptionTextWUW.value.toString()))
                         dialogState.value = false
                     }
                 },
@@ -265,12 +266,18 @@ fun MainScreen(navController: NavController, mainScreenViewModel: MainScreenView
         Spacer(modifier = Modifier.height(30.dp))
 
         LazyColumn(modifier = Modifier.fillMaxWidth()) {
-            for (index in 0..mainScreenViewModel.graphs.typeList.size) {
-                if (!mainScreenViewModel.graphs.getName(index).startsWith(search)) return@LazyColumn
+            itemsIndexed(mainScreenViewModel.graphs.typeList) { index, _ ->
+                if (!mainScreenViewModel.graphs.getName(index).startsWith(search)) return@itemsIndexed
                 // To GraphScreen
                 Row(modifier = Modifier.padding(vertical = 15.dp)) {
                     Button(
-                        onClick = { navController.navigate("${Screen.GraphScreen.route}/$index") },
+                        onClick = { navController.navigate(when(mainScreenViewModel.graphs.typeList[index]){
+                            MainScreenViewModel.ViewModelType.UU -> "${Screen.UndirectedUnweightedGraphScreen.route}/UU/$index"
+                            MainScreenViewModel.ViewModelType.DU -> "${Screen.DirectedWeightedGraphScreen.route}/DU/$index"
+                            MainScreenViewModel.ViewModelType.UW -> "${Screen.UndirectedWeightedGraphScreen.route}/UW/$index"
+                            MainScreenViewModel.ViewModelType.DW -> "${Screen.DirectedWeightedGraphScreen.route}/DW/$index"
+                        })
+                                  },
                         modifier = Modifier
                             .fillMaxWidth()
                             .height(100.dp)

@@ -7,7 +7,7 @@ import model.graph.edges.Edge
 abstract class AbstractGraphViewModel<V, G>(graph: G) : ViewModel() {
     val graphView = mutableStateMapOf<V, VertexViewModel<V>>()
     val graphModel = graph
-
+    var size = 0
 
     fun addEdge(from: V, to: V) {
         if (graphView[from] == null) {

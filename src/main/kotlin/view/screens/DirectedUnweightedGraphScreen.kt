@@ -4,7 +4,10 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.*
+import androidx.compose.material.Button
+import androidx.compose.material.ButtonDefaults
+import androidx.compose.material.Text
+import androidx.compose.material.TextField
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -17,16 +20,16 @@ import model.graph.edges.Edge
 import view.DefaultColors
 import view.defaultStyle
 import view.views.GraphView
-import viewmodel.UndirectedUnweightedGraphViewModel
 import viewmodel.MainScreenViewModel
+import viewmodel.UndirectedUnweightedGraphViewModel
 
 @Composable
-fun GraphScreen(
+fun DirectedUnweightedGraphScreen(
     navController: NavController,
     mainScreenViewModel: MainScreenViewModel,
     graphId: Int
 ) {
-    val graphVM by mutableStateOf(mainScreenViewModel.getGraph(graphId))
+    val graphVM by mutableStateOf(mainScreenViewModel.graphs.getUU(graphId))
 
     Box(modifier = Modifier.fillMaxSize()) {
         GraphView(graphVM)
@@ -83,7 +86,7 @@ fun GraphScreen(
                     .padding(10.dp)
 
             ) {
-                AddEdgeMenu(graphVM)
+                AddDUEdgeMenu(graphVM)
             }
 
         }
@@ -91,7 +94,7 @@ fun GraphScreen(
 }
 
 @Composable
-fun AddEdgeMenu(graphModel: UndirectedUnweightedGraphViewModel<Int, Edge<Int>>) {
+fun AddDUEdgeMenu(graphModel: UndirectedUnweightedGraphViewModel<Int, Edge<Int>>) {
     var source by remember { mutableStateOf("") }
     var destination by remember { mutableStateOf("") }
     Row {
