@@ -19,6 +19,7 @@ import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
+import model.graph.edges.Edge
 import view.DefaultColors
 import viewmodel.GraphViewModel
 import viewmodel.VertexViewModel
@@ -26,11 +27,11 @@ import kotlin.math.atan2
 import kotlin.math.roundToInt
 
 @Composable
-fun VertexView(vertexVM: VertexViewModel, graphVM: GraphViewModel) {
-    val number = vertexVM.number
+fun VertexView(vertexVM: VertexViewModel<Int>, graphVM: GraphViewModel<Int, Edge<Int>>) {
+    val vertex = vertexVM.vertex
 
     Box(modifier = Modifier
-        .offset {IntOffset(vertexVM.offsetX.roundToInt(), vertexVM.offsetY.roundToInt())}
+        .offset { IntOffset(vertexVM.offsetX.roundToInt(), vertexVM.offsetY.roundToInt()) }
         .clip(shape = CircleShape)
         .size(100.dp)
         .background(DefaultColors.primary)
@@ -42,16 +43,19 @@ fun VertexView(vertexVM: VertexViewModel, graphVM: GraphViewModel) {
                 vertexVM.offsetY += dragAmount.y
             }
         }
-    ){
-        Text(text = "$number",
+    ) {
+        Text(
+            text = "$vertex",
             fontSize = 40.sp,
             modifier = Modifier
                 .fillMaxSize()
-                .wrapContentSize(),)
+                .wrapContentSize(),
+        )
     }
 
-    vertexVM.edges.forEach{ otherNumber ->
-        val otherVM = graphVM.graphView[otherNumber]!!
+    vertexVM.edges.forEach{ edge ->
+        val otherVertex = edge.to
+        val otherVM = graphVM.graphView[otherVertex]!!
         val otherX = otherVM.offsetX
         val otherY = otherVM.offsetY
 
@@ -59,14 +63,13 @@ fun VertexView(vertexVM: VertexViewModel, graphVM: GraphViewModel) {
             drawLine(
                 start = Offset(vertexVM.offsetX + vertexVM.vertexSize/2, vertexVM.offsetY + vertexVM.vertexSize/2),
                 end = Offset( otherX + vertexVM.vertexSize/2, otherY + vertexVM.vertexSize/2),
-                strokeWidth = if(graphVM.graphView[otherNumber]?.edges?.contains(vertexVM.number) != true) 6f else 12f,
+                strokeWidth =  6f,
                 color = Color.Black,
             )
             rotate(
                     degrees = ((57.2958 * (atan2(((vertexVM.offsetY - otherY).toDouble()), ((vertexVM.offsetX - otherX).toDouble())))).toFloat()),
                 pivot = Offset( otherX + vertexVM.vertexSize/2, otherY + vertexVM.vertexSize/2)
             ){
-                if(graphVM.graphView[otherNumber]?.edges?.contains(vertexVM.number) != true) {
                     drawRect(
                         color = Color.Black,
                         size = Size(5f, 16f),
@@ -92,9 +95,9 @@ fun VertexView(vertexVM: VertexViewModel, graphVM: GraphViewModel) {
                         size = Size(5f, 8f),
                         topLeft = Offset(otherX + vertexVM.vertexSize / 2 + 50, otherY + vertexVM.vertexSize / 2 - 4f),
                     )
-                }
             }
-
         }
+
+
     }
 }

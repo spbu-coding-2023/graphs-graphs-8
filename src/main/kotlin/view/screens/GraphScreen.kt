@@ -13,6 +13,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import androidx.navigation.NavController
 import localisation.localisation
+import model.graph.edges.Edge
 import view.DefaultColors
 import view.defaultStyle
 import view.views.GraphView
@@ -20,11 +21,15 @@ import viewmodel.GraphViewModel
 import viewmodel.MainScreenViewModel
 
 @Composable
-fun GraphScreen(navController: NavController, mainScreenViewModel: MainScreenViewModel, graphId: Int) {
-    val graphModel by mutableStateOf(mainScreenViewModel.getGraph(graphId))
+fun GraphScreen(
+    navController: NavController,
+    mainScreenViewModel: MainScreenViewModel,
+    graphId: Int
+) {
+    val graphVM by mutableStateOf(mainScreenViewModel.getGraph(graphId))
 
     Box(modifier = Modifier.fillMaxSize()) {
-        GraphView(graphModel)
+        GraphView(graphVM)
     }
 
     Column(modifier = Modifier.zIndex(1f).padding(16.dp).width(300.dp)) {
@@ -44,7 +49,7 @@ fun GraphScreen(navController: NavController, mainScreenViewModel: MainScreenVie
 
         // Add vertex
         Button(
-            onClick = { graphModel.addVertex(graphModel.size) },
+            onClick = { graphVM.addVertex(graphVM.size) },
             modifier = Modifier
                 .clip(shape = RoundedCornerShape(45.dp))
                 .border(5.dp, color = Color.Black, shape = RoundedCornerShape(45.dp))
@@ -78,7 +83,7 @@ fun GraphScreen(navController: NavController, mainScreenViewModel: MainScreenVie
                     .padding(10.dp)
 
             ) {
-                AddEdgeMenu(graphModel)
+                AddEdgeMenu(graphVM)
             }
 
         }
@@ -86,7 +91,7 @@ fun GraphScreen(navController: NavController, mainScreenViewModel: MainScreenVie
 }
 
 @Composable
-fun AddEdgeMenu(graphModel: GraphViewModel) {
+fun AddEdgeMenu(graphModel: GraphViewModel<Int, Edge<Int>>) {
     var source by remember { mutableStateOf("") }
     var destination by remember { mutableStateOf("") }
     Row {
