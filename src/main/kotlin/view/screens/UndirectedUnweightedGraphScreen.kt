@@ -37,6 +37,7 @@ fun UndirectedUnweightedGraphScreen(
 
     Column(modifier = Modifier.zIndex(1f).padding(16.dp).width(300.dp)) {
         // To MainScreen
+        Text(text="UU")
         Button(
             onClick = { navController.popBackStack() },
             modifier = Modifier

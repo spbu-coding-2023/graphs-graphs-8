@@ -5,9 +5,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
-import view.screens.MainScreen
-import view.screens.Screen
-import view.screens.SettingsScreen
+import view.screens.*
 import viewmodel.MainScreenViewModel
 
 @Composable
@@ -25,8 +23,8 @@ fun Navigation() {
         ){ navBackStackEntry ->
             val graphId = navBackStackEntry.arguments?.getInt("graphId")
             graphId?.let{
-                navController.navigate("${Screen.UndirectedUnweightedGraphScreen.route}/$graphId")
-                println("${Screen.UndirectedUnweightedGraphScreen.route}/$graphId")
+                println(graphId)
+                UndirectedUnweightedGraphScreen(navController, mainScreenViewModel, graphId)
             }
         }
         composable(
@@ -35,7 +33,7 @@ fun Navigation() {
         ){ navBackStackEntry ->
             val graphId = navBackStackEntry.arguments?.getInt("graphId")
             graphId?.let{
-                navController.navigate("${Screen.UndirectedUnweightedGraphScreen.route}/$graphId")
+                DirectedUnweightedGraphScreen(navController, mainScreenViewModel, graphId)
             }
         }
         composable(
@@ -44,7 +42,7 @@ fun Navigation() {
         ){ navBackStackEntry ->
             val graphId = navBackStackEntry.arguments?.getInt("graphId")
             graphId?.let{
-                navController.navigate("${Screen.UndirectedUnweightedGraphScreen.route}/$graphId")
+                UndirectedWeightedGraphScreen(navController, mainScreenViewModel, graphId)
             }
         }
         composable(
@@ -53,7 +51,7 @@ fun Navigation() {
         ){ navBackStackEntry ->
             val graphId = navBackStackEntry.arguments?.getInt("graphId")
             graphId?.let{
-                navController.navigate("${Screen.UndirectedUnweightedGraphScreen.route}/$graphId")
+                DirectedWeightedGraphScreen(navController, mainScreenViewModel, graphId)
             }
         }
         composable(route = Screen.SettingsScreen.route){

@@ -13,7 +13,6 @@ class MainScreenViewModel : ViewModel() {
             Pair("undirected", "unweighted") -> {
                 graphs.typeList.add(ViewModelType.UU)
                 graphs.undirectedUnweightedGraphs.add(UndirectedUnweightedGraphViewModel<Int, Edge<Int>>(name))
-
             }
             Pair("directed", "unweighted") -> {
                 graphs.typeList.add(ViewModelType.DU)
@@ -45,16 +44,16 @@ class MainScreenViewModel : ViewModel() {
         fun getName(index: Int) : String{
             when(graphs.typeList[index]){
                 ViewModelType.UU -> {
-                    return graphs.undirectedUnweightedGraphs[index].name
+                    return graphs.undirectedUnweightedGraphs[findGraph(index)].name
                 }
                 ViewModelType.DU -> {
-                    return graphs.directedUnweightedGraphs[index].name
+                    return graphs.directedUnweightedGraphs[findGraph(index)].name
                 }
                 ViewModelType.UW -> {
-                    return graphs.undirectedWeightedGraphs[index].name
+                    return graphs.undirectedWeightedGraphs[findGraph(index)].name
                 }
                 ViewModelType.DW -> {
-                    return graphs.directedWeightedGraphs[index].name
+                    return graphs.directedWeightedGraphs[findGraph(index)].name
                 }
             }
         }
@@ -74,7 +73,7 @@ class MainScreenViewModel : ViewModel() {
                     for (i in 0..index) if (graphs.typeList[i] == ViewModelType.DW) indexAr += 1
                 }
             }
-            return indexAr
+            return indexAr - 1
         }
         fun removeAt(index: Int){
             when(graphs.typeList[index]){

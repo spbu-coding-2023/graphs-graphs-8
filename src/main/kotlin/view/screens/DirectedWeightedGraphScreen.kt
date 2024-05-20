@@ -24,7 +24,7 @@ import viewmodel.MainScreenViewModel
 import viewmodel.UndirectedUnweightedGraphViewModel
 
 @Composable
-fun DirectedUnweightedGraphScreen(
+fun DirectedWeightedGraphScreen(
     navController: NavController,
     mainScreenViewModel: MainScreenViewModel,
     graphId: Int
@@ -37,7 +37,7 @@ fun DirectedUnweightedGraphScreen(
 
     Column(modifier = Modifier.zIndex(1f).padding(16.dp).width(300.dp)) {
         // To MainScreen
-        Text(text="DU")
+        Text(text="DW")
         Button(
             onClick = { navController.popBackStack() },
             modifier = Modifier
@@ -95,7 +95,7 @@ fun DirectedUnweightedGraphScreen(
 }
 
 @Composable
-fun AddDUEdgeMenu(graphModel: UndirectedUnweightedGraphViewModel<Int, Edge<Int>>) {
+fun AddDWEdgeMenu(graphModel: UndirectedUnweightedGraphViewModel<Int, Edge<Int>>) {
     var source by remember { mutableStateOf("") }
     var destination by remember { mutableStateOf("") }
     Row {
