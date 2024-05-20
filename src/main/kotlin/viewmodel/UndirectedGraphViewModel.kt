@@ -1,6 +1,7 @@
 package viewmodel
 
 import model.graph.UndirectedGraph
+import model.graph.edges.Edge
 
 class UndirectedGraphViewModel<V>(
     _name: String,
@@ -17,6 +18,14 @@ class UndirectedGraphViewModel<V>(
         size += 1
         graphView.putIfAbsent(vertex, VertexViewModel(vertex))
         graphModel.addVertex(vertex)
+    }
+    override fun addEdge(from: V, to: V) {
+        if (graphView[from] == null) return
+        for (i in graphView[from]?.edges!!) if(i.to == to) return
+        val edgesCopy = graphView[from]?.edges?.toMutableList()!!
+        edgesCopy.add(Edge(from, to))
+        edgesCopy.add(Edge(to, from))
+        graphView[from]?.edges = edgesCopy
     }
 
 }

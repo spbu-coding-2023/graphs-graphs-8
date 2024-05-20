@@ -9,10 +9,8 @@ abstract class AbstractGraphViewModel<V, G>(graph: G) : ViewModel() {
     val graphModel = graph
     var size = 0
 
-    fun addEdge(from: V, to: V) {
-        if (graphView[from] == null) {
-            return
-        }
+    open fun addEdge(from: V, to: V) {
+        if (graphView[from] == null) return
         for (i in graphView[from]?.edges!!) if(i.to == to) return
         val edgesCopy = graphView[from]?.edges?.toMutableList()!!
         edgesCopy.add(Edge(from, to))
