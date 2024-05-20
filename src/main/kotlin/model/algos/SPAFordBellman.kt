@@ -6,7 +6,7 @@ import model.graph.edges.Edge
 typealias Path<V> = List<Edge<V>>
 typealias Paths<V> = Map<V, Path<V>>
 
-object FordBellman {
+object SPAFordBellman {
     //should be : Pair<Int, Path<V>>
     fun <V> findShortestPath(from: V, to: V, graph: Graph<V>): Pair<Int?, Path<V>?> {
         val distances = mutableMapOf<V, Int?>()

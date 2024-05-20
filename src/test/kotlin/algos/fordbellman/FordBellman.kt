@@ -1,6 +1,6 @@
 package algos.fordbellman
 
-import model.algos.FordBellman
+import model.algos.SPAFordBellman
 import model.graph.DirectedGraph
 import model.graph.edges.Edge
 import kotlin.test.Test
@@ -8,7 +8,7 @@ import kotlin.test.assertContentEquals
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
 
-internal class FordBellmanTest {
+internal class SPAFordBellmanTest {
 
     @Test
     fun basicFind() {
@@ -25,7 +25,7 @@ internal class FordBellmanTest {
             this.addEdge(4, 3, -1)
         }
 
-        val result = FordBellman.findShortestPath(1, 4, graph)
+        val result = SPAFordBellman.findShortestPath(1, 4, graph)
 
         val shortestExpected = 6
         val shortestActual = result.first

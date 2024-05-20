@@ -3,7 +3,7 @@ package model.algos
 import model.graph.edges.Edge
 import model.graph.UndirectedGraph
 
-object Prim {
+object MSTPrim {
     fun <V> findSpanningTree(graph: UndirectedGraph<V>): List<Edge<V>> {
         val visitedVertices = mutableSetOf<V>()
         val edges = mutableListOf<Edge<V>>()
