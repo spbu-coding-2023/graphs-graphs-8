@@ -53,13 +53,15 @@ class MainScreenViewModel : ViewModel() {
             }
             return indexAr - 1
         }
-        fun removeAt(index: Int){
+        fun removeGraph(index: Int){
             when(graphs.typeList[index]){
                 ViewModelType.Undirect -> {
                     graphs.undirectedGraphs.removeAt(findGraph(index))
+                    graphs.typeList.removeAt(index)
                 }
                 ViewModelType.Direct -> {
                     graphs.directedGraphs.removeAt(findGraph(index))
+                    graphs.typeList.removeAt(index)
                 }
 
             }

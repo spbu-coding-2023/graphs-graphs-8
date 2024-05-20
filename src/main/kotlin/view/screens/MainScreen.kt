@@ -261,7 +261,7 @@ fun MainScreen(navController: NavController, mainScreenViewModel: MainScreenView
 
                     // Remove Graph
                     IconButton(
-                        onClick = { mainScreenViewModel.graphs.removeAt(index) },
+                        onClick = { mainScreenViewModel.graphs.removeGraph(index)},
                         modifier = Modifier
                             .padding(horizontal = 10.dp)
                             .size(100.dp)
