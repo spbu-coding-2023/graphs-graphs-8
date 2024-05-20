@@ -2,30 +2,33 @@ package model.algos
 
 import model.graph.edges.Edge
 import model.graph.UndirectedGraph
+import java.util.PriorityQueue
 
 object MSTPrim {
-    fun <V> findSpanningTree(graph: UndirectedGraph<V>): List<Edge<V>> {
-        val visitedVertices = mutableListOf<V>()
-        val edges = mutableListOf<Edge<V>>()
+    fun <V> findMST(graph: UndirectedGraph<V>, startVertex: V): List<Edge<V>> {
+        val mst = mutableListOf<Edge<V>>()
+        val visited = mutableSetOf<V>()
+        val edgeQueue = PriorityQueue<Edge<V>>()
 
-        val vertex = graph.vertices.random()
-        visitedVertices.add(vertex)
-
-        val allEdgesOfVertices = visitedVertices.flatMap { graph.edgesOf(it) }
-        val unvisitedEdges =
-            allEdgesOfVertices.filter { !visitedVertices.contains(it.from) || !visitedVertices.contains(it.to) }
-
-        val nextEdge = unvisitedEdges.minBy { it.weight }
-        visitedVertices.addAll(setOf(nextEdge.from, nextEdge.to))
-        edges.add(nextEdge)
-
-        while (!visitedVertices.containsAll(graph.vertices)) {
-            val edge = visitedVertices.flatMap { graph.edgesOf(it) }
-                .filter { !visitedVertices.contains(it.from) || !visitedVertices.contains(it.to) }
-                .minBy { it.weight }
-            visitedVertices.addAll(listOf(edge.from, edge.to))
-            edges.add(edge)
+        fun addEdges(vertex: V) {
+            visited.add(vertex)
+            for (edge in graph.edgesOf(vertex)) {
+                if (edge.to !in visited) {
+                    edgeQueue.add(edge)
+                }
+            }
         }
-        return edges
+
+        addEdges(startVertex)
+
+        while (edgeQueue.isNotEmpty()) {
+            val edge = edgeQueue.poll()
+            if (edge.to !in visited) {
+                mst.add(edge)
+                addEdges(edge.to)
+            }
+        }
+
+        return mst
     }
 }
