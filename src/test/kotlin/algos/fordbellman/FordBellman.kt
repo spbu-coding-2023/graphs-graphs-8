@@ -1,16 +1,18 @@
 package algos.fordbellman
 
 import model.algos.FordBellman
+import model.graph.DirectedGraph
 import model.graph.edges.Edge
-import model.graph.edges.WeightedEdge
-import model.graph.weighted.WeightedDirectedGraph
-import kotlin.test.*
+import kotlin.test.Test
+import kotlin.test.assertContentEquals
+import kotlin.test.assertEquals
+import kotlin.test.assertNotNull
 
 internal class FordBellmanTest {
 
     @Test
     fun basicFind() {
-        val graph = WeightedDirectedGraph<Int>()
+        val graph = DirectedGraph<Int>()
         for (i in 1..4) {
             graph.addVertex(i)
         }
@@ -34,9 +36,9 @@ internal class FordBellmanTest {
         )
 
         val pathExpected = listOf<Edge<Int>>(
-            WeightedEdge(1, 3, 2),
-            WeightedEdge(3, 2, 3),
-            WeightedEdge(2, 4, 1)
+            Edge(1, 3, 2),
+            Edge(3, 2, 3),
+            Edge(2, 4, 1)
         )
         val pathActual = result.second
         assertContentEquals(pathExpected, pathActual, "")
