@@ -9,8 +9,6 @@ class MainScreenViewModel : ViewModel() {
     val graphs = GraphStorage()
 
     fun addGraph(name: String, type: Pair<String, String>) {
-        println(type.first)
-        println(type.second)
         when (type){
             Pair("undirected", "unweighted") -> {
                 graphs.typeList.add(ViewModelType.UU)

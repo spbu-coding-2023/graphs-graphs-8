@@ -272,10 +272,10 @@ fun MainScreen(navController: NavController, mainScreenViewModel: MainScreenView
                 Row(modifier = Modifier.padding(vertical = 15.dp)) {
                     Button(
                         onClick = { navController.navigate(when(mainScreenViewModel.graphs.typeList[index]){
-                            MainScreenViewModel.ViewModelType.UU -> "${Screen.UndirectedUnweightedGraphScreen.route}/UU/$index"
-                            MainScreenViewModel.ViewModelType.DU -> "${Screen.DirectedWeightedGraphScreen.route}/DU/$index"
-                            MainScreenViewModel.ViewModelType.UW -> "${Screen.UndirectedWeightedGraphScreen.route}/UW/$index"
-                            MainScreenViewModel.ViewModelType.DW -> "${Screen.DirectedWeightedGraphScreen.route}/DW/$index"
+                            MainScreenViewModel.ViewModelType.UU -> "${Screen.UndirectedUnweightedGraphScreen.route}/$index"
+                            MainScreenViewModel.ViewModelType.DU -> "${Screen.DirectedWeightedGraphScreen.route}/$index"
+                            MainScreenViewModel.ViewModelType.UW -> "${Screen.UndirectedWeightedGraphScreen.route}/$index"
+                            MainScreenViewModel.ViewModelType.DW -> "${Screen.DirectedWeightedGraphScreen.route}/$index"
                         })
                                   },
                         modifier = Modifier

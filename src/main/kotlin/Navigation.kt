@@ -20,39 +20,40 @@ fun Navigation() {
             MainScreen(navController = navController, mainScreenViewModel)
         }
         composable(
-            route = "${Screen.UndirectedUnweightedGraphScreen.route}/{type}/{graphId}",
+            route = "${Screen.UndirectedUnweightedGraphScreen.route}/{graphId}",
             arguments = listOf(navArgument("graphId") { type = NavType.IntType })
         ){ navBackStackEntry ->
             val graphId = navBackStackEntry.arguments?.getInt("graphId")
             graphId?.let{
-                navController.navigate("${Screen.UndirectedUnweightedGraphScreen.route}/UU/$graphId")
+                navController.navigate("${Screen.UndirectedUnweightedGraphScreen.route}/$graphId")
+                println("${Screen.UndirectedUnweightedGraphScreen.route}/$graphId")
             }
         }
         composable(
-            route = "${Screen.DirectedUnweightedGraphScreen.route}/{type}/{graphId}",
+            route = "${Screen.DirectedUnweightedGraphScreen.route}/{graphId}",
             arguments = listOf(navArgument("graphId") { type = NavType.IntType })
         ){ navBackStackEntry ->
             val graphId = navBackStackEntry.arguments?.getInt("graphId")
             graphId?.let{
-                navController.navigate("${Screen.UndirectedUnweightedGraphScreen.route}/DU/$graphId")
+                navController.navigate("${Screen.UndirectedUnweightedGraphScreen.route}/$graphId")
             }
         }
         composable(
-            route = "${Screen.UndirectedWeightedGraphScreen.route}/{type}/{graphId}",
+            route = "${Screen.UndirectedWeightedGraphScreen.route}/{graphId}",
             arguments = listOf(navArgument("graphId") { type = NavType.IntType })
         ){ navBackStackEntry ->
             val graphId = navBackStackEntry.arguments?.getInt("graphId")
             graphId?.let{
-                navController.navigate("${Screen.UndirectedUnweightedGraphScreen.route}/UW/$graphId")
+                navController.navigate("${Screen.UndirectedUnweightedGraphScreen.route}/$graphId")
             }
         }
         composable(
-            route = "${Screen.DirectedWeightedGraphScreen.route}/{type}/{graphId}",
+            route = "${Screen.DirectedWeightedGraphScreen.route}/{graphId}",
             arguments = listOf(navArgument("graphId") { type = NavType.IntType })
         ){ navBackStackEntry ->
             val graphId = navBackStackEntry.arguments?.getInt("graphId")
             graphId?.let{
-                navController.navigate("${Screen.UndirectedUnweightedGraphScreen.route}/DW/$graphId")
+                navController.navigate("${Screen.UndirectedUnweightedGraphScreen.route}/$graphId")
             }
         }
         composable(route = Screen.SettingsScreen.route){
