@@ -6,6 +6,8 @@ abstract class Graph<V>() {
     protected val graph = mutableMapOf<V, MutableList<Edge<V>>>()
     val entries
         get() = graph.entries
+    protected var weighted = false
+
 
     val vertices
         get() = graph.keys
@@ -28,7 +30,7 @@ abstract class Graph<V>() {
         size++
     }
 
-    abstract fun addEdge(from: V, to: V, weight: Int)
+    abstract fun addEdge(from: V, to: V, weight: Int = 1)
 
     fun edgesOf(from: V): MutableList<Edge<V>> {
         return graph[from] ?: mutableListOf()
