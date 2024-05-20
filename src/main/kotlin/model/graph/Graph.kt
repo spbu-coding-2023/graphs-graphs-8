@@ -6,6 +6,8 @@ abstract class Graph<V>() {
     protected val graph = mutableMapOf<V, MutableList<Edge<V>>>()
     val entries
         get() = graph.entries
+    protected var unweighted = true
+
 
     val vertices
         get() = graph.keys

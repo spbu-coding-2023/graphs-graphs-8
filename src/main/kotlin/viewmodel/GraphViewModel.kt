@@ -3,12 +3,12 @@ package viewmodel
 import androidx.compose.runtime.mutableStateMapOf
 import androidx.lifecycle.ViewModel
 import graph.Graph
+import model.graph.UndirectedGraph
 import model.graph.edges.Edge
-import model.graph.undirected.UndirectedWeightedGraph
 
 class GraphViewModel<V, E : Edge<V>>(
     _name: String,
-    graph: Graph<V> = UndirectedWeightedGraph<V>()
+    graph: Graph<V> = UndirectedGraph<V>()
 ) : ViewModel() {
     val name = _name
     val size
