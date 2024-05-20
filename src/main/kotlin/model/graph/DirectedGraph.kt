@@ -1,6 +1,5 @@
 package model.graph
 
-import graph.Graph
 import model.graph.edges.Edge
 
 class DirectedGraph<V> : Graph<V>() {

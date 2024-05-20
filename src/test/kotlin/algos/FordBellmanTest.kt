@@ -32,7 +32,7 @@ internal class FordBellmanTest {
             "FordBellman must return weight of the shortest path"
         )
 
-        val pathExpected = listOf<Edge<Int>>(
+        val pathExpected = listOf(
             Edge(1, 3, 2),
             Edge(3, 2, 3),
             Edge(2, 4, 1)
@@ -66,7 +66,7 @@ internal class FordBellmanTest {
         val shortestLengthActual = result.first
         assertEquals(
             shortestLengthExpected, shortestLengthActual,
-            "FordBellman must return null as legnth of path if it is not possible to reach destination"
+            "FordBellman must return null as length of path if it is not possible to reach destination"
         )
 
         val pathExpected = null
@@ -97,7 +97,7 @@ internal class FordBellmanTest {
         val shortestLengthActual = result.first
         assertEquals(
             shortestLengthExpected, shortestLengthActual,
-            "FordBellman must return null as legnth of path if there is negative cycles"
+            "FordBellman must return null as length of path if there is negative cycles"
         )
 
         val pathActual = result.second

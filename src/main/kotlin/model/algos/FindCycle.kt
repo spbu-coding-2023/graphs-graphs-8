@@ -3,7 +3,7 @@ package model.algos
 import model.graph.UndirectedGraph
 import model.graph.edges.Edge
 
-object FCADFS {
+object FindCycle {
     private fun <V> findCycleUtil(
         graph: UndirectedGraph<V>,
         startVertex: V,

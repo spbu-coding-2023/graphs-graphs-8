@@ -28,7 +28,7 @@ fun DirectedGraphScreen(
     mainScreenViewModel: MainScreenViewModel,
     graphId: Int
 ) {
-    val graphVM by mutableStateOf(mainScreenViewModel.graphs.getDirect(graphId))
+    val graphVM by mutableStateOf(mainScreenViewModel.graphs.getDirected(graphId))
 
     Box(modifier = Modifier.fillMaxSize()) {
         GraphViewDirect(graphVM)
@@ -36,7 +36,7 @@ fun DirectedGraphScreen(
 
     Column(modifier = Modifier.zIndex(1f).padding(16.dp).width(300.dp)) {
         // To MainScreen
-        Text(text="Directed")
+        Text(text = "Directed")
         Button(
             onClick = { navController.popBackStack() },
             modifier = Modifier

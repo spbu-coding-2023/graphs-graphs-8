@@ -4,7 +4,8 @@ import model.graph.edges.Edge
 import model.graph.UndirectedGraph
 import java.util.PriorityQueue
 
-object MSTPrim {
+object Prim {
+    // find minimum spanning tree
     fun <V> findMST(graph: UndirectedGraph<V>, startVertex: V): List<Edge<V>> {
         val mst = mutableListOf<Edge<V>>()
         val visited = mutableSetOf<V>()
