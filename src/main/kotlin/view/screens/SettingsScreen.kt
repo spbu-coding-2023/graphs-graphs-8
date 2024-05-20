@@ -22,77 +22,96 @@ import view.bounceClick
 import view.defaultStyle
 import java.io.File
 
-val pathToSettings = "src/main/kotlin/settings.json"
+const val pathToSettings = "src/main/kotlin/settings.json"
 
 @Serializable
 class SettingsJSON(var language: String)
-enum class SettingType{
+enum class SettingType {
     LANGUAGE
 }
 
-fun resetSettings(){
+fun resetSettings() {
     File(pathToSettings).writeText(Json.encodeToString(SettingsJSON("en-US")))
 }
 
-fun makeSetting(name: SettingType, value: String){
-    try{
+fun makeSetting(name: SettingType, value: String) {
+    try {
         val data = Json.decodeFromString<SettingsJSON>(File(pathToSettings).readText())
-        when (name){
-            SettingType.LANGUAGE -> data.language = value;
+        when (name) {
+            SettingType.LANGUAGE -> data.language = value
         }
         File(pathToSettings).writeText(Json.encodeToString(data))
-    }
-    catch(exception: Exception){
+    } catch (exception: Exception) {
         resetSettings()
         return
     }
 }
 
 @Composable
-fun SettingsScreen(navController: NavController){
+fun SettingsScreen(navController: NavController) {
     var language by mutableStateOf(getLocalisation())
-    Column{
-        Text(text = localisation("settings"), fontSize = 28.sp, modifier = Modifier.padding(horizontal = 20.dp, vertical = 20.dp))
-        Button(onClick = {
-            makeSetting(SettingType.LANGUAGE, "cn-CN")
-            language = "cn-CN"
-                         },
+    Column {
+        Text(
+            text = localisation("settings"),
+            fontSize = 28.sp,
+            modifier = Modifier.padding(horizontal = 20.dp, vertical = 20.dp)
+        )
+        Button(
+            onClick = {
+                makeSetting(SettingType.LANGUAGE, "cn-CN")
+                language = "cn-CN"
+            },
             modifier = Modifier
                 .padding(horizontal = 16.dp, vertical = 20.dp)
                 .border(width = if (language == "cn-CN") 5.dp else 3.dp, color = Color.Black)
                 .bounceClick(),
-            colors = ButtonDefaults.buttonColors(backgroundColor =
-            if (language =="cn-CN") DefaultColors.primarySelected else DefaultColors.primary)) {
+            colors = ButtonDefaults.buttonColors(
+                backgroundColor =
+                if (language == "cn-CN") DefaultColors.primarySelected else DefaultColors.primary
+            )
+        ) {
             Text("汉语", style = defaultStyle)
         }
-        Button(onClick = {
-            makeSetting(SettingType.LANGUAGE, "ru-RU")
-            language = "ru-RU" },
+        Button(
+            onClick = {
+                makeSetting(SettingType.LANGUAGE, "ru-RU")
+                language = "ru-RU"
+            },
             modifier = Modifier
                 .padding(horizontal = 16.dp, vertical = 20.dp)
                 .border(width = if (language == "ru-RU") 5.dp else 3.dp, color = Color.Black)
                 .bounceClick(),
-            colors = ButtonDefaults.buttonColors(backgroundColor =
-            if (language =="ru-RU") DefaultColors.primarySelected else DefaultColors.primary)) {
+            colors = ButtonDefaults.buttonColors(
+                backgroundColor =
+                if (language == "ru-RU") DefaultColors.primarySelected else DefaultColors.primary
+            )
+        ) {
             Text("Русский", style = defaultStyle)
         }
-        Button(onClick = {
-            makeSetting(SettingType.LANGUAGE, "en-US")
-            language = "en-US"},
+        Button(
+            onClick = {
+                makeSetting(SettingType.LANGUAGE, "en-US")
+                language = "en-US"
+            },
             modifier = Modifier
                 .padding(horizontal = 16.dp, vertical = 20.dp)
                 .border(width = if (language == "en-US") 5.dp else 3.dp, color = Color.Black)
                 .bounceClick(),
-            colors = ButtonDefaults.buttonColors(backgroundColor =
-            if (language =="en-US") DefaultColors.primarySelected else DefaultColors.primary)) {
+            colors = ButtonDefaults.buttonColors(
+                backgroundColor =
+                if (language == "en-US") DefaultColors.primarySelected else DefaultColors.primary
+            )
+        ) {
             Text("English", style = defaultStyle)
         }
-        Button(onClick = {navController.navigate(Screen.MainScreen.route)},
+        Button(
+            onClick = { navController.navigate(Screen.MainScreen.route) },
             modifier = Modifier
                 .padding(16.dp)
                 .border(width = 3.dp, color = Color.Black)
                 .bounceClick(),
-            colors = ButtonDefaults.buttonColors(backgroundColor = DefaultColors.error)) {
+            colors = ButtonDefaults.buttonColors(backgroundColor = DefaultColors.error)
+        ) {
             Text(localisation("back"), style = defaultStyle, color = Color.White)
         }
     }

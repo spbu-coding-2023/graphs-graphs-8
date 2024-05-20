@@ -1,13 +1,13 @@
-package algos.fcadfs
+package algos
 
-import model.algos.FCADFS
+import model.algos.FindCycle
 import model.graph.UndirectedGraph
 import model.graph.edges.Edge
 import kotlin.test.Test
 import kotlin.test.assertContentEquals
 import kotlin.test.assertNotNull
 
-internal class FCA {
+internal class FindCycleTest {
 
     @Test
     fun basic() {
@@ -23,7 +23,7 @@ internal class FCA {
             this.addEdge(3, 4)
         }
 
-        val pathActual = FCADFS.findCycle(graph, 2)
+        val pathActual = FindCycle.findCycle(graph, 2)
         assertNotNull(pathActual)
         val pathExpected = listOf(
             Edge(2, 1),

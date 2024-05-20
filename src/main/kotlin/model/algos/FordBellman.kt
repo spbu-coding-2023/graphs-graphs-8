@@ -1,6 +1,6 @@
 package model.algos
 
-import graph.Graph
+import model.graph.Graph
 import model.graph.edges.Edge
 
 typealias Path<V> = List<Edge<V>>

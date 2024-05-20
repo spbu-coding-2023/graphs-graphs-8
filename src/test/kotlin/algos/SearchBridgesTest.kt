@@ -6,9 +6,9 @@ import model.graph.edges.Edge
 import kotlin.test.Test
 import kotlin.test.assertTrue
 
-internal class SearchBridges {
+internal class SearchBridgesTest {
 
-    fun <V> bridgesEquals(bridges1: Set<Edge<V>>, bridges2: Set<Edge<V>>): Boolean {
+    private fun <V> bridgesEquals(bridges1: Set<Edge<V>>, bridges2: Set<Edge<V>>): Boolean {
         for (bridge in bridges1) {
             val bridgeReversed = Edge(bridge.to, bridge.from, bridge.weight)
             if (bridges2.contains(bridge) || bridges2.contains(bridgeReversed))
