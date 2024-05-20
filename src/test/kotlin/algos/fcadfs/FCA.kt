@@ -7,7 +7,7 @@ import kotlin.test.Test
 import kotlin.test.assertContentEquals
 import kotlin.test.assertNotNull
 
-internal class FCADFS {
+internal class FCA {
 
     @Test
     fun basic() {
