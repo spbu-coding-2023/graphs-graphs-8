@@ -34,9 +34,11 @@ fun MainScreen(navController: NavController, mainScreenViewModel: MainScreenView
     var search by remember { mutableStateOf("") }
     var graphName by remember { mutableStateOf("") }
     val dialogState = remember { mutableStateOf(false) }
-    val options = listOf("undirected", "directed")
-    val expanded = remember { mutableStateOf(false) }
-    val selectedOptionText = remember { mutableStateOf(options[0]) }
+    val optionsDropDown = listOf("undirected", "directed")
+    val expandedDropDown = remember { mutableStateOf(false) }
+    val selectedOptionTextDropDown = remember { mutableStateOf(optionsDropDown[0]) }
+    
+    
 
     Column(modifier = Modifier.fillMaxSize().background(DefaultColors.background).padding(16.dp)) {
         Row(modifier = Modifier.fillMaxWidth().height(100.dp)) {
@@ -163,7 +165,7 @@ fun MainScreen(navController: NavController, mainScreenViewModel: MainScreenView
                 colors = if(graphName != "") ButtonDefaults.buttonColors(backgroundColor = DefaultColors.simpleGreen) else ButtonDefaults.buttonColors(backgroundColor = DefaultColors.darkGreen),
                 onClick = {
                     if(graphName != ""){
-                        mainScreenViewModel.addGraph(graphName)
+                        mainScreenViewModel.addGraph(graphName, selectedOptionTextDropDown.value)
                         dialogState.value = false
                     }
                 },
@@ -196,10 +198,10 @@ fun MainScreen(navController: NavController, mainScreenViewModel: MainScreenView
                     .height(60.dp)
                     .clip(RoundedCornerShape(25.dp))
                     .border(BorderStroke(2.dp, Color.LightGray), RoundedCornerShape(25.dp))
-                    .clickable { expanded.value = !expanded.value },
+                    .clickable { expandedDropDown.value = !expandedDropDown.value },
             ) {
                 Text(
-                    text = selectedOptionText.value,
+                    text = selectedOptionTextDropDown.value,
                     fontSize = 20.sp,
                     modifier = Modifier.padding(start = 20.dp)
                 )
@@ -208,14 +210,14 @@ fun MainScreen(navController: NavController, mainScreenViewModel: MainScreenView
                     Modifier.align(Alignment.CenterEnd)
                 )
                 DropdownMenu(
-                    expanded = expanded.value,
-                    onDismissRequest = { expanded.value = false }
+                    expanded = expandedDropDown.value,
+                    onDismissRequest = { expandedDropDown.value = false }
                 ) {
-                    options.forEach { selectionOption ->
+                    optionsDropDown.forEach { selectionOption ->
                         DropdownMenuItem(
                             onClick = {
-                                selectedOptionText.value = selectionOption
-                                expanded.value = false
+                                selectedOptionTextDropDown.value = selectionOption
+                                expandedDropDown.value = false
                             }
                         ) {
                             Text(text = localisation(selectionOption))
@@ -223,18 +225,23 @@ fun MainScreen(navController: NavController, mainScreenViewModel: MainScreenView
                     }
                 }
             }
+            
+            
         }
 
         Spacer(modifier = Modifier.height(30.dp))
 
         LazyColumn(modifier = Modifier.fillMaxWidth()) {
-            itemsIndexed(mainScreenViewModel.graphs) { index, graph ->
-                if (!graph.name.startsWith(search)) return@itemsIndexed
-
+            itemsIndexed(mainScreenViewModel.graphs.typeList) { index, _ ->
+                if (!mainScreenViewModel.graphs.getName(index).startsWith(search)) return@itemsIndexed
                 // To GraphScreen
                 Row(modifier = Modifier.padding(vertical = 15.dp)) {
                     Button(
-                        onClick = { navController.navigate("${Screen.GraphScreen.route}/$index") },
+                        onClick = { navController.navigate(when(mainScreenViewModel.graphs.typeList[index]){
+                            MainScreenViewModel.ViewModelType.Undirect -> "${Screen.UndirectedGraphScreen.route}/$index"
+                            MainScreenViewModel.ViewModelType.Direct -> "${Screen.DirectedGraphScreen.route}/$index"
+                        })
+                                  },
                         modifier = Modifier
                             .fillMaxWidth()
                             .height(100.dp)
@@ -247,14 +254,14 @@ fun MainScreen(navController: NavController, mainScreenViewModel: MainScreenView
                             ),
                         colors = ButtonDefaults.buttonColors(backgroundColor = DefaultColors.primary)
                     ) {
-                        Text(text = graph.name, style = bigStyle, modifier = Modifier.clip(RoundedCornerShape(45.dp)))
+                        Text(text = mainScreenViewModel.graphs.getName(index), style = bigStyle, modifier = Modifier.clip(RoundedCornerShape(45.dp)))
                     }
 
                     Spacer(modifier = Modifier.width(10.dp))
 
                     // Remove Graph
                     IconButton(
-                        onClick = { mainScreenViewModel.graphs.removeAt(index) },
+                        onClick = { mainScreenViewModel.graphs.removeGraph(index)},
                         modifier = Modifier
                             .padding(horizontal = 10.dp)
                             .size(100.dp)

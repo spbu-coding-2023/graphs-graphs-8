@@ -6,8 +6,17 @@ import model.graph.edges.Edge
 typealias Path<V> = List<Edge<V>>
 typealias Paths<V> = Map<V, Path<V>>
 
-object SPAFordBellman {
-    //should be : Pair<Int, Path<V>>
+object FordBellman {
+    /**
+     * @return
+     * If it is possible to reach the destination , then return Pair(length of shortest path, path)
+     *
+     * If it is possible to reach the destination, but graph contains negative cycle,
+     * than return Pair(null, some path to destination)
+     *
+     * If it is not possible to reach the destination, then return Pair(null, null)
+     *
+     */
     fun <V> findShortestPath(from: V, to: V, graph: Graph<V>): Pair<Int?, Path<V>?> {
         val distances = mutableMapOf<V, Int?>()
         val minSources = mutableMapOf<V, Edge<V>>()
@@ -43,7 +52,7 @@ object SPAFordBellman {
         }
         var path: MutableList<Edge<V>>? = null
         var curVert = to
-        if (!lastTimeRelaxed && distances[curVert] != null) {
+        if (distances[curVert] != null) {
             path = mutableListOf()
             while (curVert != from) {
                 val prevEdge = minSources[curVert]
@@ -52,12 +61,10 @@ object SPAFordBellman {
                 curVert = prevEdge.from
             }
         }
+
+        if (lastTimeRelaxed) distances[to] = null
         val pathAnswer = path?.reversed()?.toList()
         return Pair(distances[to], pathAnswer)
-    }
-
-    fun <V> findShortestPath(from: V, graph: Graph<V>): Pair<Map<V, Int>, Paths<V>> {
-        TODO()
     }
 }
 
