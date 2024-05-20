@@ -19,7 +19,7 @@ import localisation.localisation
 import model.graph.edges.Edge
 import view.DefaultColors
 import view.defaultStyle
-import view.views.GraphView
+import view.views.GraphViewUW
 import viewmodel.MainScreenViewModel
 import viewmodel.UndirectedUnweightedGraphViewModel
 
@@ -32,7 +32,7 @@ fun UndirectedWeightedGraphScreen(
     val graphVM by mutableStateOf(mainScreenViewModel.graphs.getUU(graphId))
 
     Box(modifier = Modifier.fillMaxSize()) {
-        GraphView(graphVM)
+        GraphViewUW(graphVM)
     }
 
     Column(modifier = Modifier.zIndex(1f).padding(16.dp).width(300.dp)) {

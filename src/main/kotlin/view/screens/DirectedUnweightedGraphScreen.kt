@@ -19,9 +19,9 @@ import localisation.localisation
 import model.graph.edges.Edge
 import view.DefaultColors
 import view.defaultStyle
-import view.views.GraphView
+import view.views.GraphViewDU
+import viewmodel.DirectedUnweightedGraphViewModel
 import viewmodel.MainScreenViewModel
-import viewmodel.UndirectedUnweightedGraphViewModel
 
 @Composable
 fun DirectedUnweightedGraphScreen(
@@ -29,10 +29,10 @@ fun DirectedUnweightedGraphScreen(
     mainScreenViewModel: MainScreenViewModel,
     graphId: Int
 ) {
-    val graphVM by mutableStateOf(mainScreenViewModel.graphs.getUU(graphId))
+    val graphVM by mutableStateOf(mainScreenViewModel.graphs.getDU(graphId))
 
     Box(modifier = Modifier.fillMaxSize()) {
-        GraphView(graphVM)
+        GraphViewDU(graphVM)
     }
 
     Column(modifier = Modifier.zIndex(1f).padding(16.dp).width(300.dp)) {
@@ -95,7 +95,7 @@ fun DirectedUnweightedGraphScreen(
 }
 
 @Composable
-fun AddDUEdgeMenu(graphModel: UndirectedUnweightedGraphViewModel<Int, Edge<Int>>) {
+fun AddDUEdgeMenu(graphModel: DirectedUnweightedGraphViewModel<Int, Edge<Int>>) {
     var source by remember { mutableStateOf("") }
     var destination by remember { mutableStateOf("") }
     Row {
