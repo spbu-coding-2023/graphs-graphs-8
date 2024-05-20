@@ -34,12 +34,11 @@ fun MainScreen(navController: NavController, mainScreenViewModel: MainScreenView
     var search by remember { mutableStateOf("") }
     var graphName by remember { mutableStateOf("") }
     val dialogState = remember { mutableStateOf(false) }
-    val optionsDUD = listOf("undirected", "directed")
-    val expandedDUD = remember { mutableStateOf(false) }
-    val selectedOptionTextDUD = remember { mutableStateOf(optionsDUD[0]) }
-    val optionsWUW = listOf("unweighted", "weighted")
-    val expandedWUW = remember { mutableStateOf(false) }
-    val selectedOptionTextWUW= remember { mutableStateOf(optionsWUW[0]) }
+    val optionsDropDown = listOf("undirected", "directed")
+    val expandedDropDown = remember { mutableStateOf(false) }
+    val selectedOptionTextDropDown = remember { mutableStateOf(optionsDropDown[0]) }
+    
+    
 
     Column(modifier = Modifier.fillMaxSize().background(DefaultColors.background).padding(16.dp)) {
         Row(modifier = Modifier.fillMaxWidth().height(100.dp)) {
@@ -166,7 +165,7 @@ fun MainScreen(navController: NavController, mainScreenViewModel: MainScreenView
                 colors = if(graphName != "") ButtonDefaults.buttonColors(backgroundColor = DefaultColors.simpleGreen) else ButtonDefaults.buttonColors(backgroundColor = DefaultColors.darkGreen),
                 onClick = {
                     if(graphName != ""){
-                        mainScreenViewModel.addGraph(graphName, Pair(selectedOptionTextDUD.value.toString(), selectedOptionTextWUW.value.toString()))
+                        mainScreenViewModel.addGraph(graphName, selectedOptionTextDropDown.value)
                         dialogState.value = false
                     }
                 },
@@ -199,10 +198,10 @@ fun MainScreen(navController: NavController, mainScreenViewModel: MainScreenView
                     .height(60.dp)
                     .clip(RoundedCornerShape(25.dp))
                     .border(BorderStroke(2.dp, Color.LightGray), RoundedCornerShape(25.dp))
-                    .clickable { expandedDUD.value = !expandedDUD.value },
+                    .clickable { expandedDropDown.value = !expandedDropDown.value },
             ) {
                 Text(
-                    text = selectedOptionTextDUD.value,
+                    text = selectedOptionTextDropDown.value,
                     fontSize = 20.sp,
                     modifier = Modifier.padding(start = 20.dp)
                 )
@@ -211,14 +210,14 @@ fun MainScreen(navController: NavController, mainScreenViewModel: MainScreenView
                     Modifier.align(Alignment.CenterEnd)
                 )
                 DropdownMenu(
-                    expanded = expandedDUD.value,
-                    onDismissRequest = { expandedDUD.value = false }
+                    expanded = expandedDropDown.value,
+                    onDismissRequest = { expandedDropDown.value = false }
                 ) {
-                    optionsDUD.forEach { selectionOption ->
+                    optionsDropDown.forEach { selectionOption ->
                         DropdownMenuItem(
                             onClick = {
-                                selectedOptionTextDUD.value = selectionOption
-                                expandedDUD.value = false
+                                selectedOptionTextDropDown.value = selectionOption
+                                expandedDropDown.value = false
                             }
                         ) {
                             Text(text = localisation(selectionOption))
@@ -226,41 +225,8 @@ fun MainScreen(navController: NavController, mainScreenViewModel: MainScreenView
                     }
                 }
             }
-            Box(
-                contentAlignment = Alignment.CenterStart,
-                modifier = Modifier
-                    .padding(horizontal = 350.dp, vertical = 260.dp)
-                    .width(300.dp)
-                    .height(60.dp)
-                    .clip(RoundedCornerShape(25.dp))
-                    .border(BorderStroke(2.dp, Color.LightGray), RoundedCornerShape(25.dp))
-                    .clickable { expandedWUW.value = !expandedWUW.value },
-            ) {
-                Text(
-                    text = selectedOptionTextWUW.value,
-                    fontSize = 20.sp,
-                    modifier = Modifier.padding(start = 20.dp)
-                )
-                Icon(
-                    Icons.Filled.ArrowDropDown, "contentDescription",
-                    Modifier.align(Alignment.CenterEnd)
-                )
-                DropdownMenu(
-                    expanded = expandedWUW.value,
-                    onDismissRequest = { expandedWUW.value = false }
-                ) {
-                    optionsWUW.forEach { selectionOption ->
-                        DropdownMenuItem(
-                            onClick = {
-                                selectedOptionTextWUW.value = selectionOption
-                                expandedWUW.value = false
-                            }
-                        ) {
-                            Text(text = localisation(selectionOption))
-                        }
-                    }
-                }
-            }
+            
+            
         }
 
         Spacer(modifier = Modifier.height(30.dp))
@@ -272,10 +238,8 @@ fun MainScreen(navController: NavController, mainScreenViewModel: MainScreenView
                 Row(modifier = Modifier.padding(vertical = 15.dp)) {
                     Button(
                         onClick = { navController.navigate(when(mainScreenViewModel.graphs.typeList[index]){
-                            MainScreenViewModel.ViewModelType.UU -> "${Screen.UndirectedUnweightedGraphScreen.route}/$index"
-                            MainScreenViewModel.ViewModelType.DU -> "${Screen.DirectedWeightedGraphScreen.route}/$index"
-                            MainScreenViewModel.ViewModelType.UW -> "${Screen.UndirectedWeightedGraphScreen.route}/$index"
-                            MainScreenViewModel.ViewModelType.DW -> "${Screen.DirectedWeightedGraphScreen.route}/$index"
+                            MainScreenViewModel.ViewModelType.Undirect -> "${Screen.UndirectedGraphScreen.route}/$index"
+                            MainScreenViewModel.ViewModelType.Direct -> "${Screen.DirectedGraphScreen.route}/$index"
                         })
                                   },
                         modifier = Modifier

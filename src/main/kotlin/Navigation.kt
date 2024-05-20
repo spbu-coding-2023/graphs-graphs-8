@@ -18,42 +18,25 @@ fun Navigation() {
             MainScreen(navController = navController, mainScreenViewModel)
         }
         composable(
-            route = "${Screen.UndirectedUnweightedGraphScreen.route}/{graphId}",
+            route = "${Screen.UndirectedGraphScreen.route}/{graphId}",
             arguments = listOf(navArgument("graphId") { type = NavType.IntType })
         ){ navBackStackEntry ->
             val graphId = navBackStackEntry.arguments?.getInt("graphId")
             graphId?.let{
                 println(graphId)
-                UndirectedUnweightedGraphScreen(navController, mainScreenViewModel, graphId)
+                UndirectedGraphScreen(navController, mainScreenViewModel, graphId)
             }
         }
         composable(
-            route = "${Screen.DirectedUnweightedGraphScreen.route}/{graphId}",
+            route = "${Screen.DirectedGraphScreen.route}/{graphId}",
             arguments = listOf(navArgument("graphId") { type = NavType.IntType })
         ){ navBackStackEntry ->
             val graphId = navBackStackEntry.arguments?.getInt("graphId")
             graphId?.let{
-                DirectedUnweightedGraphScreen(navController, mainScreenViewModel, graphId)
+                DirectedGraphScreen(navController, mainScreenViewModel, graphId)
             }
         }
-        composable(
-            route = "${Screen.UndirectedWeightedGraphScreen.route}/{graphId}",
-            arguments = listOf(navArgument("graphId") { type = NavType.IntType })
-        ){ navBackStackEntry ->
-            val graphId = navBackStackEntry.arguments?.getInt("graphId")
-            graphId?.let{
-                UndirectedWeightedGraphScreen(navController, mainScreenViewModel, graphId)
-            }
-        }
-        composable(
-            route = "${Screen.DirectedWeightedGraphScreen.route}/{graphId}",
-            arguments = listOf(navArgument("graphId") { type = NavType.IntType })
-        ){ navBackStackEntry ->
-            val graphId = navBackStackEntry.arguments?.getInt("graphId")
-            graphId?.let{
-                DirectedWeightedGraphScreen(navController, mainScreenViewModel, graphId)
-            }
-        }
+
         composable(route = Screen.SettingsScreen.route){
             SettingsScreen(navController = navController)
         }

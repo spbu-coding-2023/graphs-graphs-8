@@ -3,6 +3,8 @@ build/
 !gradle/wrapper/gradle-wrapper.jar
 !**/src/main/**/build/
 !**/src/test/**/build/
+src/main/kotlin/**/localisationError.log
+src/main/kotlin/**/settings.json
 
 ### IntelliJ IDEA ###
 .idea/

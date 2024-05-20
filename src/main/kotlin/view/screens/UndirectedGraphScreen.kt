@@ -19,25 +19,25 @@ import localisation.localisation
 import model.graph.edges.Edge
 import view.DefaultColors
 import view.defaultStyle
-import view.views.GraphViewUW
+import view.views.GraphViewUndirect
 import viewmodel.MainScreenViewModel
-import viewmodel.UndirectedUnweightedGraphViewModel
+import viewmodel.UndirectedGraphViewModel
 
 @Composable
-fun UndirectedWeightedGraphScreen(
+fun UndirectedGraphScreen(
     navController: NavController,
     mainScreenViewModel: MainScreenViewModel,
     graphId: Int
 ) {
-    val graphVM by mutableStateOf(mainScreenViewModel.graphs.getUU(graphId))
+    val graphVM by mutableStateOf(mainScreenViewModel.graphs.getUndirect(graphId))
 
     Box(modifier = Modifier.fillMaxSize()) {
-        GraphViewUW(graphVM)
+        GraphViewUndirect(graphVM)
     }
 
     Column(modifier = Modifier.zIndex(1f).padding(16.dp).width(300.dp)) {
         // To MainScreen
-        Text(text="UW")
+        Text(text="Undirected")
         Button(
             onClick = { navController.popBackStack() },
             modifier = Modifier
@@ -87,7 +87,7 @@ fun UndirectedWeightedGraphScreen(
                     .padding(10.dp)
 
             ) {
-                AddDUEdgeMenu(graphVM)
+                AddUUEdgeMenu(graphVM)
             }
 
         }
@@ -95,7 +95,7 @@ fun UndirectedWeightedGraphScreen(
 }
 
 @Composable
-fun AddUWEdgeMenu(graphModel: UndirectedUnweightedGraphViewModel<Int, Edge<Int>>) {
+fun AddUUEdgeMenu(graphModel: UndirectedGraphViewModel<Int, Edge<Int>>) {
     var source by remember { mutableStateOf("") }
     var destination by remember { mutableStateOf("") }
     Row {

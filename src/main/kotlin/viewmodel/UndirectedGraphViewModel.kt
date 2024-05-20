@@ -1,9 +1,9 @@
 package viewmodel
 
+import model.graph.UndirectedGraph
 import model.graph.edges.Edge
-import model.graph.unweighted.UndirectedGraph
 
-class UndirectedUnweightedGraphViewModel<V, E : Edge<V>>(
+class UndirectedGraphViewModel<V, E : Edge<V>>(
     _name: String,
     graph: UndirectedGraph<V> = UndirectedGraph<V>()
 ): AbstractGraphViewModel<V, UndirectedGraph<V>>(graph){

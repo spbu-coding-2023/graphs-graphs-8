@@ -16,28 +16,28 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import androidx.navigation.NavController
 import localisation.localisation
-import model.graph.edges.WeightedEdge
+import model.graph.edges.Edge
 import view.DefaultColors
 import view.defaultStyle
-import view.views.GraphViewDW
-import viewmodel.DirectedWeightedGraphViewModel
+import view.views.GraphViewDirect
+import viewmodel.DirectedGraphViewModel
 import viewmodel.MainScreenViewModel
 
 @Composable
-fun DirectedWeightedGraphScreen(
+fun DirectedGraphScreen(
     navController: NavController,
     mainScreenViewModel: MainScreenViewModel,
     graphId: Int
 ) {
-    val graphVM by mutableStateOf(mainScreenViewModel.graphs.getDW(graphId))
+    val graphVM by mutableStateOf(mainScreenViewModel.graphs.getDirect(graphId))
 
     Box(modifier = Modifier.fillMaxSize()) {
-        GraphViewDW(graphVM)
+        GraphViewDirect(graphVM)
     }
 
     Column(modifier = Modifier.zIndex(1f).padding(16.dp).width(300.dp)) {
         // To MainScreen
-        Text(text="DW")
+        Text(text="Directed")
         Button(
             onClick = { navController.popBackStack() },
             modifier = Modifier
@@ -87,15 +87,14 @@ fun DirectedWeightedGraphScreen(
                     .padding(10.dp)
 
             ) {
-                AddDWEdgeMenu(graphVM)
+                AddDirectedEdgeMenu(graphVM)
             }
-
         }
     }
 }
 
 @Composable
-fun AddDWEdgeMenu(graphModel: DirectedWeightedGraphViewModel<Int, WeightedEdge<Int>>) {
+fun AddDirectedEdgeMenu(graphModel: DirectedGraphViewModel<Int, Edge<Int>>) {
     var source by remember { mutableStateOf("") }
     var destination by remember { mutableStateOf("") }
     Row {
