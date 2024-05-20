@@ -16,7 +16,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import androidx.navigation.NavController
 import localisation.localisation
-import model.graph.edges.Edge
 import view.DefaultColors
 import view.defaultStyle
 import view.views.GraphViewDirect
@@ -94,7 +93,7 @@ fun DirectedGraphScreen(
 }
 
 @Composable
-fun AddDirectedEdgeMenu(graphModel: DirectedGraphViewModel<Int, Edge<Int>>) {
+fun AddDirectedEdgeMenu(graphModel: DirectedGraphViewModel<Int>) {
     var source by remember { mutableStateOf("") }
     var destination by remember { mutableStateOf("") }
     Row {

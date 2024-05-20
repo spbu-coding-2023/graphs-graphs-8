@@ -2,7 +2,6 @@ package viewmodel
 
 import androidx.compose.runtime.mutableStateListOf
 import androidx.lifecycle.ViewModel
-import model.graph.edges.Edge
 
 class MainScreenViewModel : ViewModel() {
     val graphs = GraphStorage()
@@ -11,20 +10,15 @@ class MainScreenViewModel : ViewModel() {
         when (type){
             "undirected" -> {
                 graphs.typeList.add(ViewModelType.Undirect)
-                graphs.undirectedGraphs.add(UndirectedGraphViewModel<Int, Edge<Int>>(name))
+                graphs.undirectedGraphs.add(UndirectedGraphViewModel(name))
             }
             "directed" -> {
                 graphs.typeList.add(ViewModelType.Direct)
-                graphs.directedGraphs.add(DirectedGraphViewModel<Int, Edge<Int>>(name))
+                graphs.directedGraphs.add(DirectedGraphViewModel(name))
             }
 
         }
     }
-    /*
-    fun getGraph(graphId: Int): UndirectedUnweightedGraphViewModel<Int, Edge<Int>> {
-        return graphs[graphId]
-    }
-    */
     enum class ViewModelType(){
         Undirect,
         Direct,
@@ -66,15 +60,15 @@ class MainScreenViewModel : ViewModel() {
 
             }
         }
-        fun getUndirect(index: Int) : UndirectedGraphViewModel<Int, Edge<Int>>{
+        fun getUndirect(index: Int) : UndirectedGraphViewModel<Int>{
             return undirectedGraphs[findGraph(index)]
         }
-        fun getDirect(index: Int) : DirectedGraphViewModel<Int, Edge<Int>>{
+        fun getDirect(index: Int) : DirectedGraphViewModel<Int>{
             return directedGraphs[findGraph(index)]
         }
 
-        var undirectedGraphs = mutableStateListOf<UndirectedGraphViewModel<Int, Edge<Int>>>()
-        var directedGraphs = mutableStateListOf<DirectedGraphViewModel<Int, Edge<Int>>>()
+        var undirectedGraphs = mutableStateListOf<UndirectedGraphViewModel<Int>>()
+        var directedGraphs = mutableStateListOf<DirectedGraphViewModel<Int>>()
         var typeList = mutableStateListOf<ViewModelType>()
     }
 }

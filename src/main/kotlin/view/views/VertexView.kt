@@ -19,7 +19,6 @@ import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
-import model.graph.edges.Edge
 import view.DefaultColors
 import viewmodel.DirectedGraphViewModel
 import viewmodel.UndirectedGraphViewModel
@@ -28,7 +27,7 @@ import kotlin.math.atan2
 import kotlin.math.roundToInt
 
 @Composable
-fun DirectedVertexView(vertexVM: VertexViewModel<Int>, graphVM: DirectedGraphViewModel<Int, Edge<Int>>) {
+fun DirectedVertexView(vertexVM: VertexViewModel<Int>, graphVM: DirectedGraphViewModel<Int>) {
     val vertex = vertexVM.vertex
 
     Box(modifier = Modifier
@@ -102,7 +101,7 @@ fun DirectedVertexView(vertexVM: VertexViewModel<Int>, graphVM: DirectedGraphVie
 }
 
 @Composable
-fun UndirectedVertexView(vertexVM: VertexViewModel<Int>, graphVM: UndirectedGraphViewModel<Int, Edge<Int>>) {
+fun UndirectedVertexView(vertexVM: VertexViewModel<Int>, graphVM: UndirectedGraphViewModel<Int>) {
     val vertex = vertexVM.vertex
 
     Box(modifier = Modifier

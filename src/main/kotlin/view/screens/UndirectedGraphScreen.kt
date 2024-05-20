@@ -16,7 +16,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import androidx.navigation.NavController
 import localisation.localisation
-import model.graph.edges.Edge
 import view.DefaultColors
 import view.defaultStyle
 import view.views.GraphViewUndirect
@@ -95,7 +94,7 @@ fun UndirectedGraphScreen(
 }
 
 @Composable
-fun AddUUEdgeMenu(graphModel: UndirectedGraphViewModel<Int, Edge<Int>>) {
+fun AddUUEdgeMenu(graphModel: UndirectedGraphViewModel<Int>) {
     var source by remember { mutableStateOf("") }
     var destination by remember { mutableStateOf("") }
     Row {

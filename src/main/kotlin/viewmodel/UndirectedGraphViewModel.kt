@@ -1,11 +1,10 @@
 package viewmodel
 
 import model.graph.UndirectedGraph
-import model.graph.edges.Edge
 
-class UndirectedGraphViewModel<V, E : Edge<V>>(
+class UndirectedGraphViewModel<V>(
     _name: String,
-    graph: UndirectedGraph<V> = UndirectedGraph<V>()
+    graph: UndirectedGraph<V> = UndirectedGraph()
 ): AbstractGraphViewModel<V, UndirectedGraph<V>>(graph){
     val name = _name
     init {

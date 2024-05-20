@@ -1,12 +1,11 @@
 package viewmodel
 
-import model.graph.UndirectedGraph
-import model.graph.edges.Edge
+import model.graph.DirectedGraph
 
-class DirectedGraphViewModel<V, E : Edge<V>>(
+class DirectedGraphViewModel<V>(
     _name: String,
-    graph: UndirectedGraph<V> = UndirectedGraph<V>()
-): AbstractGraphViewModel<V, UndirectedGraph<V>>(graph){
+    graph: DirectedGraph<V> = DirectedGraph()
+): AbstractGraphViewModel<V, DirectedGraph<V>>(graph){
     val name = _name
     init {
         for (vertex in graphModel.entries) {
