@@ -4,7 +4,7 @@ import model.graph.UndirectedGraph
 import model.graph.edges.Edge
 
 object FCADFS {
-    fun <V> findCycleUtil(
+    private fun <V> findCycleUtil(
         graph: UndirectedGraph<V>,
         startVertex: V,
         visited: MutableMap<V, Boolean>,

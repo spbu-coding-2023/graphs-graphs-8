@@ -1,4 +1,4 @@
-package algos.fcadfc
+package algos.fcadfs
 
 import model.algos.FCADFS
 import model.graph.UndirectedGraph
