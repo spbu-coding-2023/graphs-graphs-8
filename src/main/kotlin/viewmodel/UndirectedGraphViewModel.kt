@@ -1,21 +1,13 @@
 package viewmodel
 
-import androidx.compose.runtime.mutableStateMapOf
-import androidx.lifecycle.ViewModel
-import graph.Graph
 import model.graph.UndirectedGraph
 import model.graph.edges.Edge
 
-class GraphViewModel<V, E : Edge<V>>(
+class UndirectedGraphViewModel<V>(
     _name: String,
-    graph: Graph<V> = UndirectedGraph<V>()
-) : ViewModel() {
+    graph: UndirectedGraph<V> = UndirectedGraph()
+): AbstractGraphViewModel<V, UndirectedGraph<V>>(graph){
     val name = _name
-    val size
-        get() = graphModel.size
-    val graphView = mutableStateMapOf<V, VertexViewModel<V>>()
-    val graphModel = graph
-
     init {
         for (vertex in graphModel.entries) {
             graphView[vertex.key] = VertexViewModel(vertex.key, vertex.value)
@@ -23,18 +15,17 @@ class GraphViewModel<V, E : Edge<V>>(
     }
 
     fun addVertex(vertex: V) {
+        size += 1
         graphView.putIfAbsent(vertex, VertexViewModel(vertex))
         graphModel.addVertex(vertex)
     }
-
-
-    fun addEdge(from: V, to: V) {
-        if (graphView[from] == null) {
-            return
-        }
-        for (i in graphView[from]?.edges!!) if (i.to == to) return
+    override fun addEdge(from: V, to: V) {
+        if (graphView[from] == null) return
+        for (i in graphView[from]?.edges!!) if(i.to == to) return
         val edgesCopy = graphView[from]?.edges?.toMutableList()!!
         edgesCopy.add(Edge(from, to))
+        edgesCopy.add(Edge(to, from))
         graphView[from]?.edges = edgesCopy
     }
+
 }

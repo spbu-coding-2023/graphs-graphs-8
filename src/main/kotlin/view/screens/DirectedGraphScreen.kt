@@ -4,7 +4,10 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.*
+import androidx.compose.material.Button
+import androidx.compose.material.ButtonDefaults
+import androidx.compose.material.Text
+import androidx.compose.material.TextField
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -13,27 +16,27 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import androidx.navigation.NavController
 import localisation.localisation
-import model.graph.edges.Edge
 import view.DefaultColors
 import view.defaultStyle
-import view.views.GraphView
-import viewmodel.GraphViewModel
+import view.views.GraphViewDirect
+import viewmodel.DirectedGraphViewModel
 import viewmodel.MainScreenViewModel
 
 @Composable
-fun GraphScreen(
+fun DirectedGraphScreen(
     navController: NavController,
     mainScreenViewModel: MainScreenViewModel,
     graphId: Int
 ) {
-    val graphVM by mutableStateOf(mainScreenViewModel.getGraph(graphId))
+    val graphVM by mutableStateOf(mainScreenViewModel.graphs.getDirect(graphId))
 
     Box(modifier = Modifier.fillMaxSize()) {
-        GraphView(graphVM)
+        GraphViewDirect(graphVM)
     }
 
     Column(modifier = Modifier.zIndex(1f).padding(16.dp).width(300.dp)) {
         // To MainScreen
+        Text(text="Directed")
         Button(
             onClick = { navController.popBackStack() },
             modifier = Modifier
@@ -83,15 +86,14 @@ fun GraphScreen(
                     .padding(10.dp)
 
             ) {
-                AddEdgeMenu(graphVM)
+                AddDirectedEdgeMenu(graphVM)
             }
-
         }
     }
 }
 
 @Composable
-fun AddEdgeMenu(graphModel: GraphViewModel<Int, Edge<Int>>) {
+fun AddDirectedEdgeMenu(graphModel: DirectedGraphViewModel<Int>) {
     var source by remember { mutableStateOf("") }
     var destination by remember { mutableStateOf("") }
     Row {
