@@ -1,12 +1,12 @@
 package model.algos
 
-import model.graph.edges.WeightedEdge
-import model.graph.weighted.WeightedUndirectedGraph
+import model.graph.edges.Edge
+import model.graph.UndirectedGraph
 
 object Prim {
-    fun <V> findSpanningTree(graph: WeightedUndirectedGraph<V>): List<WeightedEdge<V>> {
+    fun <V> findSpanningTree(graph: UndirectedGraph<V>): List<Edge<V>> {
         val visitedVertices = mutableSetOf<V>()
-        val edges = mutableListOf<WeightedEdge<V>>()
+        val edges = mutableListOf<Edge<V>>()
 
         val vertex = graph.vertices.random()
         visitedVertices.add(vertex)
@@ -19,11 +19,11 @@ object Prim {
         visitedVertices.addAll(setOf(nextEdge.from, nextEdge.to))
 
         while (!visitedVertices.containsAll(graph.vertices)) {
-            val nextEdge = visitedVertices.flatMap { graph.edgesOf(it) }
+            val edge = visitedVertices.flatMap { graph.edgesOf(it) }
                 .filter { !visitedVertices.contains(it.from) && !visitedVertices.contains(it.to) }
                 .minBy { it.weight }
-            visitedVertices.addAll(setOf(nextEdge.from, nextEdge.to))
-            edges.add(nextEdge)
+            visitedVertices.addAll(setOf(edge.from, edge.to))
+            edges.add(edge)
         }
         return edges
     }
