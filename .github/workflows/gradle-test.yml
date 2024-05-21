@@ -17,9 +17,5 @@ jobs:
         with:
           distribution: 'adopt'
           java-version: '21'
-
-      - name: Setup Android SDK
-        uses: android-actions/setup-android@v3
-
       - name: Clean, Build and Test
         run: ./gradlew clean test
