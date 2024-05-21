@@ -30,7 +30,7 @@ import view.defaultStyle
 import viewmodel.MainScreenViewModel
 
 @Composable
-fun MainScreen(navController: NavController, mainScreenViewModel: MainScreenViewModel){
+fun MainScreen(navController: NavController, mainScreenViewModel: MainScreenViewModel) {
     var search by remember { mutableStateOf("") }
     var graphName by remember { mutableStateOf("") }
     val dialogState = remember { mutableStateOf(false) }
@@ -128,7 +128,11 @@ fun MainScreen(navController: NavController, mainScreenViewModel: MainScreenView
             state = DialogState(size = DpSize(960.dp, 680.dp))
         )
         {
-            Text(text = localisation("enter_new_graph_name"), modifier = Modifier.padding(horizontal = 20.dp, vertical = 15.dp), style = defaultStyle)
+            Text(
+                text = localisation("enter_new_graph_name"),
+                modifier = Modifier.padding(horizontal = 20.dp, vertical = 15.dp),
+                style = defaultStyle
+            )
             TextField(
                 value = graphName,
                 textStyle = bigStyle,
@@ -149,28 +153,36 @@ fun MainScreen(navController: NavController, mainScreenViewModel: MainScreenView
                     unfocusedIndicatorColor = Color.Transparent,
                 ),
             )
-            Button(modifier = Modifier
-                .align(Alignment.CenterHorizontally)
-                .padding(horizontal = 20.dp, vertical = 180.dp)
-                .border(
-                    width = 2.dp,
-                    color = Color.Black,
-                    shape = RoundedCornerShape(25.dp)
-                )
-                .width(300.dp)
-                .height(60.dp),
+            Button(
+                modifier = Modifier
+                    .align(Alignment.CenterHorizontally)
+                    .padding(horizontal = 20.dp, vertical = 180.dp)
+                    .border(
+                        width = 2.dp,
+                        color = Color.Black,
+                        shape = RoundedCornerShape(25.dp)
+                    )
+                    .width(300.dp)
+                    .height(60.dp),
                 shape = RoundedCornerShape(25.dp),
-                colors = if(graphName != "") ButtonDefaults.buttonColors(backgroundColor = DefaultColors.simpleGreen) else ButtonDefaults.buttonColors(backgroundColor = DefaultColors.darkGreen),
+                colors = if (graphName != "") ButtonDefaults.buttonColors(backgroundColor = DefaultColors.simpleGreen) else ButtonDefaults.buttonColors(
+                    backgroundColor = DefaultColors.darkGreen
+                ),
                 onClick = {
-                    if(graphName != ""){
+                    if (graphName != "") {
                         mainScreenViewModel.addGraph(graphName, selectedOptionTextDropDown.value)
                         graphName = ""
                         dialogState.value = false
                     }
                 },
             ) {
-                Text(text= localisation("add"), color = if(graphName != "") Color.White else Color.Black, fontSize = 28.sp)
+                Text(
+                    text = localisation("add"),
+                    color = if (graphName != "") Color.White else Color.Black,
+                    fontSize = 28.sp
+                )
             }
+
             Button(modifier = Modifier
                 .padding(horizontal = 20.dp, vertical = 260.dp)
                 .border(
@@ -180,13 +192,14 @@ fun MainScreen(navController: NavController, mainScreenViewModel: MainScreenView
                 )
                 .width(300.dp)
                 .height(60.dp),
+
                 shape = RoundedCornerShape(25.dp),
                 colors = ButtonDefaults.buttonColors(backgroundColor = Color.Red),
                 onClick = {
                     dialogState.value = false
                 },
             ) {
-                Text(text= localisation("back"), color = Color.White, fontSize = 28.sp)
+                Text(text = localisation("back"), color = Color.White, fontSize = 28.sp)
             }
             Box(
                 contentAlignment = Alignment.CenterStart,
@@ -223,23 +236,28 @@ fun MainScreen(navController: NavController, mainScreenViewModel: MainScreenView
                     }
                 }
             }
-            
-            
+
+
         }
 
         Spacer(modifier = Modifier.height(30.dp))
 
         LazyColumn(modifier = Modifier.fillMaxWidth()) {
             itemsIndexed(mainScreenViewModel.graphs.typeList) { index, _ ->
-                if (!mainScreenViewModel.graphs.getName(index).startsWith(search)) return@itemsIndexed
+                if (!mainScreenViewModel.graphs.getName(index)
+                        .startsWith(search)
+                ) return@itemsIndexed
                 // To GraphScreen
                 Row(modifier = Modifier.padding(vertical = 15.dp)) {
                     Button(
-                        onClick = { navController.navigate(when(mainScreenViewModel.graphs.typeList[index]){
-                            MainScreenViewModel.ViewModelType.Undirect -> "${Screen.UndirectedGraphScreen.route}/$index"
-                            MainScreenViewModel.ViewModelType.Direct -> "${Screen.DirectedGraphScreen.route}/$index"
-                        })
-                                  },
+                        onClick = {
+                            navController.navigate(
+                                when (mainScreenViewModel.graphs.typeList[index]) {
+                                    MainScreenViewModel.ViewModelType.Undirected -> "${Screen.UndirectedGraphScreen.route}/$index"
+                                    MainScreenViewModel.ViewModelType.Directed -> "${Screen.DirectedGraphScreen.route}/$index"
+                                }
+                            )
+                        },
                         modifier = Modifier
                             .fillMaxWidth()
                             .height(100.dp)
@@ -252,26 +270,33 @@ fun MainScreen(navController: NavController, mainScreenViewModel: MainScreenView
                             ),
                         colors = ButtonDefaults.buttonColors(backgroundColor = DefaultColors.primary)
                     ) {
-                        Text(text = mainScreenViewModel.graphs.getName(index), style = bigStyle, modifier = Modifier.clip(RoundedCornerShape(45.dp)))
+                        Text(
+                            text = mainScreenViewModel.graphs.getName(index),
+                            style = bigStyle,
+                            modifier = Modifier.clip(RoundedCornerShape(45.dp))
+                        )
                     }
 
                     Spacer(modifier = Modifier.width(10.dp))
 
                     // Remove Graph
                     IconButton(
-                        onClick = { mainScreenViewModel.graphs.removeGraph(index)},
+                        onClick = { mainScreenViewModel.graphs.removeGraph(index) },
                         modifier = Modifier
                             .padding(horizontal = 10.dp)
                             .size(100.dp)
                             .clip(shape = RoundedCornerShape(45.dp))
-                            .background(Color(0xe8,0x08,0x3e))
-                            .border(5.dp , color = Color.Black, shape = RoundedCornerShape(45.dp))
+                            .background(Color(0xe8, 0x08, 0x3e))
+                            .border(5.dp, color = Color.Black, shape = RoundedCornerShape(45.dp))
                             .bounceClick(),
-                    ){
+                    ) {
                         Icon(
-                            Icons.Filled.Delete, contentDescription = "Remove graph", modifier = Modifier
-                            .padding(5.dp)
-                            .fillMaxSize())
+                            Icons.Filled.Delete,
+                            contentDescription = "Remove graph",
+                            modifier = Modifier
+                                .padding(5.dp)
+                                .fillMaxSize()
+                        )
                     }
                 }
             }

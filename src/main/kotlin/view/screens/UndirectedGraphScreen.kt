@@ -30,7 +30,7 @@ fun UndirectedGraphScreen(
     mainScreenViewModel: MainScreenViewModel,
     graphId: Int
 ) {
-    val graphVM by mutableStateOf(mainScreenViewModel.graphs.getUndirect(graphId))
+    val graphVM by mutableStateOf(mainScreenViewModel.graphs.getUndirected(graphId))
 
     Box(modifier = Modifier.fillMaxSize()) {
         GraphViewUndirect(graphVM)
@@ -38,7 +38,7 @@ fun UndirectedGraphScreen(
 
     Column(modifier = Modifier.zIndex(1f).padding(16.dp).width(300.dp)) {
         // To MainScreen
-        Text(text="Undirected")
+        Text(text = "Undirected")
         Button(
             onClick = { navController.popBackStack() },
             modifier = Modifier
