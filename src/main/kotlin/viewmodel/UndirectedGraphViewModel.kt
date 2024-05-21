@@ -19,13 +19,14 @@ class UndirectedGraphViewModel<V>(
         graphView.putIfAbsent(vertex, VertexViewModel(vertex))
         graphModel.addVertex(vertex)
     }
-    override fun addEdge(from: V, to: V) {
+    fun addEdge(from: V, to: V, weight: Int) {
         if (graphView[from] == null) return
         for (i in graphView[from]?.edges!!) if(i.to == to) return
         val edgesCopy = graphView[from]?.edges?.toMutableList()!!
         edgesCopy.add(Edge(from, to))
         edgesCopy.add(Edge(to, from))
         graphView[from]?.edges = edgesCopy
+        graphModel.addEdge(from, to, weight)
     }
 
 }
