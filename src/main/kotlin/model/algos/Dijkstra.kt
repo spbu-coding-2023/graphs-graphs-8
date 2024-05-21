@@ -1,18 +1,17 @@
 import model.graph.edges.Edge
 import java.util.*
 
-
 class Dijkstra<V>(var graph:  MutableMap<V, MutableList<Edge<V>>>, private val totalNodes: Int) {
     private val vertexValues: MutableMap<V, Int> = emptyMap<V, Int>().toMutableMap()
     private val visitedSet: MutableSet<V> = HashSet()
     private val prioraQueue = PriorityQueue<V>(totalNodes)
 
-    fun dijkstra(s: V) {
+    fun dijkstra(start: V) {
         for (j in graph.keys) {
             vertexValues.put(j, Int.MAX_VALUE)
         }
-        prioraQueue.add(s)
-        vertexValues[s] = 0
+        prioraQueue.add(start)
+        vertexValues[start] = 0
 
         while (visitedSet.size != totalNodes) {
             println(vertexValues)

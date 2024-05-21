@@ -37,8 +37,6 @@ fun MainScreen(navController: NavController, mainScreenViewModel: MainScreenView
     val optionsDropDown = listOf("undirected", "directed")
     val expandedDropDown = remember { mutableStateOf(false) }
     val selectedOptionTextDropDown = remember { mutableStateOf(optionsDropDown[0]) }
-    
-    
 
     Column(modifier = Modifier.fillMaxSize().background(DefaultColors.background).padding(16.dp)) {
         Row(modifier = Modifier.fillMaxWidth().height(100.dp)) {
@@ -166,6 +164,7 @@ fun MainScreen(navController: NavController, mainScreenViewModel: MainScreenView
                 onClick = {
                     if(graphName != ""){
                         mainScreenViewModel.addGraph(graphName, selectedOptionTextDropDown.value)
+                        graphName = ""
                         dialogState.value = false
                     }
                 },
@@ -173,7 +172,6 @@ fun MainScreen(navController: NavController, mainScreenViewModel: MainScreenView
                 Text(text= localisation("add"), color = if(graphName != "") Color.White else Color.Black, fontSize = 28.sp)
             }
             Button(modifier = Modifier
-
                 .padding(horizontal = 20.dp, vertical = 260.dp)
                 .border(
                     width = 2.dp,
