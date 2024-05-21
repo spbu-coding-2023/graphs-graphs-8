@@ -1,6 +1,6 @@
 package algos
 
-import model.algos.searchBridges
+import model.algos.Bridges.searchBridges
 import model.graph.UndirectedGraph
 import model.graph.edges.Edge
 import kotlin.test.Test
