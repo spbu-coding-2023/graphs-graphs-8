@@ -1,5 +1,6 @@
 package viewmodel
 
+import model.algos.Prim
 import model.graph.UndirectedGraph
 import model.graph.edges.Edge
 
@@ -19,6 +20,14 @@ class UndirectedGraphViewModel<V>(
         }
     }
 
+    fun primAlgo(startVertex: V) {
+        val mst = Prim.findMST(graph, startVertex)
+        for (edgeVM in edgesView) {
+            if (Edge(edgeVM.from, edgeVM.to, edgeVM.weight) in mst) {
+                edgeVM.color = Color.Magenta
+            }
+        }
+    }
     override fun addEdge(from: V, to: V, weight: Int) {
         if (vertexView[from] == null) return
         for (i in vertexView[from]?.edges!!) if (i.to == to) return
