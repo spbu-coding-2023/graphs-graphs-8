@@ -8,10 +8,13 @@ import androidx.compose.ui.window.WindowState
 import androidx.compose.ui.window.application
 import java.awt.Dimension
 
+val width = 1920
+val height = 1080
+
 fun main() = application {
     val state = WindowState(
-        width = 1920.dp,
-        height = 1080.dp,
+        width = width.dp,
+        height = height.dp,
         position = WindowPosition(alignment = Alignment.Center),
     )
     Window(

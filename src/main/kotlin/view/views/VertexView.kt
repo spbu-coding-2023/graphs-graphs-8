@@ -36,7 +36,7 @@ fun DirectedVertexView(vertexVM: VertexViewModel<Int>, graphVM: DirectedGraphVie
     Box(modifier = Modifier
         .offset { IntOffset(vertexVM.offsetX.roundToInt(), vertexVM.offsetY.roundToInt()) }
         .clip(shape = CircleShape)
-        .size(100.dp)
+        .size(vertexVM.vertexSize.dp)
         .background(DefaultColors.primary)
         .border(5.dp, Color.Black, CircleShape)
         .pointerInput(Unit) {
@@ -56,49 +56,70 @@ fun DirectedVertexView(vertexVM: VertexViewModel<Int>, graphVM: DirectedGraphVie
         )
     }
 
-    vertexVM.edges.forEach{ edge ->
+    vertexVM.edges.forEach { edge ->
         val otherVertex = edge.to
         val otherVM = graphVM.graphView[otherVertex]!!
         val otherX = otherVM.offsetX
         val otherY = otherVM.offsetY
         val textMeasurer = rememberTextMeasurer()
 
-        Canvas(modifier = Modifier.fillMaxSize().zIndex(-1f)){
+        Canvas(modifier = Modifier.fillMaxSize().zIndex(-1f)) {
             drawLine(
-                start = Offset(vertexVM.offsetX + vertexVM.vertexSize/2, vertexVM.offsetY + vertexVM.vertexSize/2),
-                end = Offset( otherX + vertexVM.vertexSize/2, otherY + vertexVM.vertexSize/2),
-                strokeWidth =  6f,
+                start = Offset(
+                    vertexVM.offsetX + vertexVM.vertexSize / 2,
+                    vertexVM.offsetY + vertexVM.vertexSize / 2
+                ),
+                end = Offset(otherX + vertexVM.vertexSize / 2, otherY + vertexVM.vertexSize / 2),
+                strokeWidth = 6f,
                 color = Color.Black,
             )
             rotate(
-                degrees = ((57.2958 * (atan2(((vertexVM.offsetY - otherY).toDouble()), ((vertexVM.offsetX - otherX).toDouble())))).toFloat()),
-                pivot = Offset( otherX + vertexVM.vertexSize/2, otherY + vertexVM.vertexSize/2)
-            ){
-                    drawRect(
-                        color = Color.Black,
-                        size = Size(5f, 16f),
-                        topLeft = Offset(otherX + vertexVM.vertexSize / 2 + 70, otherY + vertexVM.vertexSize / 2 - 8f),
-                    )
-                    drawRect(
-                        color = Color.Black,
-                        size = Size(5f, 14f),
-                        topLeft = Offset(otherX + vertexVM.vertexSize / 2 + 65, otherY + vertexVM.vertexSize / 2 - 7f),
-                    )
-                    drawRect(
-                        color = Color.Black,
-                        size = Size(5f, 12f),
-                        topLeft = Offset(otherX + vertexVM.vertexSize / 2 + 60, otherY + vertexVM.vertexSize / 2 - 6f),
-                    )
-                    drawRect(
-                        color = Color.Black,
-                        size = Size(5f, 10f),
-                        topLeft = Offset(otherX + vertexVM.vertexSize / 2 + 55, otherY + vertexVM.vertexSize / 2 - 5f),
-                    )
-                    drawRect(
-                        color = Color.Black,
-                        size = Size(5f, 8f),
-                        topLeft = Offset(otherX + vertexVM.vertexSize / 2 + 50, otherY + vertexVM.vertexSize / 2 - 4f),
-                    )
+                degrees = ((57.2958 * (atan2(
+                    ((vertexVM.offsetY - otherY).toDouble()),
+                    ((vertexVM.offsetX - otherX).toDouble())
+                ))).toFloat()),
+                pivot = Offset(otherX + vertexVM.vertexSize / 2, otherY + vertexVM.vertexSize / 2)
+            ) {
+                drawRect(
+                    color = Color.Black,
+                    size = Size(5f, 16f),
+                    topLeft = Offset(
+                        otherX + vertexVM.vertexSize / 2 + 70,
+                        otherY + vertexVM.vertexSize / 2 - 8f
+                    ),
+                )
+                drawRect(
+                    color = Color.Black,
+                    size = Size(5f, 14f),
+                    topLeft = Offset(
+                        otherX + vertexVM.vertexSize / 2 + 65,
+                        otherY + vertexVM.vertexSize / 2 - 7f
+                    ),
+                )
+                drawRect(
+                    color = Color.Black,
+                    size = Size(5f, 12f),
+                    topLeft = Offset(
+                        otherX + vertexVM.vertexSize / 2 + 60,
+                        otherY + vertexVM.vertexSize / 2 - 6f
+                    ),
+                )
+                drawRect(
+                    color = Color.Black,
+                    size = Size(5f, 10f),
+                    topLeft = Offset(
+                        otherX + vertexVM.vertexSize / 2 + 55,
+                        otherY + vertexVM.vertexSize / 2 - 5f
+                    ),
+                )
+                drawRect(
+                    color = Color.Black,
+                    size = Size(5f, 8f),
+                    topLeft = Offset(
+                        otherX + vertexVM.vertexSize / 2 + 50,
+                        otherY + vertexVM.vertexSize / 2 - 4f
+                    ),
+                )
             }
             if(graphVM.graph.state)
             drawText(textMeasurer,  edge.weight.toString(),
@@ -117,7 +138,7 @@ fun UndirectedVertexView(vertexVM: VertexViewModel<Int>, graphVM: UndirectedGrap
     Box(modifier = Modifier
         .offset { IntOffset(vertexVM.offsetX.roundToInt(), vertexVM.offsetY.roundToInt()) }
         .clip(shape = CircleShape)
-        .size(100.dp)
+        .size(vertexVM.vertexSize.dp)
         .background(DefaultColors.primary)
         .border(5.dp, Color.Black, CircleShape)
         .pointerInput(Unit) {
@@ -137,17 +158,20 @@ fun UndirectedVertexView(vertexVM: VertexViewModel<Int>, graphVM: UndirectedGrap
         )
     }
 
-    vertexVM.edges.forEach{ edge ->
+    vertexVM.edges.forEach { edge ->
         val otherVertex = edge.to
         val otherVM = graphVM.graphView[otherVertex]!!
         val otherX = otherVM.offsetX
         val otherY = otherVM.offsetY
 
-        Canvas(modifier = Modifier.fillMaxSize().zIndex(-1f)){
+        Canvas(modifier = Modifier.fillMaxSize().zIndex(-1f)) {
             drawLine(
-                start = Offset(vertexVM.offsetX + vertexVM.vertexSize/2, vertexVM.offsetY + vertexVM.vertexSize/2),
-                end = Offset( otherX + vertexVM.vertexSize/2, otherY + vertexVM.vertexSize/2),
-                strokeWidth =  8f,
+                start = Offset(
+                    vertexVM.offsetX + vertexVM.vertexSize / 2,
+                    vertexVM.offsetY + vertexVM.vertexSize / 2
+                ),
+                end = Offset(otherX + vertexVM.vertexSize / 2, otherY + vertexVM.vertexSize / 2),
+                strokeWidth = 8f,
                 color = Color.Black,
             )
             if(graphVM.graph.state)
