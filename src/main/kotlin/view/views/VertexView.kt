@@ -15,6 +15,9 @@ import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.drawscope.rotate
 import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.drawText
+import androidx.compose.ui.text.rememberTextMeasurer
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -58,6 +61,7 @@ fun DirectedVertexView(vertexVM: VertexViewModel<Int>, graphVM: DirectedGraphVie
         val otherVM = graphVM.graphView[otherVertex]!!
         val otherX = otherVM.offsetX
         val otherY = otherVM.offsetY
+        val textMeasurer = rememberTextMeasurer()
 
         Canvas(modifier = Modifier.fillMaxSize().zIndex(-1f)){
             drawLine(
@@ -67,7 +71,7 @@ fun DirectedVertexView(vertexVM: VertexViewModel<Int>, graphVM: DirectedGraphVie
                 color = Color.Black,
             )
             rotate(
-                    degrees = ((57.2958 * (atan2(((vertexVM.offsetY - otherY).toDouble()), ((vertexVM.offsetX - otherX).toDouble())))).toFloat()),
+                degrees = ((57.2958 * (atan2(((vertexVM.offsetY - otherY).toDouble()), ((vertexVM.offsetX - otherX).toDouble())))).toFloat()),
                 pivot = Offset( otherX + vertexVM.vertexSize/2, otherY + vertexVM.vertexSize/2)
             ){
                     drawRect(
@@ -96,6 +100,12 @@ fun DirectedVertexView(vertexVM: VertexViewModel<Int>, graphVM: DirectedGraphVie
                         topLeft = Offset(otherX + vertexVM.vertexSize / 2 + 50, otherY + vertexVM.vertexSize / 2 - 4f),
                     )
             }
+            if(graphVM.graph.state)
+            drawText(textMeasurer,  edge.weight.toString(),
+                topLeft = Offset((vertexVM.offsetX + vertexVM.vertexSize + otherX)/2 - edge.weight.toString().length * 5.5f, (vertexVM.offsetY + vertexVM.vertexSize + otherY)/2 - 9),
+                style = TextStyle(background = Color.White, fontSize = 18.sp)
+            )
+
         }
     }
 }
@@ -103,6 +113,7 @@ fun DirectedVertexView(vertexVM: VertexViewModel<Int>, graphVM: DirectedGraphVie
 @Composable
 fun UndirectedVertexView(vertexVM: VertexViewModel<Int>, graphVM: UndirectedGraphViewModel<Int>) {
     val vertex = vertexVM.vertex
+    val textMeasurer = rememberTextMeasurer()
 
     Box(modifier = Modifier
         .offset { IntOffset(vertexVM.offsetX.roundToInt(), vertexVM.offsetY.roundToInt()) }
@@ -140,6 +151,11 @@ fun UndirectedVertexView(vertexVM: VertexViewModel<Int>, graphVM: UndirectedGrap
                 strokeWidth =  8f,
                 color = Color.Black,
             )
+            if(graphVM.graph.state)
+                drawText(textMeasurer,  edge.weight.toString(),
+                    topLeft = Offset((vertexVM.offsetX + vertexVM.vertexSize + otherX)/2 - edge.weight.toString().length * 5.5f, (vertexVM.offsetY + vertexVM.vertexSize + otherY)/2 - 9),
+                    style = TextStyle(background = Color.White, fontSize = 18.sp)
+                )
         }
     }
 }

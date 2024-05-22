@@ -22,7 +22,6 @@ import view.DefaultColors
 import view.defaultStyle
 import view.views.GraphViewUndirect
 import viewmodel.MainScreenViewModel
-import viewmodel.UndirectedGraphViewModel
 
 @Composable
 fun UndirectedGraphScreen(
@@ -208,46 +207,5 @@ fun UndirectedGraphScreen(
                 }
             }
         }
-    }
-}
-
-@Composable
-fun AddUUEdgeMenu(graphModel: UndirectedGraphViewModel<Int>) {
-    var source by remember { mutableStateOf("") }
-    var destination by remember { mutableStateOf("") }
-    Row {
-        TextField(
-            modifier = Modifier
-                .width(115.dp)
-                .border(3.dp, color = Color.Black),
-            textStyle = defaultStyle,
-            value = source,
-            onValueChange = { newValue -> source = newValue },
-        )
-        Spacer(modifier = Modifier.width(10.dp))
-        TextField(
-            modifier = Modifier
-                .width(115.dp)
-                .border(3.dp, color = Color.Black),
-            textStyle = defaultStyle,
-            value = destination,
-            onValueChange = { newValue -> destination = newValue })
-    }
-
-    Spacer(modifier = Modifier.height(16.dp))
-    Button(
-        onClick = {
-            val sourceInt = source.toIntOrNull()
-            val destinationInt = destination.toIntOrNull()
-            if (sourceInt != null && destinationInt != null) {
-                graphModel.addEdge(sourceInt, destinationInt, 1)
-            }
-        }, modifier = Modifier
-            .clip(shape = RoundedCornerShape(45.dp))
-            .border(5.dp, color = Color.Black, shape = RoundedCornerShape(45.dp))
-            .size(240.dp, 80.dp),
-        colors = ButtonDefaults.buttonColors(backgroundColor = DefaultColors.primary)
-    ) {
-        Text(localisation("add_edge"), style = defaultStyle)
     }
 }

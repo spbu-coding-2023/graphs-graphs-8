@@ -5,9 +5,11 @@ import model.graph.edges.Edge
 
 class UndirectedGraphViewModel<V>(
     _name: String,
-    graph: UndirectedGraph<V> = UndirectedGraph()
+    val graph: UndirectedGraph<V> = UndirectedGraph()
 ): AbstractGraphViewModel<V, UndirectedGraph<V>>(graph){
     val name = _name
+    val model
+        get() = graph
     init {
         for (vertex in graphModel.entries) {
             graphView[vertex.key] = VertexViewModel(vertex.key, vertex.value)
@@ -23,8 +25,8 @@ class UndirectedGraphViewModel<V>(
         if (graphView[from] == null) return
         for (i in graphView[from]?.edges!!) if(i.to == to) return
         val edgesCopy = graphView[from]?.edges?.toMutableList()!!
-        edgesCopy.add(Edge(from, to))
-        edgesCopy.add(Edge(to, from))
+        edgesCopy.add(Edge(from, to, weight))
+        edgesCopy.add(Edge(to, from, weight))
         graphView[from]?.edges = edgesCopy
         graphModel.addEdge(from, to, weight)
     }
