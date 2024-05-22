@@ -293,7 +293,7 @@ fun DirectedGraphScreen(
                 Row {
                     Spacer(modifier = Modifier.width(30.dp))
                     Button(
-                        onClick = { isOpenedEdgeMenu = false }, modifier = Modifier
+                        onClick = { isDijkstraMenu = false }, modifier = Modifier
                             .clip(shape = RoundedCornerShape(45.dp))
                             .border(5.dp, color = Color.Black, shape = RoundedCornerShape(45.dp))
                             .size(240.dp, 80.dp),
