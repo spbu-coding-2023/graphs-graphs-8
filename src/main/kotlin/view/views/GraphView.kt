@@ -6,15 +6,23 @@ import viewmodel.UndirectedGraphViewModel
 
 @Composable
 fun GraphViewUndirect(graphViewModel: UndirectedGraphViewModel<Int>) {
-    for (vertexVM in graphViewModel.graphView.values) {
+    for (vertexVM in graphViewModel.vertexView.values) {
         UndirectedVertexView(vertexVM, graphViewModel)
+    }
+    for (edge in graphViewModel.edgesView.iterator()) {
+        UndirectedEdgeView(edge, graphViewModel)
     }
 }
 
 
 @Composable
 fun GraphViewDirect(graphViewModel: DirectedGraphViewModel<Int>) {
-    for (vertexVM in graphViewModel.graphView.values) {
+
+    for (vertexVM in graphViewModel.vertexView.values) {
         DirectedVertexView(vertexVM, graphViewModel)
+    }
+
+    for (edge in graphViewModel.edgesView.iterator()) {
+        DirectedEdgeView(edge, graphViewModel)
     }
 }

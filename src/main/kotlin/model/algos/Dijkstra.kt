@@ -10,6 +10,7 @@ class Dijkstra<V>(var graph:  MutableMap<V, MutableList<Edge<V>>>, private val t
     fun dijkstra(start: V, end: V) : MutableList<Edge<V>>{
         for (j in graph.keys) {
             vertexValues.put(j, Int.MAX_VALUE)
+            pathMap.put(j, emptyList<Edge<V>>().toMutableList())
         }
         prioraQueue.add(start)
         vertexValues[start] = 0

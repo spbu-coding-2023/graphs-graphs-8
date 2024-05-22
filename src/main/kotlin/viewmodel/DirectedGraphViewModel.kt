@@ -12,7 +12,10 @@ class DirectedGraphViewModel<V>(
         get() = graph
     init {
         for (vertex in graphModel.entries) {
-            graphView[vertex.key] = VertexViewModel(vertex.key, vertex.value)
+            vertexView[vertex.key] = VertexViewModel(vertex.key, vertex.value)
+        }
+        for (edge in graphModel.edges) {
+            edgesView.add(EdgeViewModel(edge, vertexView[edge.from]!!, vertexView[edge.to]!!))
         }
     }
     fun dijkstraAlgo(start: V, end: V){
@@ -22,11 +25,14 @@ class DirectedGraphViewModel<V>(
 
 
     override fun addEdge(from: V, to: V, weight: Int) {
-        if (graphView[from] == null) return
-        for (i in graphView[from]?.edges!!) if (i.to == to) return
-        val edgesCopy = graphView[from]?.edges?.toMutableList()!!
-        edgesCopy.add(Edge(from, to, weight))
-        graphView[from]?.edges = edgesCopy
+        if (vertexView[from] == null) return
+        for (i in vertexView[from]?.edges!!) if (i.to == to) return
+        val edgesCopy = vertexView[from]?.edges?.toMutableList()!!
+        val edge = Edge(from, to, weight)
+        edgesCopy.add(edge)
+        vertexView[from]?.edges = edgesCopy
+        edgesView.add(EdgeViewModel(edge, vertexView[edge.from]!!, vertexView[edge.to]!!))
         graphModel.addEdge(from, to, weight)
+        updateView()
     }
 }

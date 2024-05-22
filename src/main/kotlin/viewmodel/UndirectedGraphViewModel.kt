@@ -12,19 +12,27 @@ class UndirectedGraphViewModel<V>(
         get() = graph
     init {
         for (vertex in graphModel.entries) {
-            graphView[vertex.key] = VertexViewModel(vertex.key, vertex.value)
+            vertexView[vertex.key] = VertexViewModel(vertex.key, vertex.value)
+        }
+        for (edge in graphModel.edges) {
+            edgesView.add(EdgeViewModel(edge, vertexView[edge.from]!!, vertexView[edge.to]!!))
         }
     }
 
 
     override fun addEdge(from: V, to: V, weight: Int) {
-        if (graphView[from] == null) return
-        for (i in graphView[from]?.edges!!) if (i.to == to) return
-        val edgesCopy = graphView[from]?.edges?.toMutableList()!!
-        edgesCopy.add(Edge(from, to, weight))
-        edgesCopy.add(Edge(to, from, weight))
-        graphView[from]?.edges = edgesCopy
+        if (vertexView[from] == null) return
+        for (i in vertexView[from]?.edges!!) if (i.to == to) return
+        val edgesCopy = vertexView[from]?.edges?.toMutableList()!!
+        val edgeTo = Edge(from, to, weight)
+        val edgeFrom = Edge(from, to, weight)
+        edgesCopy.add(edgeTo)
+        edgesCopy.add(edgeFrom)
+        vertexView[from]?.edges = edgesCopy
+        edgesView.add(EdgeViewModel(edgeTo, vertexView[edgeTo.from]!!, vertexView[edgeTo.to]!!))
+        edgesView.add(EdgeViewModel(edgeFrom, vertexView[edgeFrom.from]!!, vertexView[edgeFrom.to]!!))
         graphModel.addEdge(from, to, weight)
+        updateView()
     }
 
 }

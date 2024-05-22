@@ -5,7 +5,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import height
-import kotlinx.serialization.descriptors.PrimitiveKind
 import model.graph.edges.Edge
 import width
 import kotlin.random.Random
