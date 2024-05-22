@@ -1,6 +1,7 @@
 package viewmodel
 
 import Dijkstra
+import androidx.compose.ui.graphics.Color
 import model.graph.DirectedGraph
 import model.graph.edges.Edge
 
@@ -19,10 +20,13 @@ class DirectedGraphViewModel<V>(
         }
     }
     fun dijkstraAlgo(start: V, end: V){
-        val dalg = Dijkstra(graph.matrix, graph.size)
-        dalg.dijkstra(start, end)
+        val y = Dijkstra(graph.matrix, graph.size).dijkstra(start, end)
+        for (edgeVM in edgesView){
+            if (Edge(edgeVM.from, edgeVM.to, edgeVM.weight) in y){
+                edgeVM.color = Color.Red
+            }
+        }
     }
-
 
     override fun addEdge(from: V, to: V, weight: Int) {
         if (vertexView[from] == null) return

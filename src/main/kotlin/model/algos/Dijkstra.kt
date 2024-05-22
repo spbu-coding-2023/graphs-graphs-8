@@ -17,6 +17,9 @@ class Dijkstra<V>(var graph:  MutableMap<V, MutableList<Edge<V>>>, private val t
 
         while (visitedSet.size != totalNodes) {
             println(vertexValues)
+            for (i in pathMap){
+                println(i)
+            }
             if (prioraQueue.isEmpty()) {
                 return pathMap[end]!!
             }
@@ -40,7 +43,7 @@ class Dijkstra<V>(var graph:  MutableMap<V, MutableList<Edge<V>>>, private val t
                 newRange = vertexValues[currentVertex]!! + j.weight
                 if (newRange < vertexValues[j.to]!!) {
                     vertexValues[j.to] = newRange
-                    val k = pathMap[j.from]
+                    val k = pathMap[j.from]?.toMutableList()
                     k?.add(j)
                     pathMap[j.to] = k!!
                 }

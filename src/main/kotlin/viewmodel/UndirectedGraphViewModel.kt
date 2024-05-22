@@ -19,7 +19,6 @@ class UndirectedGraphViewModel<V>(
         }
     }
 
-
     override fun addEdge(from: V, to: V, weight: Int) {
         if (vertexView[from] == null) return
         for (i in vertexView[from]?.edges!!) if (i.to == to) return
@@ -32,7 +31,7 @@ class UndirectedGraphViewModel<V>(
         edgesView.add(EdgeViewModel(edgeTo, vertexView[edgeTo.from]!!, vertexView[edgeTo.to]!!))
         edgesView.add(EdgeViewModel(edgeFrom, vertexView[edgeFrom.from]!!, vertexView[edgeFrom.to]!!))
         graphModel.addEdge(from, to, weight)
+        graphModel.addEdge(to, from, weight)
         updateView()
     }
-
 }

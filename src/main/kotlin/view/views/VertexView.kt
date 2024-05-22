@@ -86,7 +86,7 @@ fun DirectedEdgeView(edgeVM: EdgeViewModel<Int>, graphVM: DirectedGraphViewModel
             ),
             end = Offset(edgeVM.offsetXTo + edgeVM.vertexSize / 2, edgeVM.offsetYTo + edgeVM.vertexSize / 2),
             strokeWidth = 6f,
-            color = Color.Black,
+            color = edgeVM.color,
         )
         rotate(
             degrees = ((57.2958 * (atan2(
@@ -96,42 +96,42 @@ fun DirectedEdgeView(edgeVM: EdgeViewModel<Int>, graphVM: DirectedGraphViewModel
             pivot = Offset(edgeVM.offsetXTo + edgeVM.vertexSize / 2, edgeVM.offsetYTo + edgeVM.vertexSize / 2)
         ) {
             drawRect(
-                color = Color.Black,
+                color = edgeVM.color,
                 size = Size(5f, 16f),
                 topLeft = Offset(
-                    edgeVM.offsetXTo + edgeVM.vertexSize / 2 + 70,
+                    edgeVM.offsetXTo + edgeVM.vertexSize / 2 + 65,
                     edgeVM.offsetYTo + edgeVM.vertexSize / 2 - 8f
                 ),
             )
             drawRect(
-                color = Color.Black,
+                color = edgeVM.color,
                 size = Size(5f, 14f),
                 topLeft = Offset(
-                    edgeVM.offsetXTo + edgeVM.vertexSize / 2 + 65,
+                    edgeVM.offsetXTo + edgeVM.vertexSize / 2 + 60,
                     edgeVM.offsetYTo + edgeVM.vertexSize / 2 - 7f
                 ),
             )
             drawRect(
-                color = Color.Black,
+                color = edgeVM.color,
                 size = Size(5f, 12f),
                 topLeft = Offset(
-                    edgeVM.offsetXTo + edgeVM.vertexSize / 2 + 60,
+                    edgeVM.offsetXTo + edgeVM.vertexSize / 2 + 55,
                     edgeVM.offsetYTo + edgeVM.vertexSize / 2 - 6f
                 ),
             )
             drawRect(
-                color = Color.Black,
+                color = edgeVM.color,
                 size = Size(5f, 10f),
                 topLeft = Offset(
-                    edgeVM.offsetXTo + edgeVM.vertexSize / 2 + 55,
+                    edgeVM.offsetXTo + edgeVM.vertexSize / 2 + 50,
                     edgeVM.offsetYTo + edgeVM.vertexSize / 2 - 5f
                 ),
             )
             drawRect(
-                color = Color.Black,
+                color = edgeVM.color,
                 size = Size(5f, 8f),
                 topLeft = Offset(
-                    edgeVM.offsetXTo + edgeVM.vertexSize / 2 + 50,
+                    edgeVM.offsetXTo + edgeVM.vertexSize / 2 + 45,
                     edgeVM.offsetYTo + edgeVM.vertexSize / 2 - 4f
                 ),
             )
@@ -157,7 +157,7 @@ fun UndirectedEdgeView(edgeVM: EdgeViewModel<Int>, graphVM: UndirectedGraphViewM
             ),
             end = Offset(edgeVM.offsetXTo + edgeVM.vertexSize / 2, edgeVM.offsetYTo + edgeVM.vertexSize / 2),
             strokeWidth = 6f,
-            color = Color.Black,
+            color = edgeVM.color,
         )
         if (graphVM.graph.state)
             drawText(
