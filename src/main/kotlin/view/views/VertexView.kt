@@ -105,7 +105,6 @@ fun DirectedVertexView(vertexVM: VertexViewModel<Int>, graphVM: DirectedGraphVie
                 topLeft = Offset((vertexVM.offsetX + vertexVM.vertexSize + otherX)/2 - edge.weight.toString().length * 5.5f, (vertexVM.offsetY + vertexVM.vertexSize + otherY)/2 - 9),
                 style = TextStyle(background = Color.White, fontSize = 18.sp)
             )
-
         }
     }
 }

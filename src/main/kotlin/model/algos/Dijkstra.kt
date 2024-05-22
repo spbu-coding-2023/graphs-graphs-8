@@ -5,8 +5,9 @@ class Dijkstra<V>(var graph:  MutableMap<V, MutableList<Edge<V>>>, private val t
     private val vertexValues: MutableMap<V, Int> = emptyMap<V, Int>().toMutableMap()
     private val visitedSet: MutableSet<V> = HashSet()
     private val prioraQueue = PriorityQueue<V>(totalNodes)
+    private val pathMap: MutableMap<V, MutableList<Edge<V>>> = emptyMap<V, MutableList<Edge<V>>>().toMutableMap()
 
-    fun dijkstra(start: V) {
+    fun dijkstra(start: V, end: V) : MutableList<Edge<V>>{
         for (j in graph.keys) {
             vertexValues.put(j, Int.MAX_VALUE)
         }
@@ -16,7 +17,7 @@ class Dijkstra<V>(var graph:  MutableMap<V, MutableList<Edge<V>>>, private val t
         while (visitedSet.size != totalNodes) {
             println(vertexValues)
             if (prioraQueue.isEmpty()) {
-                return
+                return pathMap[end]!!
             }
             val ux = prioraQueue.remove()
             if (visitedSet.contains(ux)) {
@@ -26,8 +27,9 @@ class Dijkstra<V>(var graph:  MutableMap<V, MutableList<Edge<V>>>, private val t
                 visitedSet.add(ux)
                 refreshSearch(ux)
             }
-            println()
+            println(vertexValues)
         }
+        return pathMap[end]!!
     }
 
     private fun refreshSearch(currentVertex: V) {
@@ -37,6 +39,9 @@ class Dijkstra<V>(var graph:  MutableMap<V, MutableList<Edge<V>>>, private val t
                 newRange = vertexValues[currentVertex]!! + j.weight
                 if (newRange < vertexValues[j.to]!!) {
                     vertexValues[j.to] = newRange
+                    val k = pathMap[j.from]
+                    k?.add(j)
+                    pathMap[j.to] = k!!
                 }
                 prioraQueue.add(j.to)
             }

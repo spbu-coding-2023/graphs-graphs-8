@@ -33,6 +33,7 @@ fun DirectedGraphScreen(
 
     val graphVM by mutableStateOf(mainScreenViewModel.graphs.getDirected(graphId))
     var isOpenedEdgeMenu by remember { mutableStateOf(false) }
+    var isDijkstraMenu by remember { mutableStateOf(false) }
 
 
     Box(modifier = Modifier.fillMaxSize()) {
@@ -82,7 +83,7 @@ fun DirectedGraphScreen(
         Spacer(modifier = Modifier.height(10.dp))
 
         Button(
-            onClick = { },
+            onClick = {isDijkstraMenu = !isDijkstraMenu},
             modifier = Modifier
                 .clip(shape = RoundedCornerShape(45.dp))
                 .border(5.dp, color = Color.Black, shape = RoundedCornerShape(45.dp))
@@ -205,6 +206,87 @@ fun DirectedGraphScreen(
                         colors = ButtonDefaults.buttonColors(backgroundColor = DefaultColors.primary)
                     ) {
                         Text(localisation("add_edge"), style = defaultStyle)
+                    }
+                }
+                Spacer(modifier = Modifier.height(36.dp))
+                Row {
+                    Spacer(modifier = Modifier.width(30.dp))
+                    Button(
+                        onClick = { isOpenedEdgeMenu = false }, modifier = Modifier
+                            .clip(shape = RoundedCornerShape(45.dp))
+                            .border(5.dp, color = Color.Black, shape = RoundedCornerShape(45.dp))
+                            .size(240.dp, 80.dp),
+                        colors = ButtonDefaults.buttonColors(backgroundColor = Color.Red)
+                    ) {
+                        Text(localisation("back"), style = defaultStyle)
+                    }
+                }
+            }
+        }
+        DialogWindow(
+            visible = isDijkstraMenu,
+            title = "New Edge",
+            onCloseRequest = { isDijkstraMenu = false },
+            state = rememberDialogState(height = 600.dp, width = 880.dp)
+        ) {
+            var source by remember { mutableStateOf("") }
+            var destination by remember { mutableStateOf("") }
+            Column {
+                Spacer(modifier = Modifier.height(24.dp))
+                Row {
+                    Spacer(modifier = Modifier.width(30.dp))
+                    Text(text = localisation("from"), style = defaultStyle,modifier = Modifier.align(Alignment.CenterVertically))
+                    Spacer(modifier = Modifier.width(26.dp))
+                    TextField(
+                        modifier = Modifier
+                            .weight(1f)
+                            .width(115.dp)
+                            .border(4.dp, color = Color.Black,shape = RoundedCornerShape(25.dp),),
+
+                        colors = TextFieldDefaults.textFieldColors(
+                            focusedIndicatorColor = Color.Transparent,
+                            unfocusedIndicatorColor = Color.Transparent,
+                        ),
+                        shape = RoundedCornerShape(25.dp),
+                        textStyle = defaultStyle,
+                        value = source,
+                        onValueChange = { newValue -> source = newValue },
+                    )
+                    Spacer(modifier = Modifier.width(200.dp))
+                }
+                Spacer(modifier = Modifier.height(36.dp))
+                Row {
+                    Spacer(modifier = Modifier.width(30.dp))
+                    Text(text = localisation("to"), style = defaultStyle,modifier = Modifier.align(Alignment.CenterVertically))
+                    Spacer(modifier = Modifier.width(62.dp))
+                    TextField(
+                        modifier = Modifier
+                            .weight(1f)
+                            .width(115.dp)
+                            .border(4.dp, color = Color.Black,shape = RoundedCornerShape(25.dp),),
+
+                        colors = TextFieldDefaults.textFieldColors(
+                            focusedIndicatorColor = Color.Transparent,
+                            unfocusedIndicatorColor = Color.Transparent,
+                        ),
+                        shape = RoundedCornerShape(25.dp),
+                        textStyle = defaultStyle,
+                        value = destination,
+                        onValueChange = { newValue -> destination = newValue },)
+                    Spacer(modifier = Modifier.width(200.dp))
+                }
+                Spacer(modifier = Modifier.height(36.dp))
+                Row {
+                    Spacer(modifier = Modifier.width(30.dp))
+                    Button(
+                        onClick = { graphVM.dijkstraAlgo(source.toInt(), destination.toInt())
+                        }, modifier = Modifier
+                            .clip(shape = RoundedCornerShape(45.dp))
+                            .border(5.dp, color = Color.Black, shape = RoundedCornerShape(45.dp))
+                            .size(240.dp, 80.dp),
+                        colors = ButtonDefaults.buttonColors(backgroundColor = DefaultColors.primary)
+                    ) {
+                        Text(localisation("start"), style = defaultStyle)
                     }
                 }
                 Spacer(modifier = Modifier.height(36.dp))

@@ -18,9 +18,9 @@ class DirectedGraphViewModel<V>(
             graphView[vertex.key] = VertexViewModel(vertex.key, vertex.value)
         }
     }
-    fun dijkstraAlgo(start: V){
+    fun dijkstraAlgo(start: V, end: V){
         val dalg = Dijkstra(graph.matrix, graph.size)
-        dalg.dijkstra(start)
+        dalg.dijkstra(start, end)
     }
 
     fun addVertex(vertex: V) {
