@@ -23,7 +23,6 @@ fun Navigation() {
         ){ navBackStackEntry ->
             val graphId = navBackStackEntry.arguments?.getInt("graphId")
             graphId?.let{
-                println(graphId)
                 UndirectedGraphScreen(navController, mainScreenViewModel, graphId)
             }
         }

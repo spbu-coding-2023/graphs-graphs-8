@@ -38,8 +38,6 @@ fun MainScreen(navController: NavController, mainScreenViewModel: MainScreenView
     val expandedDropDown = remember { mutableStateOf(false) }
     val selectedOptionTextDropDown = remember { mutableStateOf(optionsDropDown[0]) }
 
-
-
     Column(modifier = Modifier.fillMaxSize().background(DefaultColors.background).padding(16.dp)) {
         Row(modifier = Modifier.fillMaxWidth().height(100.dp)) {
             // Search tab
@@ -173,6 +171,7 @@ fun MainScreen(navController: NavController, mainScreenViewModel: MainScreenView
                 onClick = {
                     if (graphName != "") {
                         mainScreenViewModel.addGraph(graphName, selectedOptionTextDropDown.value)
+                        graphName = ""
                         dialogState.value = false
                     }
                 },
@@ -183,17 +182,17 @@ fun MainScreen(navController: NavController, mainScreenViewModel: MainScreenView
                     fontSize = 28.sp
                 )
             }
-            Button(
-                modifier = Modifier
 
-                    .padding(horizontal = 20.dp, vertical = 260.dp)
-                    .border(
-                        width = 2.dp,
-                        color = Color.Black,
-                        shape = RoundedCornerShape(25.dp)
-                    )
-                    .width(300.dp)
-                    .height(60.dp),
+            Button(modifier = Modifier
+                .padding(horizontal = 20.dp, vertical = 260.dp)
+                .border(
+                    width = 2.dp,
+                    color = Color.Black,
+                    shape = RoundedCornerShape(25.dp)
+                )
+                .width(300.dp)
+                .height(60.dp),
+
                 shape = RoundedCornerShape(25.dp),
                 colors = ButtonDefaults.buttonColors(backgroundColor = Color.Red),
                 onClick = {

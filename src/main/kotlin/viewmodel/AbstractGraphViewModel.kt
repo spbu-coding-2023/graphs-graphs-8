@@ -33,5 +33,5 @@ abstract class AbstractGraphViewModel<V>(_name: String, graph: Graph<V>) : ViewM
         graphView = keep
     }
 
-    abstract fun addEdge(from: V, to: V)
+    abstract fun addEdge(from: V, to: V, weight: Int = 1)
 }
