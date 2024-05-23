@@ -110,7 +110,7 @@ fun SettingsScreen(navController: NavController) {
                 .padding(16.dp)
                 .border(width = 3.dp, color = Color.Black)
                 .bounceClick(),
-            colors = ButtonDefaults.buttonColors(backgroundColor = DefaultColors.error)
+            colors = ButtonDefaults.buttonColors(backgroundColor = Color.Red)
         ) {
             Text(localisation("back"), style = defaultStyle, color = Color.White)
         }
