@@ -12,15 +12,6 @@ class DirectedGraphViewModel<V>(
     val model
         get() = graph
 
-    init {
-        for (vertex in graphModel.entries) {
-            graphView[vertex.key] = VertexViewModel(vertex.key, vertex.value)
-        }
-        for (edge in graphModel.edges) {
-            edgesView.add(EdgeViewModel(edge, graphView[edge.from]!!, graphView[edge.to]!!))
-        }
-    }
-
     fun dijkstraAlgo(start: V, end: V) {
         val y = Dijkstra(graph.matrix, graph.size).dijkstra(start, end)
         for (edgeVM in edgesView) {

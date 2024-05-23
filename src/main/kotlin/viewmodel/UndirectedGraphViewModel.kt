@@ -11,15 +11,6 @@ class UndirectedGraphViewModel<V>(
     val model
         get() = graph
 
-    init {
-        for (vertex in graphModel.entries) {
-            graphView[vertex.key] = VertexViewModel(vertex.key, vertex.value)
-        }
-        for (edge in graphModel.edges) {
-            edgesView.add(EdgeViewModel(edge, graphView[edge.from]!!, graphView[edge.to]!!))
-        }
-    }
-
     override fun addEdge(from: V, to: V, weight: Int) {
         val source: VertexViewModel<V>
         val destination: VertexViewModel<V>

@@ -13,7 +13,7 @@ class VertexViewModel<V>(_vertex: V, _edges: MutableList<Edge<V>> = mutableListO
     ViewModel() {
     val vertex: V = _vertex
     var edges by mutableStateOf(_edges)
-    var offsetX by mutableStateOf(Random.nextInt(100, width - 100).toFloat())
-    var offsetY by mutableStateOf(Random.nextInt(100, height - 100).toFloat())
+    var x by mutableStateOf(Random.nextInt(100, width - 100).toFloat())
+    var y by mutableStateOf(Random.nextInt(100, height - 100).toFloat())
     val vertexSize = 80f
 }

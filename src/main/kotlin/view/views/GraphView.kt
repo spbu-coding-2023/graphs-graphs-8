@@ -1,6 +1,10 @@
 package view.views
 
 import androidx.compose.runtime.Composable
+import view.views.edge.DirectedEdgeView
+import view.views.edge.UndirectedEdgeView
+import view.views.vertex.DirectedVertexView
+import view.views.vertex.UndirectedVertexView
 import viewmodel.DirectedGraphViewModel
 import viewmodel.UndirectedGraphViewModel
 

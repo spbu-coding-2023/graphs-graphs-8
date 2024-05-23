@@ -17,6 +17,9 @@ abstract class AbstractGraphViewModel<V>(_name: String, graph: Graph<V>) : ViewM
         for (vertex in graphModel.entries) {
             graphView[vertex.key] = VertexViewModel(vertex.key, vertex.value)
         }
+        for (edge in graphModel.edges) {
+            edgesView.add(EdgeViewModel(edge, graphView[edge.from]!!, graphView[edge.to]!!))
+        }
     }
 
     fun addVertex(vertex: V) {

@@ -17,9 +17,9 @@ import localisation.getLocalisation
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import localisation.localisation
-import view.DefaultColors
-import view.bounceClick
-import view.defaultStyle
+import view.common.DefaultColors
+import view.common.bounceClick
+import view.common.defaultStyle
 import java.io.File
 
 const val pathToSettings = "src/main/kotlin/settings.json"

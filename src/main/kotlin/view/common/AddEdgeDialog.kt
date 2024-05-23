@@ -18,7 +18,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.DialogWindow
 import androidx.compose.ui.window.rememberDialogState
 import localisation.localisation
-import view.defaultStyle
 import viewmodel.AbstractGraphViewModel
 
 @Composable
