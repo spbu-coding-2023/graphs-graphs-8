@@ -28,6 +28,7 @@ import view.bigStyle
 import view.bounceClick
 import view.defaultStyle
 import viewmodel.MainScreenViewModel
+import viewmodel.initType
 
 @Composable
 fun MainScreen(navController: NavController, mainScreenViewModel: MainScreenViewModel) {
@@ -38,6 +39,10 @@ fun MainScreen(navController: NavController, mainScreenViewModel: MainScreenView
     val expandedDropDown = remember { mutableStateOf(false) }
     val selectedOptionTextDropDown = remember { mutableStateOf(optionsDropDown[0]) }
 
+    if(!mainScreenViewModel.inited) {
+        mainScreenViewModel.graphInit()
+        mainScreenViewModel.inited = true
+    }
     Column(modifier = Modifier.fillMaxSize().background(DefaultColors.background).padding(16.dp)) {
         Row(modifier = Modifier.fillMaxWidth().height(100.dp)) {
             // Search tab
@@ -170,7 +175,7 @@ fun MainScreen(navController: NavController, mainScreenViewModel: MainScreenView
                 ),
                 onClick = {
                     if (graphName != "") {
-                        mainScreenViewModel.addGraph(graphName, selectedOptionTextDropDown.value)
+                        mainScreenViewModel.addGraph(graphName, selectedOptionTextDropDown.value, initType.Internal)
                         graphName = ""
                         dialogState.value = false
                     }
@@ -251,10 +256,14 @@ fun MainScreen(navController: NavController, mainScreenViewModel: MainScreenView
                 Row(modifier = Modifier.padding(vertical = 15.dp)) {
                     Button(
                         onClick = {
+                            if(mainScreenViewModel.graphs.typeList[index] == MainScreenViewModel.ViewModelType.Directed){
+                                mainScreenViewModel.initModel(index)
+                            }
                             navController.navigate(
                                 when (mainScreenViewModel.graphs.typeList[index]) {
-                                    MainScreenViewModel.ViewModelType.Undirected -> "${Screen.UndirectedGraphScreen.route}/$index"
+                                    MainScreenViewModel.ViewModelType.Undirected -> {"${Screen.UndirectedGraphScreen.route}/$index"}
                                     MainScreenViewModel.ViewModelType.Directed -> "${Screen.DirectedGraphScreen.route}/$index"
+
                                 }
                             )
                         },

@@ -9,11 +9,17 @@ import java.sql.SQLException
 
 class DirectedGraphViewModel<V>(
     name: String,
+
     val graph: DirectedGraph<V> = DirectedGraph()
 ): AbstractGraphViewModel<V>(name, graph){
     val model
         get() = graph
+    var inType = initType.Internal
+    var initedGraph = false
+
+    private val DB_DRIVER = "jdbc:sqlite"
     init {
+
         for (vertex in graphModel.entries) {
             vertexView[vertex.key] = VertexViewModel(vertex.key, vertex.value)
         }
@@ -21,6 +27,8 @@ class DirectedGraphViewModel<V>(
             edgesView.add(EdgeViewModel(edge, vertexView[edge.from]!!, vertexView[edge.to]!!))
         }
     }
+
+
     fun dijkstraAlgo(start: V, end: V){
         val y = Dijkstra(graph.matrix, graph.size).dijkstra(start, end)
         for (edgeVM in edgesView){
@@ -31,10 +39,12 @@ class DirectedGraphViewModel<V>(
     }
 
     fun saveSQLite(){
-        val DB_DRIVER = "jdbc:sqlite"
+
         var parameterCreate = "( Vertexes String,"
         var parameterInput = "( Vertexes,"
-        var create = ("CREATE TABLE if not exists $name ")
+        var create = ("CREATE TABLE $name ")
+        val createIndex = ("CREATE TABLE BEBRA_KILLER (name TEXT, type TEXT);")
+        val insertIndex = ("INSERT INTO BEBRA_KILLER (name, type) VALUES('$name', 'Directed');")
         for (i in graph.entries){
             parameterCreate = "$parameterCreate V${i.key.toString()} INTEGER, "
             parameterInput = "$parameterInput V${i.key.toString()},"
@@ -44,12 +54,14 @@ class DirectedGraphViewModel<V>(
         parameterInput = parameterInput.slice(0.. parameterInput.length - 2)
         parameterInput = "$parameterInput )"
         create = create + parameterCreate + ";"
-        println(create)
-        val connection = DriverManager.getConnection("$DB_DRIVER:$name.db")
+
+        val connection = DriverManager.getConnection("$DB_DRIVER:storage.db")
             ?: throw SQLException("Cannot connect to database")
+        val delTable = "DROP TABLE $name"
+        val delIndexRec = "DELETE FROM BEBRA_KILLER WHERE name='$name';"
         connection.createStatement().also { stmt ->
             try {
-                stmt.execute(create)
+                stmt.execute(delTable)
                 println("Tables created or already exists")
             } catch (ex: Exception) {
                 println("Cannot create table in database")
@@ -58,6 +70,40 @@ class DirectedGraphViewModel<V>(
                 stmt.close()
             }
         }
+        connection.createStatement().also { stmt ->
+            try {
+                stmt.execute(delIndexRec)
+                println("Tables created or already exists")
+            } catch (ex: Exception) {
+                println("Cannot create table in database")
+                println(ex)
+            } finally {
+                stmt.close()
+            }
+        }
+        connection.createStatement().also { stmt ->
+            try {
+                stmt.execute(create)
+                stmt.execute(createIndex)
+                println("Tables created or already exists")
+            } catch (ex: Exception) {
+                println("Cannot create table in database")
+                println(ex)
+            } finally {
+                stmt.close()
+            }
+        }
+        connection.createStatement().also { stmt ->
+            try {
+                stmt.execute(insertIndex)
+            } catch (ex: Exception) {
+                println("Unsuccessful")
+                println(ex)
+            } finally {
+                stmt.close()
+            }
+        }
+
         var request = "INSERT INTO $name $parameterInput VALUES "
         for (i in graph.entries){
             var record = "( 'V${i.key}', "
@@ -75,21 +121,18 @@ class DirectedGraphViewModel<V>(
             record = "$record ),"
             request = "$request $record"
         }
-
         request = request.slice(0.. request.length - 2)
         connection.createStatement().also { stmt ->
             try {
                 stmt.execute(request)
-                println("YES")
             } catch (ex: Exception) {
-                println("NOPE")
+                println("Unsuccessful")
                 println(ex)
             } finally {
                 stmt.close()
             }
         }
         println(request)
-
     }
 
     override fun addEdge(from: V, to: V, weight: Int) {

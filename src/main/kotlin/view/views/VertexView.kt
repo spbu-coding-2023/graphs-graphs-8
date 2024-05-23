@@ -31,7 +31,7 @@ import kotlin.math.atan2
 import kotlin.math.roundToInt
 
 @Composable
-fun DirectedVertexView(vertexVM: VertexViewModel<Int>, graphVM: DirectedGraphViewModel<Int>) {
+fun DirectedVertexView(vertexVM: VertexViewModel<String>, graphVM: DirectedGraphViewModel<String>) {
     val vertex = vertexVM.vertex
     Box(modifier = Modifier
         .offset { IntOffset(vertexVM.offsetX.roundToInt(), vertexVM.offsetY.roundToInt()) }
@@ -74,7 +74,7 @@ fun DirectedVertexView(vertexVM: VertexViewModel<Int>, graphVM: DirectedGraphVie
 }
 
 @Composable
-fun DirectedEdgeView(edgeVM: EdgeViewModel<Int>, graphVM: DirectedGraphViewModel<Int>){
+fun DirectedEdgeView(edgeVM: EdgeViewModel<String>, graphVM: DirectedGraphViewModel<String>){
 
     val textMeasurer = rememberTextMeasurer()
 
@@ -145,7 +145,7 @@ fun DirectedEdgeView(edgeVM: EdgeViewModel<Int>, graphVM: DirectedGraphViewModel
 }
 
 @Composable
-fun UndirectedEdgeView(edgeVM: EdgeViewModel<Int>, graphVM: UndirectedGraphViewModel<Int>){
+fun UndirectedEdgeView(edgeVM: EdgeViewModel<String>, graphVM: UndirectedGraphViewModel<String>){
 
     val textMeasurer = rememberTextMeasurer()
 
@@ -172,7 +172,7 @@ fun UndirectedEdgeView(edgeVM: EdgeViewModel<Int>, graphVM: UndirectedGraphViewM
 }
 
 @Composable
-fun UndirectedVertexView(vertexVM: VertexViewModel<Int>, graphVM: UndirectedGraphViewModel<Int>) {
+fun UndirectedVertexView(vertexVM: VertexViewModel<String>, graphVM: UndirectedGraphViewModel<String>) {
     val vertex = vertexVM.vertex
 
     Box(modifier = Modifier

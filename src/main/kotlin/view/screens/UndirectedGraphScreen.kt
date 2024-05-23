@@ -53,7 +53,7 @@ fun UndirectedGraphScreen(
 
         // Add vertex
         Button(
-            onClick = { graphVM.addVertex(graphVM.size) },
+            onClick = { graphVM.addVertex(graphVM.size.toString()) },
             modifier = Modifier
                 .clip(shape = RoundedCornerShape(45.dp))
                 .border(5.dp, color = Color.Black, shape = RoundedCornerShape(45.dp))
@@ -177,10 +177,8 @@ fun UndirectedGraphScreen(
                     Spacer(modifier = Modifier.width(30.dp))
                     Button(
                         onClick = {
-                            val sourceInt = source.toIntOrNull()
-                            val destinationInt = destination.toIntOrNull()
-                            if (sourceInt != null && destinationInt != null) {
-                                graphVM.addEdge(sourceInt, destinationInt, weight.toInt())
+                            if (source != "" && destination != "") {
+                                graphVM.addEdge(source, destination, weight.toInt())
                                 isOpenedEdgeMenu = false
                             }
                         }, modifier = Modifier

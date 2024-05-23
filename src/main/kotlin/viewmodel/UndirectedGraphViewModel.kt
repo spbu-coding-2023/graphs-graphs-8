@@ -5,6 +5,7 @@ import model.graph.edges.Edge
 
 class UndirectedGraphViewModel<V>(
     name: String,
+    initType: initType,
     val graph: UndirectedGraph<V> = UndirectedGraph()
 ): AbstractGraphViewModel<V>(name, graph){
 

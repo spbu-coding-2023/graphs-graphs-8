@@ -5,7 +5,7 @@ import viewmodel.DirectedGraphViewModel
 import viewmodel.UndirectedGraphViewModel
 
 @Composable
-fun GraphViewUndirect(graphViewModel: UndirectedGraphViewModel<Int>) {
+fun GraphViewUndirect(graphViewModel: UndirectedGraphViewModel<String>) {
     for (vertexVM in graphViewModel.vertexView.values) {
         UndirectedVertexView(vertexVM, graphViewModel)
     }
@@ -16,7 +16,7 @@ fun GraphViewUndirect(graphViewModel: UndirectedGraphViewModel<Int>) {
 
 
 @Composable
-fun GraphViewDirect(graphViewModel: DirectedGraphViewModel<Int>) {
+fun GraphViewDirect(graphViewModel: DirectedGraphViewModel<String>) {
     for (vertexVM in graphViewModel.vertexView.values) {
         DirectedVertexView(vertexVM, graphViewModel)
     }
