@@ -32,13 +32,19 @@ class DirectedGraphViewModel<V>(
 
     fun saveSQLite(){
         val DB_DRIVER = "jdbc:sqlite"
-
-        var create = ("CREATE TABLE if not exists " + name + " (")
-
+        var parameterCreate = "( Vertexes String,"
+        var parameterInput = "( Vertexes,"
+        var create = ("CREATE TABLE if not exists $name ")
         for (i in graph.entries){
-            create = create + " " + i.toString() + " INTEGER "
+            parameterCreate = "$parameterCreate V${i.key.toString()} INTEGER, "
+            parameterInput = "$parameterInput V${i.key.toString()},"
         }
-        create = create + " )"
+        parameterCreate = parameterCreate.slice(0.. parameterCreate.length - 3)
+        parameterCreate = "$parameterCreate )"
+        parameterInput = parameterInput.slice(0.. parameterInput.length - 2)
+        parameterInput = "$parameterInput )"
+        create = create + parameterCreate + ";"
+        println(create)
         val connection = DriverManager.getConnection("$DB_DRIVER:$name.db")
             ?: throw SQLException("Cannot connect to database")
         connection.createStatement().also { stmt ->
@@ -47,10 +53,43 @@ class DirectedGraphViewModel<V>(
                 println("Tables created or already exists")
             } catch (ex: Exception) {
                 println("Cannot create table in database")
+                println(ex)
             } finally {
                 stmt.close()
             }
         }
+        var request = "INSERT INTO $name $parameterInput VALUES "
+        for (i in graph.entries){
+            var record = "( 'V${i.key}', "
+            val recList = emptyMap<V, String>().toMutableMap()
+            for (j in graph.entries){
+                recList[j.key] = "NULL"
+            }
+            for (j in i.value){
+                recList[j.to] = j.weight.toString()
+            }
+            for (j in recList){
+                record = "$record ${j.value}, "
+            }
+            record = record.slice(0.. record.length - 3)
+            record = "$record ),"
+            request = "$request $record"
+        }
+
+        request = request.slice(0.. request.length - 2)
+        connection.createStatement().also { stmt ->
+            try {
+                stmt.execute(request)
+                println("YES")
+            } catch (ex: Exception) {
+                println("NOPE")
+                println(ex)
+            } finally {
+                stmt.close()
+            }
+        }
+        println(request)
+
     }
 
     override fun addEdge(from: V, to: V, weight: Int) {
