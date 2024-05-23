@@ -36,8 +36,8 @@ fun AddEdgeDialog(
     ) {
         var source by remember { mutableStateOf("") }
         var destination by remember { mutableStateOf("") }
-        var checkedState by remember { mutableStateOf(false) }
-        var weight by remember { mutableStateOf("") }
+        var checkedState by remember { mutableStateOf(true) }
+        var weight by remember { mutableStateOf("1") }
         Column(modifier = Modifier.padding(30.dp, 24.dp)) {
             val textWidth = 90.dp
             val rightPadding = 200.dp

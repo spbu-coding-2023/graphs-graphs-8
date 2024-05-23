@@ -12,9 +12,7 @@ import viewmodel.UndirectedGraphViewModel
 fun <V> UndirectedGraphView(graphVM: UndirectedGraphViewModel<V>) {
     for (vertexVM in graphVM.verticesVM) {
         UndirectedVertexView(vertexVM, graphVM)
-    }
-    for (edgeVM in graphVM.edgesVM) {
-        UndirectedEdgeView(edgeVM, graphVM.isWeighted)
+
     }
 }
 
@@ -23,8 +21,5 @@ fun <V> UndirectedGraphView(graphVM: UndirectedGraphViewModel<V>) {
 fun <V> DirectedGraphView(graphVM: DirectedGraphViewModel<V>) {
     for (vertexVM in graphVM.verticesVM) {
         DirectedVertexView(vertexVM, graphVM)
-    }
-    for (edgeVM in graphVM.edgesVM) {
-        DirectedEdgeView(edgeVM, graphVM.isWeighted)
     }
 }

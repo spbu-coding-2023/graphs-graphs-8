@@ -1,5 +1,9 @@
 package viewmodel
 
+import androidx.compose.ui.graphics.Color
+import model.algos.FindCycle
+import model.algos.Prim
+import model.algos.findBridges
 import model.graph.UndirectedGraph
 import model.graph.edges.Edge
 
@@ -31,5 +35,36 @@ class UndirectedGraphViewModel<V>(
 
         if (weight != 1) isWeighted = true
         updateView()
+    }
+
+    private fun drawEdges(edges: Collection<Edge<V>>, color: Color) {
+        for (edge in edges) {
+            for (edgeVM in this.edgesVmOf(edge.from)) {
+                if (edgeVM.to == edge.to) edgeVM.color = color
+            }
+            for (edgeVM in this.edgesVmOf(edge.to)) {
+                if (edgeVM.to == edge.from) edgeVM.color = color
+            }
+        }
+    }
+
+    fun findMst() {
+        if (size == 0) return
+        val startVertex = graphModel.vertices.first()
+        val result = Prim.findMst(graphModel as UndirectedGraph<V>, startVertex)
+        drawEdges(result, Color.Magenta)
+    }
+
+    fun findCycles() {
+        if (size == 0) return
+        val startVertex = graph.vertices.first()
+        val result = FindCycle.findCycle(graphModel as UndirectedGraph<V>, startVertex)
+            ?: emptyList()
+        drawEdges(result, Color.Magenta)
+    }
+
+    fun findBridges() {
+        val result = findBridges(graphModel as UndirectedGraph<V>)
+        drawEdges(result, Color.Yellow)
     }
 }

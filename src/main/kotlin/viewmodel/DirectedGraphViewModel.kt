@@ -10,15 +10,6 @@ class DirectedGraphViewModel<V>(
     val graph: DirectedGraph<V> = DirectedGraph()
 ) : AbstractGraphViewModel<V>(name, graph) {
 
-    fun dijkstraAlgo(start: V, end: V) {
-        val y = Dijkstra(graph.matrix, graph.size).dijkstra(start, end)
-        for (edge in y) {
-            for (edgeVM in this.edgesVmOf(edge.from)) {
-                if (edgeVM.to == edge.to) edgeVM.color = Color.Red
-            }
-        }
-    }
-
     override fun addEdge(from: V, to: V, weight: Int) {
         val source: VertexViewModel<V>
         val destination: VertexViewModel<V>
@@ -38,5 +29,18 @@ class DirectedGraphViewModel<V>(
 
         if (weight != 1) isWeighted = true
         updateView()
+    }
+
+    private fun drawEdges(edges: Collection<Edge<V>>, color: Color) {
+        for (edge in edges) {
+            for (edgeVM in this.edgesVmOf(edge.from)) {
+                if (edgeVM.to == edge.to) edgeVM.color = color
+            }
+        }
+    }
+
+    fun dijkstraAlgo(start: V, end: V) {
+        val result = Dijkstra(graph.matrix, graph.size).dijkstra(start, end)
+        drawEdges(result, Color.Red)
     }
 }

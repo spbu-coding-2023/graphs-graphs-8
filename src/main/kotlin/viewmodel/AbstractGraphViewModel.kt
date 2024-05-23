@@ -3,6 +3,7 @@ package viewmodel
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.ViewModel
 import model.graph.Graph
 
@@ -49,6 +50,10 @@ abstract class AbstractGraphViewModel<V>(_name: String, graph: Graph<V>) : ViewM
         }
     }
 
+    fun vertexVmOf(vertex: V): VertexViewModel<V>? {
+        return graphVM[vertex]
+    }
+
     fun edgesVmOf(vertex: V): List<EdgeViewModel<V>> {
         return graphVM[vertex]?.edges?.toList() ?: emptyList()
     }
@@ -58,6 +63,12 @@ abstract class AbstractGraphViewModel<V>(_name: String, graph: Graph<V>) : ViewM
         graphVM.putIfAbsent(vertex, VertexViewModel(vertex))
         graphModel.addVertex(vertex)
         updateView()
+    }
+
+    fun resetDrawing() {
+        for (edge in edgesVM) {
+            edge.color = Color.Black
+        }
     }
 
     fun updateView() {

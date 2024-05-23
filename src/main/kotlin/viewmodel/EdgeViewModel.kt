@@ -13,12 +13,19 @@ class EdgeViewModel<V>(
     vertexToVM: VertexViewModel<V>,
 ) :
     ViewModel() {
-    var xFrom by mutableStateOf(vertexFromVM.x)
-    var yFrom by mutableStateOf(vertexFromVM.y)
-    var xTo by mutableStateOf(vertexToVM.x)
-    var yTo by mutableStateOf(vertexToVM.y)
-    var vertexSize by mutableStateOf(vertexFromVM.vertexSize)
-    var weight by mutableStateOf(edge.weight)
+    val fromVM = vertexFromVM
+    val toVM = vertexToVM
+    val fromX
+        get() = fromVM.x
+    val fromY
+        get() = fromVM.y
+    val toX
+        get() = toVM.x
+    val toY
+        get() = toVM.y
+    val vertexSize
+        get() = fromVM.vertexSize
+    val weight by mutableStateOf(edge.weight)
     val from by mutableStateOf(edge.from)
     val to by mutableStateOf(edge.to)
     var color by mutableStateOf(Color.Black)

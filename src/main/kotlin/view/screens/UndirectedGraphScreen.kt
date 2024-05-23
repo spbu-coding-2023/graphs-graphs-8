@@ -4,9 +4,11 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import androidx.navigation.NavController
+import model.algos.ForceAtlas2
 import view.common.AddEdgeDialog
 import view.common.DefaultButton
 import view.views.UndirectedGraphView
@@ -41,6 +43,24 @@ fun UndirectedGraphScreen(
         DefaultButton({ isOpenedEdgeMenu = !isOpenedEdgeMenu }, "open_edge")
 
         Spacer(modifier = Modifier.height(10.dp))
+
+        DefaultButton({ ForceAtlas2.forceDrawing(graphVM) }, "visualize", Color(0xffFFA500))
+
+        Spacer(modifier = Modifier.height(10.dp))
+
+        DefaultButton({ graphVM.resetDrawing() }, "reset", Color.LightGray)
+
+        Spacer(modifier = Modifier.height(10.dp))
+
+        DefaultButton(onClick = { graphVM.findMst() }, "find_mst")
+
+        Spacer(modifier = Modifier.height(10.dp))
+
+        DefaultButton(onClick = { graphVM.findCycles() }, "find_cycles")
+
+        Spacer(modifier = Modifier.height(10.dp))
+
+        DefaultButton(onClick = { graphVM.findBridges() }, "find_bridges")
 
         val onClose = { isOpenedEdgeMenu = false }
         AddEdgeDialog(isOpenedEdgeMenu, onClose, graphVM)

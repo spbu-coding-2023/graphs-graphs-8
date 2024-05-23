@@ -14,6 +14,7 @@ import androidx.compose.ui.window.rememberDialogState
 import androidx.compose.ui.zIndex
 import androidx.navigation.NavController
 import localisation.localisation
+import model.algos.ForceAtlas2
 import view.common.AddEdgeDialog
 import view.common.DefaultButton
 import view.common.defaultStyle
@@ -52,9 +53,17 @@ fun DirectedGraphScreen(
 
         Spacer(modifier = Modifier.height(10.dp))
 
+        DefaultButton({ ForceAtlas2.forceDrawing(graphVM) }, "visualize", Color(0xffFFA500))
+
+        Spacer(modifier = Modifier.height(10.dp))
+
+        DefaultButton({ graphVM.resetDrawing() }, "reset", Color.LightGray)
+
+        Spacer(modifier = Modifier.height(10.dp))
+
         // Open Dijkstra dialog window
         var isDijkstraMenu by remember { mutableStateOf(false) }
-        DefaultButton({ isDijkstraMenu = !isDijkstraMenu }, "dijkstra_algorithm")
+        DefaultButton({ isDijkstraMenu = !isDijkstraMenu }, "dijkstra")
 
         Spacer(modifier = Modifier.height(10.dp))
 
