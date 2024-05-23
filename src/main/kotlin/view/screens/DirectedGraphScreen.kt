@@ -40,18 +40,9 @@ fun DirectedGraphScreen(
     }
 
     Column(modifier = Modifier.zIndex(1f).padding(16.dp).width(300.dp)) {
-        // To MainScreen
         Text(text = "Directed")
-        Button(
-            onClick = { navController.popBackStack() },
-            modifier = Modifier
-                .clip(shape = RoundedCornerShape(45.dp))
-                .border(5.dp, color = Color.Black, shape = RoundedCornerShape(45.dp))
-                .size(240.dp, 80.dp),
-            colors = ButtonDefaults.buttonColors(DefaultColors.primary)
-        ) {
-            Text(localisation("home"), style = defaultStyle)
-        }
+        // To MainScreen
+        DefaultButton({ navController.popBackStack() }, "home")
 
         Spacer(modifier = Modifier.height(16.dp))
 
@@ -71,7 +62,7 @@ fun DirectedGraphScreen(
         DefaultButton({ isDijkstraMenu = !isDijkstraMenu }, "dijkstra_algorithm")
 
         Spacer(modifier = Modifier.height(10.dp))
-        
+
         val onClose = { isOpenedEdgeMenu = false }
         AddEdgeDialog(isOpenedEdgeMenu, onClose, graphVM, isDirected = true)
 

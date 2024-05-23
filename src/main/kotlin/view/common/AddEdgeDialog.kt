@@ -35,7 +35,6 @@ fun AddEdgeDialog(
         onCloseRequest = onClose,
         state = rememberDialogState(height = 600.dp, width = 880.dp)
     ) {
-        println("внутри visible is $visible")
         var source by remember { mutableStateOf("") }
         var destination by remember { mutableStateOf("") }
         var checkedState by remember { mutableStateOf(false) }
