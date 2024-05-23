@@ -6,32 +6,40 @@ import model.graph.edges.Edge
 class UndirectedGraphViewModel<V>(
     name: String,
     val graph: UndirectedGraph<V> = UndirectedGraph()
-): AbstractGraphViewModel<V>(name, graph){
+) : AbstractGraphViewModel<V>(name, graph) {
 
     val model
         get() = graph
+
     init {
         for (vertex in graphModel.entries) {
-            vertexView[vertex.key] = VertexViewModel(vertex.key, vertex.value)
+            graphView[vertex.key] = VertexViewModel(vertex.key, vertex.value)
         }
         for (edge in graphModel.edges) {
-            edgesView.add(EdgeViewModel(edge, vertexView[edge.from]!!, vertexView[edge.to]!!))
+            edgesView.add(EdgeViewModel(edge, graphView[edge.from]!!, graphView[edge.to]!!))
         }
     }
 
     override fun addEdge(from: V, to: V, weight: Int) {
-        if (vertexView[from] == null) return
-        for (i in vertexView[from]?.edges!!) if (i.to == to) return
-        val edgesCopy = vertexView[from]?.edges?.toMutableList()!!
-        val edgeTo = Edge(from, to, weight)
-        val edgeFrom = Edge(from, to, weight)
-        edgesCopy.add(edgeTo)
-        edgesCopy.add(edgeFrom)
-        vertexView[from]?.edges = edgesCopy
-        edgesView.add(EdgeViewModel(edgeTo, vertexView[edgeTo.from]!!, vertexView[edgeTo.to]!!))
-        edgesView.add(EdgeViewModel(edgeFrom, vertexView[edgeFrom.from]!!, vertexView[edgeFrom.to]!!))
+        val source: VertexViewModel<V>
+        val destination: VertexViewModel<V>
+        try {
+            source = graphView[from]!!
+            destination = graphView[to]!!
+        } catch (e: Exception) {
+            println("Can't add edge between $from and $to: one of them don't exist")
+            return
+        }
+        for (edge in source.edges) if (edge.to == to) return
+        for (edge in destination.edges) if (edge.from == from) return
+
+        val edgeFromSource = Edge(from, to, weight)
+        val edgeFromDestination = Edge(to, from, weight)
+        source.edges.add(edgeFromSource)
+        destination.edges.add(edgeFromDestination)
+        edgesView.add(EdgeViewModel(edgeFromSource, source, destination))
+        edgesView.add(EdgeViewModel(edgeFromDestination, destination, source))
         graphModel.addEdge(from, to, weight)
-        graphModel.addEdge(to, from, weight)
         updateView()
     }
 }
