@@ -9,22 +9,22 @@ import viewmodel.DirectedGraphViewModel
 import viewmodel.UndirectedGraphViewModel
 
 @Composable
-fun GraphViewUndirect(graphViewModel: UndirectedGraphViewModel<Int>) {
-    for (vertexVM in graphViewModel.graphView.values) {
-        UndirectedVertexView(vertexVM, graphViewModel)
+fun <V> UndirectedGraphView(graphVM: UndirectedGraphViewModel<V>) {
+    for (vertexVM in graphVM.verticesVM) {
+        UndirectedVertexView(vertexVM, graphVM)
     }
-    for (edge in graphViewModel.edgesView.iterator()) {
-        UndirectedEdgeView(edge, graphViewModel)
+    for (edgeVM in graphVM.edgesVM) {
+        UndirectedEdgeView(edgeVM, graphVM.isWeighted)
     }
 }
 
 
 @Composable
-fun GraphViewDirect(graphViewModel: DirectedGraphViewModel<Int>) {
-    for (vertexVM in graphViewModel.graphView.values) {
-        DirectedVertexView(vertexVM, graphViewModel)
+fun <V> DirectedGraphView(graphVM: DirectedGraphViewModel<V>) {
+    for (vertexVM in graphVM.verticesVM) {
+        DirectedVertexView(vertexVM, graphVM)
     }
-    for (edge in graphViewModel.edgesView.iterator()) {
-        DirectedEdgeView(edge, graphViewModel)
+    for (edgeVM in graphVM.edgesVM) {
+        DirectedEdgeView(edgeVM, graphVM.isWeighted)
     }
 }

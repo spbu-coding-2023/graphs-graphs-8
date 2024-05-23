@@ -32,16 +32,14 @@ fun <V> DirectedVertexView(vertexVM: VertexViewModel<V>, graphVM: DirectedGraphV
         .pointerInput(Unit) {
             detectDragGestures { change, dragAmount ->
                 change.consume()
-                for (edge in graphVM.edgesView.iterator()) {
-                    if (edge.to == vertexVM.vertex) {
-                        edge.xTo += dragAmount.x
-                        edge.yTo += dragAmount.y
-                    }
-                }
-                for (edge in graphVM.edgesView.iterator()) {
+                for (edge in graphVM.edgesVM) {
                     if (edge.from == vertexVM.vertex) {
                         edge.xFrom += dragAmount.x
                         edge.yFrom += dragAmount.y
+                    }
+                    if (edge.to == vertexVM.vertex) {
+                        edge.xTo += dragAmount.x
+                        edge.yTo += dragAmount.y
                     }
                 }
                 vertexVM.x += dragAmount.x
@@ -57,8 +55,5 @@ fun <V> DirectedVertexView(vertexVM: VertexViewModel<V>, graphVM: DirectedGraphV
                 .fillMaxSize()
                 .wrapContentSize(),
         )
-    }
-    for (edge in graphVM.edgesView.iterator()) {
-        DirectedEdgeView(edge, graphVM)
     }
 }

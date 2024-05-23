@@ -15,7 +15,7 @@ import viewmodel.EdgeViewModel
 import viewmodel.UndirectedGraphViewModel
 
 @Composable
-fun <V> UndirectedEdgeView(edgeVM: EdgeViewModel<V>, graphVM: UndirectedGraphViewModel<V>) {
+fun <V> UndirectedEdgeView(edgeVM: EdgeViewModel<V>, isWeighted: Boolean) {
 
     val textMeasurer = rememberTextMeasurer()
 
@@ -32,7 +32,7 @@ fun <V> UndirectedEdgeView(edgeVM: EdgeViewModel<V>, graphVM: UndirectedGraphVie
             strokeWidth = 6f,
             color = edgeVM.color,
         )
-        if (graphVM.graph.state)
+        if (isWeighted)
             drawText(
                 textMeasurer, edgeVM.weight.toString(),
                 topLeft = Offset(

@@ -15,10 +15,11 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
 import viewmodel.DirectedGraphViewModel
 import viewmodel.EdgeViewModel
+import javax.swing.text.StyledEditorKit.BoldAction
 import kotlin.math.atan2
 
 @Composable
-fun <V> DirectedEdgeView(edgeVM: EdgeViewModel<V>, graphVM: DirectedGraphViewModel<V>) {
+fun <V> DirectedEdgeView(edgeVM: EdgeViewModel<V>, isWeightedd: Boolean) {
 
     val textMeasurer = rememberTextMeasurer()
 
@@ -86,7 +87,7 @@ fun <V> DirectedEdgeView(edgeVM: EdgeViewModel<V>, graphVM: DirectedGraphViewMod
                 ),
             )
         }
-        if (graphVM.graph.state)
+        if (isWeightedd)
             drawText(
                 textMeasurer, edgeVM.weight.toString(),
                 topLeft = Offset(

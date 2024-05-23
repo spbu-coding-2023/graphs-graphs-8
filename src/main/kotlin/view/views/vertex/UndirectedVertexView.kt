@@ -32,21 +32,20 @@ fun <V> UndirectedVertexView(vertexVM: VertexViewModel<V>, graphVM: UndirectedGr
         .pointerInput(Unit) {
             detectDragGestures { change, dragAmount ->
                 change.consume()
-                for (edge in graphVM.edgesView.iterator()) {
+                for (edge in graphVM.edgesVM) {
+                    if (edge.from == vertexVM.vertex) {
+                        edge.xFrom += dragAmount.x
+                        edge.yFrom += dragAmount.y
+                    }
                     if (edge.to == vertexVM.vertex) {
                         edge.xTo += dragAmount.x
                         edge.yTo += dragAmount.y
                     }
                 }
-                for (edge in graphVM.edgesView.iterator()) {
-                    if (edge.from == vertexVM.vertex) {
-                        edge.xFrom += dragAmount.x
-                        edge.yFrom += dragAmount.y
-                    }
-                }
                 vertexVM.x += dragAmount.x
                 vertexVM.y += dragAmount.y
             }
+
         }
     ) {
         Text(

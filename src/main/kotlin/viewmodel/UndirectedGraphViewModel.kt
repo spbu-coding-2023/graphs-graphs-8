@@ -8,15 +8,12 @@ class UndirectedGraphViewModel<V>(
     val graph: UndirectedGraph<V> = UndirectedGraph()
 ) : AbstractGraphViewModel<V>(name, graph) {
 
-    val model
-        get() = graph
-
     override fun addEdge(from: V, to: V, weight: Int) {
         val source: VertexViewModel<V>
         val destination: VertexViewModel<V>
         try {
-            source = graphView[from]!!
-            destination = graphView[to]!!
+            source = graphVM[from]!!
+            destination = graphVM[to]!!
         } catch (e: Exception) {
             println("Can't add edge between $from and $to: one of them don't exist")
             return
@@ -26,11 +23,13 @@ class UndirectedGraphViewModel<V>(
 
         val edgeFromSource = Edge(from, to, weight)
         val edgeFromDestination = Edge(to, from, weight)
-        source.edges.add(edgeFromSource)
-        destination.edges.add(edgeFromDestination)
-        edgesView.add(EdgeViewModel(edgeFromSource, source, destination))
-        edgesView.add(EdgeViewModel(edgeFromDestination, destination, source))
+        val edgeFromSourceVM = EdgeViewModel(edgeFromSource, source, destination)
+        val edgeFromDestinationVM = EdgeViewModel(edgeFromDestination, destination, source)
+        source.edges.add(edgeFromSourceVM)
+        destination.edges.add(edgeFromDestinationVM)
         graphModel.addEdge(from, to, weight)
+
+        if (weight != 1) isWeighted = true
         updateView()
     }
 }

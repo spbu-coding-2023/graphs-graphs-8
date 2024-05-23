@@ -9,7 +9,7 @@ import androidx.compose.ui.zIndex
 import androidx.navigation.NavController
 import view.common.AddEdgeDialog
 import view.common.DefaultButton
-import view.views.GraphViewUndirect
+import view.views.UndirectedGraphView
 import viewmodel.MainScreenViewModel
 
 @Composable
@@ -21,7 +21,7 @@ fun UndirectedGraphScreen(
     val graphVM by mutableStateOf(mainScreenViewModel.graphs.getUndirected(graphId))
 
     Box(modifier = Modifier.fillMaxSize()) {
-        GraphViewUndirect(graphVM)
+        UndirectedGraphView(graphVM)
     }
 
     Column(modifier = Modifier.zIndex(1f).padding(16.dp).width(300.dp)) {

@@ -17,7 +17,7 @@ import localisation.localisation
 import view.common.AddEdgeDialog
 import view.common.DefaultButton
 import view.common.defaultStyle
-import view.views.GraphViewDirect
+import view.views.DirectedGraphView
 import viewmodel.MainScreenViewModel
 
 
@@ -31,7 +31,7 @@ fun DirectedGraphScreen(
     val graphVM by mutableStateOf(mainScreenViewModel.graphs.getDirected(graphId))
 
     Box(modifier = Modifier.fillMaxSize()) {
-        GraphViewDirect(graphVM)
+        DirectedGraphView(graphVM)
     }
 
     Column(modifier = Modifier.zIndex(1f).padding(16.dp).width(300.dp)) {

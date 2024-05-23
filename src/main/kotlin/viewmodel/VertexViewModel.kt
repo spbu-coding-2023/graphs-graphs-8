@@ -9,7 +9,7 @@ import model.graph.edges.Edge
 import width
 import kotlin.random.Random
 
-class VertexViewModel<V>(_vertex: V, _edges: MutableList<Edge<V>> = mutableListOf()) :
+class VertexViewModel<V>(_vertex: V, _edges: MutableList<EdgeViewModel<V>> = mutableListOf()) :
     ViewModel() {
     val vertex: V = _vertex
     var edges by mutableStateOf(_edges)
