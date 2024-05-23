@@ -9,7 +9,6 @@ import model.graph.Graph
 abstract class AbstractGraphViewModel<V>(_name: String, graph: Graph<V>) : ViewModel() {
     val name = _name
     protected var graphVM by mutableStateOf(mutableMapOf<V, VertexViewModel<V>>())
-    var edgesView by mutableStateOf(mutableListOf<EdgeViewModel<V>>())
     protected val graphModel = graph
     var size = 0
     var isWeighted by mutableStateOf(false)
@@ -65,17 +64,6 @@ abstract class AbstractGraphViewModel<V>(_name: String, graph: Graph<V>) : ViewM
         val keep = graphVM
         graphVM = mutableMapOf<V, VertexViewModel<V>>()
         graphVM = keep
-    }
-
-    // возможно надо будет переработать состояния, поэтому понадобится
-    fun updateEdgesView(vertex: V) {
-        try {
-            val keep = graphVM[vertex]?.edges!!
-            graphVM[vertex]?.edges = mutableListOf()
-            graphVM[vertex]?.edges = keep
-        } catch (e: Exception) {
-            println("Can't find vertex for update view of their edges")
-        }
     }
 
     abstract fun addEdge(from: V, to: V, weight: Int = 1)
