@@ -64,7 +64,6 @@ class MainScreenViewModel : ViewModel() {
                     graphs.directedGraphs.removeAt(findGraph(index))
                     graphs.typeList.removeAt(index)
                 }
-
             }
         }
 

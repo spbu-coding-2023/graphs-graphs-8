@@ -4,6 +4,8 @@ import Dijkstra
 import androidx.compose.ui.graphics.Color
 import model.graph.DirectedGraph
 import model.graph.edges.Edge
+import java.sql.DriverManager
+import java.sql.SQLException
 
 class DirectedGraphViewModel<V>(
     name: String,
@@ -24,6 +26,29 @@ class DirectedGraphViewModel<V>(
         for (edgeVM in edgesView){
             if (Edge(edgeVM.from, edgeVM.to, edgeVM.weight) in y){
                 edgeVM.color = Color.Red
+            }
+        }
+    }
+
+    fun saveSQLite(){
+        val DB_DRIVER = "jdbc:sqlite"
+
+        var create = ("CREATE TABLE if not exists " + name + " (")
+
+        for (i in graph.entries){
+            create = create + " " + i.toString() + " INTEGER "
+        }
+        create = create + " )"
+        val connection = DriverManager.getConnection("$DB_DRIVER:$name.db")
+            ?: throw SQLException("Cannot connect to database")
+        connection.createStatement().also { stmt ->
+            try {
+                stmt.execute(create)
+                println("Tables created or already exists")
+            } catch (ex: Exception) {
+                println("Cannot create table in database")
+            } finally {
+                stmt.close()
             }
         }
     }

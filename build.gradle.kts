@@ -16,6 +16,7 @@ repositories {
     google()
 }
 
+
 dependencies {
     // Note, if you develop a library, you should use compose.desktop.common.
     // compose.desktop.currentOs should be used in launcher-sourceSet
@@ -23,6 +24,7 @@ dependencies {
     // With compose.desktop.common you will also lose @Preview functionality
     implementation(compose.desktop.currentOs)
     val nav_version = "2.8.0-alpha02"
+    implementation("org.xerial", "sqlite-jdbc", "3.41.2.1")
     implementation("org.jetbrains.androidx.navigation:navigation-compose:$nav_version")
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.3")
     testImplementation(kotlin("test"))
