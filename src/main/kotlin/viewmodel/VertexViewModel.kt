@@ -6,8 +6,8 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import height
-import model.graph.edges.Edge
 import width
+import view.common.DefaultColors
 import kotlin.random.Random
 
 class VertexViewModel<V>(_vertex: V, _edges: MutableList<EdgeViewModel<V>> = mutableListOf()) :
@@ -24,6 +24,7 @@ class VertexViewModel<V>(_vertex: V, _edges: MutableList<EdgeViewModel<V>> = mut
     var x by mutableStateOf(Random.nextInt(100, width - 100).toFloat())
     var y by mutableStateOf(Random.nextInt(100, height - 100).toFloat())
     val vertexSize = 60f
+    var color by mutableStateOf(DefaultColors.primary)
     val degree
         get() = edges.size
 }

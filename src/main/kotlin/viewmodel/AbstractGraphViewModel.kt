@@ -9,6 +9,7 @@ import androidx.lifecycle.ViewModel
 import model.algos.FordBellman
 import model.graph.Graph
 import model.graph.edges.Edge
+import view.common.DefaultColors
 
 abstract class AbstractGraphViewModel<V>(_name: String, graph: Graph<V>) : ViewModel() {
     val name = _name
@@ -85,9 +86,12 @@ abstract class AbstractGraphViewModel<V>(_name: String, graph: Graph<V>) : ViewM
         updateView()
     }
 
-    fun resetDrawing() {
-        for (edge in edgesVM) {
-            edge.color = Color.Black
+    fun resetColors() {
+        for (edgeVM in edgesVM) {
+            edgeVM.color = Color.Black
+        }
+        for (vertexVM in verticesVM) {
+            vertexVM.color = DefaultColors.primary
         }
     }
 

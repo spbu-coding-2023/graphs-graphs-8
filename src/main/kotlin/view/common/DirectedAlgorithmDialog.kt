@@ -22,7 +22,7 @@ fun DirectedAlgorithmDialog(
     visible: Boolean,
     title: String,
     onCloseRequest: () -> Unit,
-    graphVM: AbstractGraphViewModel<Int>,
+    graphVM: AbstractGraphViewModel<String>,
     action: String,
 ) {
     DialogWindow(
@@ -89,8 +89,8 @@ fun DirectedAlgorithmDialog(
             Spacer(modifier = Modifier.height(36.dp))
             Row {
                 Spacer(modifier = Modifier.width(30.dp))
-                val dijkstra = { graphVM.dijkstraAlgo(source.toInt(), destination.toInt()) }
-                val fordBellman = { graphVM.fordBellman(source.toInt(), destination.toInt()) }
+                val dijkstra = { graphVM.dijkstraAlgo(source, destination) }
+                val fordBellman = { graphVM.fordBellman(source, destination) }
                 val onClick = if (action == "Dijkstra") {
                     dijkstra
                 } else if (action == "FordBellman") {

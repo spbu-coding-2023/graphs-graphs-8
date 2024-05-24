@@ -24,7 +24,7 @@ import viewmodel.AbstractGraphViewModel
 fun AddEdgeDialog(
     _visible: Boolean,
     onClose: () -> Unit,
-    graphVM: AbstractGraphViewModel<Int>,
+    graphVM: AbstractGraphViewModel<String>,
     isDirected: Boolean = false
 ) {
     var visible by mutableStateOf(_visible)
@@ -142,13 +142,10 @@ fun AddEdgeDialog(
             Spacer(modifier = Modifier.height(36.dp))
             Row {
                 val onClick = {
-                    val sourceInt = source.toIntOrNull()
-                    val destinationInt = destination.toIntOrNull()
-                    if (sourceInt != null && destinationInt != null) {
-                        if (weight == "") weight = "1"
-                        graphVM.addEdge(sourceInt, destinationInt, weight.toInt())
-                        visible = false
-                    }
+                    if (weight == "") weight = "1"
+                    graphVM.addEdge(source, destination, weight.toInt())
+                    visible = false
+
                 }
                 DefaultButton(onClick, "add_edge")
             }

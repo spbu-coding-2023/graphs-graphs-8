@@ -1,24 +1,14 @@
 package view.screens
 
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.*
 import androidx.compose.runtime.*
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.window.DialogWindow
-import androidx.compose.ui.window.rememberDialogState
 import androidx.compose.ui.zIndex
 import androidx.navigation.NavController
-import localisation.localisation
 import model.algos.ForceAtlas2
-import view.common.AddEdgeDialog
-import view.common.DefaultButton
-import view.common.DirectedAlgorithmDialog
-import view.common.defaultStyle
+import view.common.*
 import view.views.DirectedGraphView
 import viewmodel.MainScreenViewModel
 
@@ -37,44 +27,42 @@ fun DirectedGraphScreen(
     }
 
     Column(modifier = Modifier.zIndex(1f).padding(16.dp).width(300.dp)) {
-        Text(text = "Directed")
         // To MainScreen
-        DefaultButton({ navController.popBackStack() }, "home")
-
-        Spacer(modifier = Modifier.height(16.dp))
+        DefaultShortButton({ navController.popBackStack() }, "home")
+        Spacer(modifier = Modifier.height(10.dp))
 
         // Add vertex Button
-        DefaultButton({ graphVM.addVertex(graphVM.size) }, "add_vertex")
-
-        Spacer(modifier = Modifier.height(16.dp))
+        DefaultShortButton({ graphVM.addVertex(graphVM.size.toString()) }, "add_vertex")
+        Spacer(modifier = Modifier.height(10.dp))
 
         // Add edge Button
         var isOpenedEdgeMenu by remember { mutableStateOf(false) }
         val onCloseEdge = { isOpenedEdgeMenu = false }
-        DefaultButton({ isOpenedEdgeMenu = !isOpenedEdgeMenu }, "open_edge")
-
+        DefaultShortButton({ isOpenedEdgeMenu = !isOpenedEdgeMenu }, "open_edge")
         Spacer(modifier = Modifier.height(10.dp))
 
-        DefaultButton({ ForceAtlas2.forceDrawing(graphVM) }, "visualize", Color(0xffFFA500))
+        DefaultShortButton({ graphVM.saveSQLite() }, "save")
+        Spacer(modifier = Modifier.height(16.dp))
 
+        DefaultShortButton({ ForceAtlas2.forceDrawing(graphVM) }, "visualize", Color(0xffFFCB32))
         Spacer(modifier = Modifier.height(10.dp))
 
-        DefaultButton({ graphVM.resetDrawing() }, "reset", Color.LightGray)
+        DefaultShortButton({ graphVM.resetColors() }, "reset", Color.LightGray)
+        Spacer(modifier = Modifier.height(10.dp))
 
+        DefaultShortButton({ graphVM.showStrongConnections() }, "find_strong_connections")
         Spacer(modifier = Modifier.height(10.dp))
 
         // Dijkstra Button
         var isDijkstraMenu by remember { mutableStateOf(false) }
         val onCloseDijkstra = { isDijkstraMenu = !isDijkstraMenu }
-        DefaultButton(onCloseDijkstra, "dijkstra")
-
+        DefaultShortButton(onCloseDijkstra, "dijkstra")
         Spacer(modifier = Modifier.height(10.dp))
 
         // FordBellman Button
         var isFordBellmanMenu by remember { mutableStateOf(false) }
         val onCloseFB = { isFordBellmanMenu = !isFordBellmanMenu }
-        DefaultButton(onCloseFB, "ford_bellman")
-
+        DefaultShortButton(onCloseFB, "ford_bellman")
         Spacer(modifier = Modifier.height(10.dp))
 
         AddEdgeDialog(isOpenedEdgeMenu, onCloseEdge, graphVM, isDirected = true)

@@ -17,14 +17,16 @@ import localisation.localisation
 fun DefaultButton(
     onClick: () -> Unit,
     localisationCode: String,
-    color: Color = DefaultColors.primary
+    color: Color = DefaultColors.primary,
+    width: androidx.compose.ui.unit.Dp = 240.dp,
+    height: androidx.compose.ui.unit.Dp = 80.dp
 ) {
     Button(
         onClick = onClick,
         modifier = Modifier
             .clip(shape = RoundedCornerShape(45.dp))
             .border(5.dp, color = Color.Black, shape = RoundedCornerShape(45.dp))
-            .size(240.dp, 80.dp),
+            .size(width, height),
         colors = ButtonDefaults.buttonColors(backgroundColor = color)
     ) {
         Text(localisation(localisationCode), style = defaultStyle)

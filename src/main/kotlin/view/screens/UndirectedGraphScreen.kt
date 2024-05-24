@@ -10,7 +10,7 @@ import androidx.compose.ui.zIndex
 import androidx.navigation.NavController
 import model.algos.ForceAtlas2
 import view.common.AddEdgeDialog
-import view.common.DefaultButton
+import view.common.DefaultShortButton
 import view.common.DirectedAlgorithmDialog
 import view.views.UndirectedGraphView
 import viewmodel.MainScreenViewModel
@@ -30,52 +30,48 @@ fun UndirectedGraphScreen(
     Column(modifier = Modifier.zIndex(1f).padding(16.dp).width(300.dp)) {
         Text(text = "Undirected")
         // To MainScreen
-        DefaultButton({ navController.popBackStack() }, "home")
-
-        Spacer(modifier = Modifier.height(16.dp))
+        DefaultShortButton({ navController.popBackStack() }, "home")
+        Spacer(modifier = Modifier.height(10.dp))
 
         // Add vertex
-        DefaultButton({ graphVM.addVertex(graphVM.size) }, "add_vertex")
+        DefaultShortButton({ graphVM.addVertex(graphVM.size.toString()) }, "add_vertex")
+        Spacer(modifier = Modifier.height(10.dp))
 
+        // Add edge button
+        var isOpenedEdgeMenu by remember { mutableStateOf(false) }
+        DefaultShortButton({ isOpenedEdgeMenu = !isOpenedEdgeMenu }, "open_edge")
         Spacer(modifier = Modifier.height(16.dp))
 
-        // Open "add edge" dialog window
-        var isOpenedEdgeMenu by remember { mutableStateOf(false) }
-        DefaultButton({ isOpenedEdgeMenu = !isOpenedEdgeMenu }, "open_edge")
-
+        // Save button
+        DefaultShortButton({ graphVM.saveSQLite() }, "save")
         Spacer(modifier = Modifier.height(10.dp))
 
-        DefaultButton({ ForceAtlas2.forceDrawing(graphVM) }, "visualize", Color(0xffFFA500))
-
+        DefaultShortButton({ ForceAtlas2.forceDrawing(graphVM) }, "visualize", Color(0xffFFCB32))
         Spacer(modifier = Modifier.height(10.dp))
 
-        DefaultButton({ graphVM.resetDrawing() }, "reset", Color.LightGray)
-
+        DefaultShortButton({ graphVM.resetColors() }, "reset", Color.LightGray)
         Spacer(modifier = Modifier.height(10.dp))
 
         // Dijkstra Button
         var isDijkstraMenu by remember { mutableStateOf(false) }
         val onCloseDijkstra = { isDijkstraMenu = !isDijkstraMenu }
-        DefaultButton(onCloseDijkstra, "dijkstra")
-
+        DefaultShortButton(onCloseDijkstra, "dijkstra")
         Spacer(modifier = Modifier.height(10.dp))
 
         // FordBellman Button
         var isFordBellmanMenu by remember { mutableStateOf(false) }
         val onCloseFB = { isFordBellmanMenu = !isFordBellmanMenu }
-        DefaultButton(onCloseFB, "ford_bellman")
-
+        DefaultShortButton(onCloseFB, "ford_bellman")
         Spacer(modifier = Modifier.height(10.dp))
 
-        DefaultButton(onClick = { graphVM.findMst() }, "find_mst")
-
+        DefaultShortButton(onClick = { graphVM.findMst() }, "find_mst")
         Spacer(modifier = Modifier.height(10.dp))
 
-        DefaultButton(onClick = { graphVM.findCycles() }, "find_cycles")
-
+        DefaultShortButton(onClick = { graphVM.findCycles() }, "find_cycles")
         Spacer(modifier = Modifier.height(10.dp))
 
-        DefaultButton(onClick = { graphVM.findBridges() }, "find_bridges")
+        DefaultShortButton(onClick = { graphVM.findBridges() }, "find_bridges")
+        Spacer(modifier = Modifier.height(10.dp))
 
         val onClose = { isOpenedEdgeMenu = false }
         AddEdgeDialog(isOpenedEdgeMenu, onClose, graphVM)
@@ -97,5 +93,6 @@ fun UndirectedGraphScreen(
             graphVM,
             "FordBellman"
         )
+
     }
 }
