@@ -1,26 +1,25 @@
 package view.screens
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.DialogWindow
 import androidx.compose.ui.window.rememberDialogState
 import androidx.compose.ui.zIndex
 import androidx.navigation.NavController
 import localisation.localisation
-import view.DefaultColors
-import view.defaultStyle
-import view.views.GraphViewDirect
+import model.algos.ForceAtlas2
+import view.common.AddEdgeDialog
+import view.common.DefaultButton
+import view.common.DirectedAlgorithmDialog
+import view.common.defaultStyle
+import view.views.DirectedGraphView
 import viewmodel.MainScreenViewModel
 
 
@@ -32,196 +31,71 @@ fun DirectedGraphScreen(
 ) {
 
     val graphVM by mutableStateOf(mainScreenViewModel.graphs.getDirected(graphId))
-    var isOpenedEdgeMenu by remember { mutableStateOf(false) }
-
 
     Box(modifier = Modifier.fillMaxSize()) {
-        GraphViewDirect(graphVM)
+        DirectedGraphView(graphVM)
     }
 
     Column(modifier = Modifier.zIndex(1f).padding(16.dp).width(300.dp)) {
-        // To MainScreen
         Text(text = "Directed")
-        Button(
-            onClick = { navController.popBackStack() },
-            modifier = Modifier
-                .clip(shape = RoundedCornerShape(45.dp))
-                .border(5.dp, color = Color.Black, shape = RoundedCornerShape(45.dp))
-                .size(240.dp, 80.dp),
-            colors = ButtonDefaults.buttonColors(DefaultColors.primary)
-        ) {
-            Text(localisation("home"), style = defaultStyle)
-        }
+        // To MainScreen
+        DefaultButton({ navController.popBackStack() }, "home")
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        // Add vertex
-        Button(
-            onClick = { graphVM.addVertex(graphVM.size) },
-            modifier = Modifier
-                .clip(shape = RoundedCornerShape(45.dp))
-                .border(5.dp, color = Color.Black, shape = RoundedCornerShape(45.dp))
-                .size(240.dp, 80.dp),
-            colors = ButtonDefaults.buttonColors(backgroundColor = DefaultColors.primary)
-        ) {
-            Text(localisation("add_vertex"), style = defaultStyle)
-        }
+        // Add vertex Button
+        DefaultButton({ graphVM.addVertex(graphVM.size) }, "add_vertex")
 
         Spacer(modifier = Modifier.height(16.dp))
-        Button(
-            onClick = { isOpenedEdgeMenu = !isOpenedEdgeMenu},
-            modifier = Modifier
-                .clip(shape = RoundedCornerShape(45.dp))
-                .border(5.dp, color = Color.Black, shape = RoundedCornerShape(45.dp))
-                .size(240.dp, 80.dp),
-            colors = ButtonDefaults.buttonColors(backgroundColor = DefaultColors.primary)
-        ) {
-            Text(localisation("open_edge"), style = defaultStyle)
-        }
+
+        // Add edge Button
+        var isOpenedEdgeMenu by remember { mutableStateOf(false) }
+        val onCloseEdge = { isOpenedEdgeMenu = false }
+        DefaultButton({ isOpenedEdgeMenu = !isOpenedEdgeMenu }, "open_edge")
 
         Spacer(modifier = Modifier.height(10.dp))
 
-        Button(
-            onClick = { },
-            modifier = Modifier
-                .clip(shape = RoundedCornerShape(45.dp))
-                .border(5.dp, color = Color.Black, shape = RoundedCornerShape(45.dp))
-                .size(240.dp, 80.dp),
-            colors = ButtonDefaults.buttonColors(backgroundColor = DefaultColors.primary)
-        ) {
-            Text(localisation("dijkstra_algorithm"), style = defaultStyle)
-        }
+        DefaultButton({ ForceAtlas2.forceDrawing(graphVM) }, "visualize", Color(0xffFFA500))
 
         Spacer(modifier = Modifier.height(10.dp))
 
-        DialogWindow(
-            visible = isOpenedEdgeMenu,
-            title = "New Edge",
-            onCloseRequest = { isOpenedEdgeMenu = false },
-            state = rememberDialogState(height = 600.dp, width = 880.dp)
-        ) {
-            var source by remember { mutableStateOf("") }
-            var destination by remember { mutableStateOf("") }
-            var checkedState by remember { mutableStateOf(false) }
-            var weight by remember { mutableStateOf("") }
-            Column {
-                Spacer(modifier = Modifier.height(24.dp))
-                Row {
-                    Spacer(modifier = Modifier.width(30.dp))
-                    Text(text = localisation("from"), style = defaultStyle,modifier = Modifier.align(Alignment.CenterVertically))
-                    Spacer(modifier = Modifier.width(26.dp))
-                    TextField(
-                        modifier = Modifier
-                            .weight(1f)
-                            .width(115.dp)
-                            .border(4.dp, color = Color.Black,shape = RoundedCornerShape(25.dp),),
+        DefaultButton({ graphVM.resetDrawing() }, "reset", Color.LightGray)
 
-                        colors = TextFieldDefaults.textFieldColors(
-                            focusedIndicatorColor = Color.Transparent,
-                            unfocusedIndicatorColor = Color.Transparent,
-                        ),
-                        shape = RoundedCornerShape(25.dp),
-                        textStyle = defaultStyle,
-                        value = source,
-                        onValueChange = { newValue -> source = newValue },
-                    )
-                    Spacer(modifier = Modifier.width(200.dp))
-                }
-                Spacer(modifier = Modifier.height(36.dp))
-                Row {
-                    Spacer(modifier = Modifier.width(30.dp))
-                    Text(text = localisation("to"), style = defaultStyle,modifier = Modifier.align(Alignment.CenterVertically))
-                    Spacer(modifier = Modifier.width(62.dp))
-                    TextField(
-                        modifier = Modifier
-                            .weight(1f)
-                            .width(115.dp)
-                            .border(4.dp, color = Color.Black,shape = RoundedCornerShape(25.dp),),
+        Spacer(modifier = Modifier.height(10.dp))
 
-                        colors = TextFieldDefaults.textFieldColors(
-                            focusedIndicatorColor = Color.Transparent,
-                            unfocusedIndicatorColor = Color.Transparent,
-                        ),
-                        shape = RoundedCornerShape(25.dp),
-                        textStyle = defaultStyle,
-                        value = destination,
-                        onValueChange = { newValue -> destination = newValue },)
-                    Spacer(modifier = Modifier.width(200.dp))
-                }
-                Spacer(modifier = Modifier.height(36.dp))
-                Row {
-                    Spacer(modifier = Modifier.width(30.dp))
-                    if(!checkedState) {
-                        Text(
-                            text = localisation("weight"),
-                            style = defaultStyle,
-                            modifier = Modifier.align(Alignment.CenterVertically)
-                        )
-                        Spacer(modifier = Modifier.width(30.dp))
-                        TextField(
-                            enabled = !checkedState,
-                            modifier = Modifier
-                                .weight(1f)
-                                .width(115.dp)
-                                .border(3.dp, color = Color.Black, shape = RoundedCornerShape(10.dp),)
-                                .background(color = Color.White, shape = RoundedCornerShape(10.dp)),
-                            shape = RoundedCornerShape(10.dp),
+        // Dijkstra Button
+        var isDijkstraMenu by remember { mutableStateOf(false) }
+        val onCloseDijkstra = { isDijkstraMenu = !isDijkstraMenu }
+        DefaultButton(onCloseDijkstra, "dijkstra")
 
-                            colors = TextFieldDefaults.textFieldColors(
-                                focusedIndicatorColor = Color.Transparent,
-                                unfocusedIndicatorColor = Color.Transparent,
-                            ),
-                            textStyle = defaultStyle,
-                            value = weight,
-                            onValueChange = { value -> if (value.length < 10) weight = value.filter { it.isDigit() } },
-                            keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number)
-                        )
-                        Spacer(modifier = Modifier.width(20.dp))
-                    }
-                    Checkbox(
-                        modifier = Modifier.align(Alignment.CenterVertically),
-                        checked = checkedState,
-                        onCheckedChange = { checkedState = it;
-                            weight = if(checkedState) "1" else "" }
-                    )
-                    Text(text = localisation("unweighted"), style = defaultStyle,modifier = Modifier.align(Alignment.CenterVertically))
-                    Spacer(modifier = Modifier.width(200.dp))
-                }
-                Spacer(modifier = Modifier.height(36.dp))
-                Row {
-                    Spacer(modifier = Modifier.width(30.dp))
-                    Button(
-                        onClick = {
-                            val sourceInt = source.toIntOrNull()
-                            val destinationInt = destination.toIntOrNull()
-                            if (sourceInt != null && destinationInt != null) {
-                                graphVM.addEdge(sourceInt, destinationInt, weight.toInt())
-                                isOpenedEdgeMenu = false
-                            }
-                        }, modifier = Modifier
-                            .clip(shape = RoundedCornerShape(45.dp))
-                            .border(5.dp, color = Color.Black, shape = RoundedCornerShape(45.dp))
-                            .size(240.dp, 80.dp),
-                        colors = ButtonDefaults.buttonColors(backgroundColor = DefaultColors.primary)
-                    ) {
-                        Text(localisation("add_edge"), style = defaultStyle)
-                    }
-                }
-                Spacer(modifier = Modifier.height(36.dp))
-                Row {
-                    Spacer(modifier = Modifier.width(30.dp))
-                    Button(
-                        onClick = { isOpenedEdgeMenu = false }, modifier = Modifier
-                            .clip(shape = RoundedCornerShape(45.dp))
-                            .border(5.dp, color = Color.Black, shape = RoundedCornerShape(45.dp))
-                            .size(240.dp, 80.dp),
-                        colors = ButtonDefaults.buttonColors(backgroundColor = Color.Red)
-                    ) {
-                        Text(localisation("back"), style = defaultStyle)
-                    }
-                }
-            }
-        }
+        Spacer(modifier = Modifier.height(10.dp))
+
+        // FordBellman Button
+        var isFordBellmanMenu by remember { mutableStateOf(false) }
+        val onCloseFB = { isFordBellmanMenu = !isFordBellmanMenu }
+        DefaultButton(onCloseFB, "ford_bellman")
+
+        Spacer(modifier = Modifier.height(10.dp))
+
+        AddEdgeDialog(isOpenedEdgeMenu, onCloseEdge, graphVM, isDirected = true)
+
+        // Dijkstra dialog window
+        DirectedAlgorithmDialog(
+            isDijkstraMenu,
+            "Dijkstra Algorithm",
+            onCloseDijkstra,
+            graphVM,
+            "Dijkstra"
+        )
+
+        //Ford-Bellman dialog window
+        DirectedAlgorithmDialog(
+            isFordBellmanMenu,
+            "Ford Bellman Algorithm",
+            onCloseFB,
+            graphVM,
+            "FordBellman"
+        )
     }
 }
 

@@ -4,11 +4,14 @@ import model.graph.edges.Edge
 
 abstract class Graph<V>() {
     protected val graph = mutableMapOf<V, MutableList<Edge<V>>>()
-    val matrix get() = graph
-
+    val matrix
+        get() = graph
     val entries
         get() = graph.entries
-    protected var weighted = false
+    var isWeighted = false
+        protected set
+    var negativeWeights = false
+        protected set
     
     val vertices
         get() = graph.keys
@@ -29,6 +32,10 @@ abstract class Graph<V>() {
     fun addVertex(vertex: V) {
         graph.putIfAbsent(vertex, mutableListOf<Edge<V>>())
         size++
+    }
+
+    fun degreeOfVertex(vertex: V): Int {
+        return graph[vertex]?.size ?: 0
     }
 
     abstract fun addEdge(from: V, to: V, weight: Int = 1)

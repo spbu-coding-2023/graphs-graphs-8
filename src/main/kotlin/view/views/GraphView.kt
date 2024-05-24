@@ -1,20 +1,25 @@
 package view.views
 
 import androidx.compose.runtime.Composable
+import view.views.edge.DirectedEdgeView
+import view.views.edge.UndirectedEdgeView
+import view.views.vertex.DirectedVertexView
+import view.views.vertex.UndirectedVertexView
 import viewmodel.DirectedGraphViewModel
 import viewmodel.UndirectedGraphViewModel
 
 @Composable
-fun GraphViewUndirect(graphViewModel: UndirectedGraphViewModel<Int>) {
-    for (vertexVM in graphViewModel.graphView.values) {
-        UndirectedVertexView(vertexVM, graphViewModel)
+fun <V> UndirectedGraphView(graphVM: UndirectedGraphViewModel<V>) {
+    for (vertexVM in graphVM.verticesVM) {
+        UndirectedVertexView(vertexVM, graphVM)
+
     }
 }
 
 
 @Composable
-fun GraphViewDirect(graphViewModel: DirectedGraphViewModel<Int>) {
-    for (vertexVM in graphViewModel.graphView.values) {
-        DirectedVertexView(vertexVM, graphViewModel)
+fun <V> DirectedGraphView(graphVM: DirectedGraphViewModel<V>) {
+    for (vertexVM in graphVM.verticesVM) {
+        DirectedVertexView(vertexVM, graphVM)
     }
 }

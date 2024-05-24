@@ -27,7 +27,7 @@ internal class PrimTest {
             this.addEdge(1, 3, 10)
         }
 
-        val pathActual = Prim.findMST(graph, 1)
+        val pathActual = Prim.findMst(graph, 1)
 
         val pathExpected = listOf(
             Edge(1, 2, 1),

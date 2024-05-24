@@ -2,6 +2,7 @@ package viewmodel
 
 import androidx.compose.runtime.mutableStateListOf
 import androidx.lifecycle.ViewModel
+import model.graph.UndirectedGraph
 
 class MainScreenViewModel : ViewModel() {
     val graphs = GraphStorage()
@@ -10,7 +11,21 @@ class MainScreenViewModel : ViewModel() {
         when (type) {
             "undirected" -> {
                 graphs.typeList.add(ViewModelType.Undirected)
-                graphs.undirectedGraphs.add(UndirectedGraphViewModel(name))
+                val graph = UndirectedGraphViewModel<Int>(name)
+                fun initGraph() {
+                    val comSize = 5
+                    val comNumb = 7
+                    for (i in 0..<comNumb * comSize) graph.addVertex(i)
+                    for (i in 0..comNumb - 1) {
+                        for (j in (i * comSize)..<((i + 1) * comSize)) {
+                            for (k in (i * comSize)..<((i + 1) * comSize)) {
+                                graph.addEdge(j, k)
+                            }
+                        }
+                    }
+                }
+                initGraph()
+                graphs.undirectedGraphs.add(graph)
             }
 
             "directed" -> {

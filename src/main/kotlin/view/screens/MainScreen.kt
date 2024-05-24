@@ -23,10 +23,10 @@ import androidx.compose.ui.window.DialogState
 import androidx.compose.ui.window.DialogWindow
 import androidx.navigation.NavController
 import localisation.localisation
-import view.DefaultColors
-import view.bigStyle
-import view.bounceClick
-import view.defaultStyle
+import view.common.DefaultColors
+import view.common.bigStyle
+import view.common.bounceClick
+import view.common.defaultStyle
 import viewmodel.MainScreenViewModel
 
 @Composable
@@ -183,15 +183,16 @@ fun MainScreen(navController: NavController, mainScreenViewModel: MainScreenView
                 )
             }
 
-            Button(modifier = Modifier
-                .padding(horizontal = 20.dp, vertical = 260.dp)
-                .border(
-                    width = 2.dp,
-                    color = Color.Black,
-                    shape = RoundedCornerShape(25.dp)
-                )
-                .width(300.dp)
-                .height(60.dp),
+            Button(
+                modifier = Modifier
+                    .padding(horizontal = 20.dp, vertical = 260.dp)
+                    .border(
+                        width = 2.dp,
+                        color = Color.Black,
+                        shape = RoundedCornerShape(25.dp)
+                    )
+                    .width(300.dp)
+                    .height(60.dp),
 
                 shape = RoundedCornerShape(25.dp),
                 colors = ButtonDefaults.buttonColors(backgroundColor = Color.Red),
