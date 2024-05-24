@@ -80,7 +80,7 @@ fun DirectedGraphScreen(
             Text(localisation("open_edge"), style = defaultStyle)
         }
 
-        Spacer(modifier = Modifier.height(10.dp))
+        Spacer(modifier = Modifier.height(16.dp))
 
         Button(
             onClick = {isDijkstraMenu = !isDijkstraMenu},
@@ -91,6 +91,19 @@ fun DirectedGraphScreen(
             colors = ButtonDefaults.buttonColors(backgroundColor = DefaultColors.primary)
         ) {
             Text(localisation("dijkstra_algorithm"), style = defaultStyle)
+        }
+
+        Spacer(modifier = Modifier.height(10.dp))
+
+        Button(
+            onClick = {graphVM.showStrongConnections()},
+            modifier = Modifier
+                .clip(shape = RoundedCornerShape(45.dp))
+                .border(5.dp, color = Color.Black, shape = RoundedCornerShape(45.dp))
+                .size(240.dp, 80.dp),
+            colors = ButtonDefaults.buttonColors(backgroundColor = DefaultColors.primary)
+        ) {
+            Text(localisation("find_strong_connections"), style = defaultStyle)
         }
 
         Spacer(modifier = Modifier.height(10.dp))

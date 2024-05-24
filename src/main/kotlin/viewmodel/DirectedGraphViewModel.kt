@@ -1,15 +1,16 @@
 package viewmodel
 
 import Dijkstra
+import StrongConnections
 import androidx.compose.ui.graphics.Color
 import model.graph.DirectedGraph
 import model.graph.edges.Edge
 import java.sql.DriverManager
 import java.sql.SQLException
+import kotlin.random.Random
 
 class DirectedGraphViewModel<V>(
     name: String,
-
     val graph: DirectedGraph<V> = DirectedGraph()
 ): AbstractGraphViewModel<V>(name, graph){
     val model
@@ -19,7 +20,6 @@ class DirectedGraphViewModel<V>(
 
     private val DB_DRIVER = "jdbc:sqlite"
     init {
-
         for (vertex in graphModel.entries) {
             vertexView[vertex.key] = VertexViewModel(vertex.key, vertex.value)
         }
@@ -34,6 +34,19 @@ class DirectedGraphViewModel<V>(
         for (edgeVM in edgesView){
             if (Edge(edgeVM.from, edgeVM.to, edgeVM.weight) in y){
                 edgeVM.color = Color.Red
+            }
+        }
+    }
+
+    fun showStrongConnections(){
+        val k = StrongConnections<V>()
+        for (i in k.findStrongConnections(graph.matrix)) {
+            val col = Color(Random.nextInt(30, 230), Random.nextInt(30, 230),Random.nextInt(30, 230))
+            for (j in i) {
+                if (j in graphModel.vertices) {
+                    vertexView[j]?.color = col
+                    updateView()
+                }
             }
         }
     }

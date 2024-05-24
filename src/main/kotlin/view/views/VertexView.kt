@@ -37,7 +37,7 @@ fun DirectedVertexView(vertexVM: VertexViewModel<String>, graphVM: DirectedGraph
         .offset { IntOffset(vertexVM.offsetX.roundToInt(), vertexVM.offsetY.roundToInt()) }
         .clip(shape = CircleShape)
         .size(vertexVM.vertexSize.dp)
-        .background(DefaultColors.primary)
+        .background(vertexVM.color)
         .border(5.dp, Color.Black, CircleShape)
         .pointerInput(Unit) {
             detectDragGestures { change, dragAmount ->
