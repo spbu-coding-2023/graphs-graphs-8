@@ -22,14 +22,14 @@ fun main() = application {
         onCloseRequest = ::exitApplication,
         title = "Graph Visualizer",
     ) {
-        window.minimumSize = Dimension(100,100)
+        window.minimumSize = Dimension(100, 100)
         App()
     }
 }
 
 @Composable
-fun App(){
-    MaterialTheme(){
+fun App() {
+    MaterialTheme() {
         Navigation()
     }
 }

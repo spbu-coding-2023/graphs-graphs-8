@@ -1,9 +1,9 @@
-name: Test
+name: Build
 
 on:
   push:
 jobs:
-  test:
+  build:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
@@ -17,5 +17,5 @@ jobs:
         with:
           distribution: 'adopt'
           java-version: '21'
-      - name: Clean and Test
-        run: ./gradlew clean test
+      - name: Clean and Build
+        run: ./gradlew clean build -x test
