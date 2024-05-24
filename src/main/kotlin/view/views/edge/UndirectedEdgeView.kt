@@ -25,7 +25,7 @@ fun <V> UndirectedEdgeView(edgeVM: EdgeViewModel<V>, isWeighted: Boolean) {
                 edgeVM.fromY + edgeVM.vertexSize / 2
             ),
             end = Offset(edgeVM.toX + edgeVM.vertexSize / 2, edgeVM.toY + edgeVM.vertexSize / 2),
-            strokeWidth = 8f,
+            strokeWidth = 5f,
             color = edgeVM.color,
         )
         if (isWeighted)

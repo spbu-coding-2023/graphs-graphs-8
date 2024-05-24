@@ -47,7 +47,7 @@ fun <V> UndirectedVertexView(vertexVM: VertexViewModel<V>, graphVM: UndirectedGr
     ) {
         Text(
             text = "$vertex",
-            fontSize = 40.sp,
+            fontSize = 28.sp,
             modifier = Modifier
                 .fillMaxSize()
                 .wrapContentSize(),

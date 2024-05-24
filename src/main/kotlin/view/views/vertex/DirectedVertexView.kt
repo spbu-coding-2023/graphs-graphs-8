@@ -40,7 +40,7 @@ fun <V> DirectedVertexView(vertexVM: VertexViewModel<V>, graphVM: DirectedGraphV
     ) {
         Text(
             text = "$vertex",
-            fontSize = 40.sp,
+            fontSize = 28.sp,
             modifier = Modifier
                 .fillMaxSize()
                 .wrapContentSize(),

@@ -1,9 +1,11 @@
 package model.algos
 
 import height
+import kotlinx.serialization.internal.throwMissingFieldException
 import viewmodel.AbstractGraphViewModel
 import viewmodel.VertexViewModel
 import width
+import kotlin.math.ln
 import kotlin.math.sign
 import kotlin.math.sqrt
 
@@ -14,8 +16,7 @@ const val gravityK: Double = 5.0
 object ForceAtlas2 {
     fun <V> forceDrawing(graphVM: AbstractGraphViewModel<V>) {
         val vertices = graphVM.verticesVM
-
-        repeat(50) {
+        repeat(100) {
             val forces = mutableMapOf<VertexViewModel<V>, Pair<Float, Float>>()
             for (vertex in vertices) {
                 val edges = vertex.edges
@@ -23,8 +24,8 @@ object ForceAtlas2 {
                 for (edge in edges) {
                     isConnected[edge.to] = true
                 }
-                var forceX: Double = 0.0
-                var forceY: Double = 0.0
+                var forceX = 0.0
+                var forceY = 0.0
 
                 val gravityForces = getGravity(vertex)
                 forceX += gravityForces.first
@@ -34,7 +35,7 @@ object ForceAtlas2 {
                     if (vertexInner == vertex) continue
                     val dx = vertexInner.x.toDouble() - vertex.x.toDouble()
                     val dy = vertexInner.y.toDouble() - vertex.y.toDouble()
-                    val repulsion = getRepulsion(dx, dy)
+                    val repulsion = getRepulsion(dx, dy, vertex.degree, vertexInner.degree)
                     forceX -= sign(dx) * repulsion
                     forceY -= sign(dy) * repulsion
 
@@ -48,16 +49,22 @@ object ForceAtlas2 {
             }
             for (vertex in forces.keys) {
                 val forcesPair = forces[vertex]!!
-                vertex.x =
-                    (vertex.x + forcesPair.first).coerceIn(100f, width.toFloat() - 200f)
-                vertex.y =
-                    (vertex.y + forcesPair.second).coerceIn(100f, height.toFloat() - 200f)
+                if (!forcesPair.first.isNaN()) {
+                    val newX = (vertex.x + forcesPair.first).coerceIn(20f, width.toFloat() - 70f)
+                    vertex.x = newX
+                }
+                if (!forcesPair.second.isNaN()) {
+                    val newY =
+                        (vertex.y + forcesPair.second).coerceIn(20f, height.toFloat() - 200f)
+                    vertex.y = newY
+                }
             }
         }
     }
 
-    private fun getRepulsion(dx: Double, dy: Double): Double {
+    private fun getRepulsion(dx: Double, dy: Double, degree1: Int, degree2: Int): Double {
         val distance = getDistance(dx, dy)
+//        val repulsion = repulsionK * (degree1 + 1) * (1 + degree2) / distance
         val repulsion = repulsionK / distance
         return repulsion
     }

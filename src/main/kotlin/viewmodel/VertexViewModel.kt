@@ -23,5 +23,7 @@ class VertexViewModel<V>(_vertex: V, _edges: MutableList<EdgeViewModel<V>> = mut
 
     var x by mutableStateOf(Random.nextInt(100, width - 100).toFloat())
     var y by mutableStateOf(Random.nextInt(100, height - 100).toFloat())
-    val vertexSize = 80f
+    val vertexSize = 60f
+    val degree
+        get() = edges.size
 }
