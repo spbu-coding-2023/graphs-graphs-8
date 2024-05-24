@@ -6,7 +6,7 @@ import java.util.PriorityQueue
 
 object Prim {
     // find minimum spanning tree
-    fun <V> findMST(graph: UndirectedGraph<V>, startVertex: V): List<Edge<V>> {
+    fun <V> findMst(graph: UndirectedGraph<V>, startVertex: V): List<Edge<V>> {
         val mst = mutableListOf<Edge<V>>()
         val visited = mutableSetOf<V>()
         val edgeQueue = PriorityQueue<Edge<V>>()

@@ -1,5 +1,9 @@
 package viewmodel
 
+import androidx.compose.ui.graphics.Color
+import model.algos.FindCycle
+import model.algos.Prim
+import model.algos.findBridges
 import model.graph.UndirectedGraph
 import model.graph.edges.Edge
 import java.sql.DriverManager
@@ -8,33 +12,76 @@ import java.sql.SQLException
 class UndirectedGraphViewModel<V>(
     name: String,
     val graph: UndirectedGraph<V> = UndirectedGraph()
-): AbstractGraphViewModel<V>(name, graph){
+) : AbstractGraphViewModel<V>(name, graph) {
     private val DB_DRIVER = "jdbc:sqlite"
     var inType = viewmodel.initType.Internal
     var initedGraph = false
-    val model
-        get() = graph
-    init {
-        for (vertex in graphModel.entries) {
-            vertexView[vertex.key] = VertexViewModel(vertex.key, vertex.value)
+
+    override fun addEdge(from: V, to: V, weight: Int) {
+        val source: VertexViewModel<V>
+        val destination: VertexViewModel<V>
+        try {
+            source = graphVM[from]!!
+            destination = graphVM[to]!!
+        } catch (e: Exception) {
+            println("Can't add edge between $from and $to: one of them don't exist")
+            return
         }
-        for (edge in graphModel.edges) {
-            edgesView.add(EdgeViewModel(edge, vertexView[edge.from]!!, vertexView[edge.to]!!))
+        for (edge in source.edges) if (edge.to == to) return
+        for (edge in destination.edges) if (edge.from == from) return
+
+        val edgeFromSource = Edge(from, to, weight)
+        val edgeFromDestination = Edge(to, from, weight)
+        val edgeFromSourceVM = EdgeViewModel(edgeFromSource, source, destination)
+        val edgeFromDestinationVM = EdgeViewModel(edgeFromDestination, destination, source)
+        source.edges.add(edgeFromSourceVM)
+        destination.edges.add(edgeFromDestinationVM)
+        graphModel.addEdge(from, to, weight)
+    }
+
+    override fun drawEdges(edges: Collection<Edge<V>>, color: Color) {
+        for (edge in edges) {
+            for (edgeVM in this.edgesVmOf(edge.from)) {
+                if (edgeVM.to == edge.to) edgeVM.color = color
+            }
+            for (edgeVM in this.edgesVmOf(edge.to)) {
+                if (edgeVM.to == edge.from) edgeVM.color = color
+            }
         }
     }
-    fun saveSQLite(){
+
+    fun findMst() {
+        if (size == 0) return
+        val startVertex = graphModel.vertices.first()
+        val result = Prim.findMst(graphModel as UndirectedGraph<V>, startVertex)
+        drawEdges(result, Color.Magenta)
+    }
+
+    fun findCycles() {
+        if (this.size == 0) return
+        val start = graphModel.vertices.first()
+        val result = FindCycle.findCycle(graphModel as UndirectedGraph<V>, start) ?: emptyList()
+        drawEdges(result, Color.Magenta)
+    }
+
+    fun findBridges() {
+        val result = findBridges(graphModel as UndirectedGraph<V>)
+        drawEdges(result, Color.Yellow)
+    }
+
+    fun saveSQLite() {
         var parameterCreate = "( Vertexes String,"
         var parameterInput = "( Vertexes,"
         var create = ("CREATE TABLE $name ")
         val createIndex = ("CREATE TABLE BEBRA_KILLER (name TEXT, type TEXT);")
         val insertIndex = ("INSERT INTO BEBRA_KILLER (name, type) VALUES('$name', 'Undirected');")
-        for (i in graph.entries){
+        for (i in graph.entries) {
             parameterCreate = "$parameterCreate V${i.key.toString()} INTEGER, "
             parameterInput = "$parameterInput V${i.key.toString()},"
         }
-        parameterCreate = parameterCreate.slice(0.. parameterCreate.length - 3)
+        parameterCreate = parameterCreate.slice(0..parameterCreate.length - 3)
         parameterCreate = "$parameterCreate )"
-        parameterInput = parameterInput.slice(0.. parameterInput.length - 2)
+        parameterInput = parameterInput.slice(0..parameterInput.length - 2)
         parameterInput = "$parameterInput )"
         create = create + parameterCreate + ";"
         val connection = DriverManager.getConnection("$DB_DRIVER:storage.db")
@@ -87,23 +134,23 @@ class UndirectedGraphViewModel<V>(
         }
 
         var request = "INSERT INTO $name $parameterInput VALUES "
-        for (i in graph.entries){
+        for (i in graph.entries) {
             var record = "( 'V${i.key}', "
             val recList = emptyMap<V, String>().toMutableMap()
-            for (j in graph.entries){
+            for (j in graph.entries) {
                 recList[j.key] = "NULL"
             }
-            for (j in i.value){
+            for (j in i.value) {
                 recList[j.to] = j.weight.toString()
             }
-            for (j in recList){
+            for (j in recList) {
                 record = "$record ${j.value}, "
             }
-            record = record.slice(0.. record.length - 3)
+            record = record.slice(0..record.length - 3)
             record = "$record ),"
             request = "$request $record"
         }
-        request = request.slice(0.. request.length - 2)
+        request = request.slice(0..request.length - 2)
         connection.createStatement().also { stmt ->
             try {
                 stmt.execute(request)
@@ -115,20 +162,5 @@ class UndirectedGraphViewModel<V>(
             }
         }
         println(request)
-    }
-    override fun addEdge(from: V, to: V, weight: Int) {
-        if (vertexView[from] == null) return
-        for (i in vertexView[from]?.edges!!) if (i.to == to) return
-        val edgesCopy = vertexView[from]?.edges?.toMutableList()!!
-        val edgeTo = Edge(from, to, weight)
-        val edgeFrom = Edge(from, to, weight)
-        edgesCopy.add(edgeTo)
-        edgesCopy.add(edgeFrom)
-        vertexView[from]?.edges = edgesCopy
-        edgesView.add(EdgeViewModel(edgeTo, vertexView[edgeTo.from]!!, vertexView[edgeTo.to]!!))
-        edgesView.add(EdgeViewModel(edgeFrom, vertexView[edgeFrom.from]!!, vertexView[edgeFrom.to]!!))
-        graphModel.addEdge(from, to, weight)
-        graphModel.addEdge(to, from, weight)
-        updateView()
     }
 }
