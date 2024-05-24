@@ -117,7 +117,8 @@ fun AddEdgeDialog(
                         textStyle = defaultStyle,
                         value = weight,
                         onValueChange = { value ->
-                            if (value.length < 10) weight = value.filter { it.isDigit() }
+                            if (value.length < 10) weight =
+                                value.filter { it.isDigit() || (it == '-' && it == value.first()) }
                         },
                         keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number)
                     )
@@ -144,6 +145,7 @@ fun AddEdgeDialog(
                     val sourceInt = source.toIntOrNull()
                     val destinationInt = destination.toIntOrNull()
                     if (sourceInt != null && destinationInt != null) {
+                        if (weight == "") weight = "1"
                         graphVM.addEdge(sourceInt, destinationInt, weight.toInt())
                         visible = false
                     }

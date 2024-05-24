@@ -11,9 +11,11 @@ fun <V> findBridges(graph: UndirectedGraph<V>): Set<Edge<V>> {
     val ret = mutableMapOf<V, Int>()
     var time = 0
     val bridges = mutableSetOf<Edge<V>>()
+    val notVisited = graph.vertices.toMutableSet()
 
     fun dfs(vertex: V, prevVertex: V) {
         timeIn[vertex] = time++
+        notVisited.remove(vertex)
         ret[vertex] = timeIn[vertex]!!
         val edges = graph.edgesOf(vertex)
         for (edge in edges) {
@@ -38,8 +40,10 @@ fun <V> findBridges(graph: UndirectedGraph<V>): Set<Edge<V>> {
             }
         }
     }
-    if (graph.vertices.isNotEmpty()) {
-        dfs(graph.vertices.elementAt(0), graph.vertices.elementAt(0))
+
+
+    while (notVisited.isNotEmpty()) {
+        dfs(notVisited.elementAt(0), notVisited.elementAt(0))
     }
 
     return bridges.toSet()

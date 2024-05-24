@@ -8,10 +8,11 @@ abstract class Graph<V>() {
         get() = graph
     val entries
         get() = graph.entries
-    protected var weighted = false
-
-    val isWeighted
-        get() = weighted
+    var isWeighted = false
+        protected set
+    var negativeWeights = false
+        protected set
+    
     val vertices
         get() = graph.keys
 

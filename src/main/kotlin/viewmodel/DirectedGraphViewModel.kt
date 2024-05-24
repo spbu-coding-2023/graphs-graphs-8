@@ -27,20 +27,14 @@ class DirectedGraphViewModel<V>(
         source.edges.add(edgeVM)
         graphModel.addEdge(from, to, weight)
 
-        if (weight != 1) isWeighted = true
         updateView()
     }
 
-    private fun drawEdges(edges: Collection<Edge<V>>, color: Color) {
+    override fun drawEdges(edges: Collection<Edge<V>>, color: Color) {
         for (edge in edges) {
             for (edgeVM in this.edgesVmOf(edge.from)) {
                 if (edgeVM.to == edge.to) edgeVM.color = color
             }
         }
-    }
-
-    fun dijkstraAlgo(start: V, end: V) {
-        val result = Dijkstra(graph.matrix, graph.size).dijkstra(start, end)
-        drawEdges(result, Color.Red)
     }
 }

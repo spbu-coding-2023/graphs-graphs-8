@@ -11,6 +11,7 @@ import androidx.navigation.NavController
 import model.algos.ForceAtlas2
 import view.common.AddEdgeDialog
 import view.common.DefaultButton
+import view.common.DirectedAlgorithmDialog
 import view.views.UndirectedGraphView
 import viewmodel.MainScreenViewModel
 
@@ -52,6 +53,20 @@ fun UndirectedGraphScreen(
 
         Spacer(modifier = Modifier.height(10.dp))
 
+        // Dijkstra Button
+        var isDijkstraMenu by remember { mutableStateOf(false) }
+        val onCloseDijkstra = { isDijkstraMenu = !isDijkstraMenu }
+        DefaultButton(onCloseDijkstra, "dijkstra")
+
+        Spacer(modifier = Modifier.height(10.dp))
+
+        // FordBellman Button
+        var isFordBellmanMenu by remember { mutableStateOf(false) }
+        val onCloseFB = { isFordBellmanMenu = !isFordBellmanMenu }
+        DefaultButton(onCloseFB, "ford_bellman")
+
+        Spacer(modifier = Modifier.height(10.dp))
+
         DefaultButton(onClick = { graphVM.findMst() }, "find_mst")
 
         Spacer(modifier = Modifier.height(10.dp))
@@ -64,5 +79,23 @@ fun UndirectedGraphScreen(
 
         val onClose = { isOpenedEdgeMenu = false }
         AddEdgeDialog(isOpenedEdgeMenu, onClose, graphVM)
+
+        // Dijkstra dialog window
+        DirectedAlgorithmDialog(
+            isDijkstraMenu,
+            "Dijkstra Algorithm",
+            onCloseDijkstra,
+            graphVM,
+            "Dijkstra"
+        )
+
+        //Ford-Bellman dialog window
+        DirectedAlgorithmDialog(
+            isFordBellmanMenu,
+            "Ford Bellman Algorithm",
+            onCloseFB,
+            graphVM,
+            "FordBellman"
+        )
     }
 }

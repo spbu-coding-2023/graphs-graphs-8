@@ -1,19 +1,24 @@
 package viewmodel
 
+import Dijkstra
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.ViewModel
+import model.algos.FordBellman
 import model.graph.Graph
+import model.graph.edges.Edge
 
 abstract class AbstractGraphViewModel<V>(_name: String, graph: Graph<V>) : ViewModel() {
     val name = _name
     protected var graphVM by mutableStateOf(mutableMapOf<V, VertexViewModel<V>>())
     protected val graphModel = graph
     var size = 0
-    var isWeighted by mutableStateOf(false)
-        protected set
+    val isWeighted
+        get() = graphModel.isWeighted
+    val negativeWeights
+        get() = graphModel.negativeWeights
     val model
         get() = graphModel
     val verticesVM
@@ -50,6 +55,21 @@ abstract class AbstractGraphViewModel<V>(_name: String, graph: Graph<V>) : ViewM
         }
     }
 
+    abstract fun addEdge(from: V, to: V, weight: Int = 1)
+
+    abstract fun drawEdges(edges: Collection<Edge<V>>, color: Color)
+
+    fun dijkstraAlgo(start: V, end: V) {
+        if (this.negativeWeights) return
+        val result = Dijkstra(graphModel.matrix, graphModel.size).dijkstra(start, end)
+        drawEdges(result, Color.Red)
+    }
+
+    fun fordBellman(from: V, to: V) {
+        val path = FordBellman.findShortestPath(from, to, this.graphModel).second ?: emptyList()
+        drawEdges(path, Color.Cyan)
+    }
+
     fun vertexVmOf(vertex: V): VertexViewModel<V>? {
         return graphVM[vertex]
     }
@@ -76,6 +96,4 @@ abstract class AbstractGraphViewModel<V>(_name: String, graph: Graph<V>) : ViewM
         graphVM = mutableMapOf<V, VertexViewModel<V>>()
         graphVM = keep
     }
-
-    abstract fun addEdge(from: V, to: V, weight: Int = 1)
 }

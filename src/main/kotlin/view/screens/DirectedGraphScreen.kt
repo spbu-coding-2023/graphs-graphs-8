@@ -17,6 +17,7 @@ import localisation.localisation
 import model.algos.ForceAtlas2
 import view.common.AddEdgeDialog
 import view.common.DefaultButton
+import view.common.DirectedAlgorithmDialog
 import view.common.defaultStyle
 import view.views.DirectedGraphView
 import viewmodel.MainScreenViewModel
@@ -42,13 +43,14 @@ fun DirectedGraphScreen(
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        // Add vertex
+        // Add vertex Button
         DefaultButton({ graphVM.addVertex(graphVM.size) }, "add_vertex")
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        // Open "add edge" dialog
+        // Add edge Button
         var isOpenedEdgeMenu by remember { mutableStateOf(false) }
+        val onCloseEdge = { isOpenedEdgeMenu = false }
         DefaultButton({ isOpenedEdgeMenu = !isOpenedEdgeMenu }, "open_edge")
 
         Spacer(modifier = Modifier.height(10.dp))
@@ -61,90 +63,39 @@ fun DirectedGraphScreen(
 
         Spacer(modifier = Modifier.height(10.dp))
 
-        // Open Dijkstra dialog window
+        // Dijkstra Button
         var isDijkstraMenu by remember { mutableStateOf(false) }
-        DefaultButton({ isDijkstraMenu = !isDijkstraMenu }, "dijkstra")
+        val onCloseDijkstra = { isDijkstraMenu = !isDijkstraMenu }
+        DefaultButton(onCloseDijkstra, "dijkstra")
 
         Spacer(modifier = Modifier.height(10.dp))
 
-        val onClose = { isOpenedEdgeMenu = false }
-        AddEdgeDialog(isOpenedEdgeMenu, onClose, graphVM, isDirected = true)
+        // FordBellman Button
+        var isFordBellmanMenu by remember { mutableStateOf(false) }
+        val onCloseFB = { isFordBellmanMenu = !isFordBellmanMenu }
+        DefaultButton(onCloseFB, "ford_bellman")
+
+        Spacer(modifier = Modifier.height(10.dp))
+
+        AddEdgeDialog(isOpenedEdgeMenu, onCloseEdge, graphVM, isDirected = true)
 
         // Dijkstra dialog window
-        DialogWindow(
-            visible = isDijkstraMenu,
-            title = "New Edge",
-            onCloseRequest = { isDijkstraMenu = false },
-            state = rememberDialogState(height = 600.dp, width = 880.dp)
-        ) {
-            var source by remember { mutableStateOf("") }
-            var destination by remember { mutableStateOf("") }
-            Column {
-                Spacer(modifier = Modifier.height(24.dp))
-                Row {
-                    Spacer(modifier = Modifier.width(30.dp))
-                    Text(
-                        text = localisation("from"),
-                        style = defaultStyle,
-                        modifier = Modifier.align(Alignment.CenterVertically)
-                    )
-                    Spacer(modifier = Modifier.width(26.dp))
-                    TextField(
-                        modifier = Modifier
-                            .weight(1f)
-                            .width(115.dp)
-                            .border(4.dp, color = Color.Black, shape = RoundedCornerShape(25.dp)),
+        DirectedAlgorithmDialog(
+            isDijkstraMenu,
+            "Dijkstra Algorithm",
+            onCloseDijkstra,
+            graphVM,
+            "Dijkstra"
+        )
 
-                        colors = TextFieldDefaults.textFieldColors(
-                            focusedIndicatorColor = Color.Transparent,
-                            unfocusedIndicatorColor = Color.Transparent,
-                        ),
-                        shape = RoundedCornerShape(25.dp),
-                        textStyle = defaultStyle,
-                        value = source,
-                        onValueChange = { newValue -> source = newValue },
-                    )
-                    Spacer(modifier = Modifier.width(200.dp))
-                }
-                Spacer(modifier = Modifier.height(36.dp))
-                Row {
-                    Spacer(modifier = Modifier.width(30.dp))
-                    Text(
-                        text = localisation("to"),
-                        style = defaultStyle,
-                        modifier = Modifier.align(Alignment.CenterVertically)
-                    )
-                    Spacer(modifier = Modifier.width(62.dp))
-                    TextField(
-                        modifier = Modifier
-                            .weight(1f)
-                            .width(115.dp)
-                            .border(4.dp, color = Color.Black, shape = RoundedCornerShape(25.dp)),
-
-                        colors = TextFieldDefaults.textFieldColors(
-                            focusedIndicatorColor = Color.Transparent,
-                            unfocusedIndicatorColor = Color.Transparent,
-                        ),
-                        shape = RoundedCornerShape(25.dp),
-                        textStyle = defaultStyle,
-                        value = destination,
-                        onValueChange = { newValue -> destination = newValue },
-                    )
-                    Spacer(modifier = Modifier.width(200.dp))
-                }
-                Spacer(modifier = Modifier.height(36.dp))
-                Row {
-                    Spacer(modifier = Modifier.width(30.dp))
-                    val onClick = { graphVM.dijkstraAlgo(source.toInt(), destination.toInt()) }
-                    DefaultButton(onClick, "start")
-                }
-                Spacer(modifier = Modifier.height(36.dp))
-                Row {
-                    Spacer(modifier = Modifier.width(30.dp))
-                    DefaultButton({ isDijkstraMenu = false }, "back", Color.Red)
-                }
-            }
-        }
+        //Ford-Bellman dialog window
+        DirectedAlgorithmDialog(
+            isFordBellmanMenu,
+            "Ford Bellman Algorithm",
+            onCloseFB,
+            graphVM,
+            "FordBellman"
+        )
     }
 }
 
