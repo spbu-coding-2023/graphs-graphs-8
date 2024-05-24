@@ -13,6 +13,7 @@ version = "1.0-SNAPSHOT"
 repositories {
     mavenCentral()
     maven("https://maven.pkg.jetbrains.space/public/p/compose/dev")
+    maven("https://jitpack.io")
     google()
 }
 
@@ -27,13 +28,13 @@ dependencies {
     implementation("org.xerial", "sqlite-jdbc", "3.41.2.1")
     implementation("org.jetbrains.androidx.navigation:navigation-compose:$nav_version")
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.3")
+    implementation("com.github.uhh-lt:chinese-whispers:-SNAPSHOT")
     testImplementation(kotlin("test"))
 }
 
 compose.desktop {
     application {
         mainClass = "MainKt"
-
         nativeDistributions {
             targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb)
             packageName = "GraphVisualizer"
