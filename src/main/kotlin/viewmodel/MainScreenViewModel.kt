@@ -20,7 +20,9 @@ class MainScreenViewModel : ViewModel() {
         when (type) {
             "undirected" -> {
                 graphs.typeList.add(ViewModelType.Undirected)
-                graphs.undirectedGraphs.add(UndirectedGraphViewModel(name, initType))
+                val graphVM = UndirectedGraphViewModel<String>(name)
+                graphVM.inType = initType
+                graphs.undirectedGraphs.add(graphVM)
             }
             "directed" -> {
                 graphs.typeList.add(ViewModelType.Directed)
@@ -33,9 +35,36 @@ class MainScreenViewModel : ViewModel() {
     }
 
     fun initModel(index: Int){
-
         if(graphs.typeList[index] == ViewModelType.Directed) {
             val graph = graphs.getDirected(index)
+            if(graph.initedGraph) return
+            else graph.initedGraph = true
+            if (graph.inType == initType.SQLite) {
+                val connection = DriverManager.getConnection("$DB_DRIVER:storage.db")
+                val getGraphs by lazy { connection.prepareStatement("SELECT * FROM ${graph.name}") }
+                val getVertex by lazy { connection.prepareStatement("SELECT Vertexes FROM ${graph.name}") }
+                val resVertex = getVertex.executeQuery()
+                val resEdges = getGraphs.executeQuery()
+                while (resVertex.next()) {
+                    var vertexName = resVertex.getString("Vertexes")
+                    if(vertexName.length > 1) vertexName = vertexName.slice(1..vertexName.length - 1)
+                    graph.addVertex(vertexName)
+                }
+                while (resEdges.next()) {
+                    for (i in graph.graph.vertices) {
+                        val weight = resEdges.getString("V$i")
+                        var to = resEdges.getString("Vertexes")
+                        to = to.slice(1..<to.length)
+                        println(weight)
+                        if(weight != null){
+                            graph.addEdge(to, i, weight.toInt())
+                        }
+                    }
+                }
+            }
+        }
+        if(graphs.typeList[index] == ViewModelType.Undirected) {
+            val graph = graphs.getUndirected(index)
             if(graph.initedGraph) return
             else graph.initedGraph = true
             if (graph.inType == initType.SQLite) {

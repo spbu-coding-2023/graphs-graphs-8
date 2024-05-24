@@ -259,6 +259,9 @@ fun MainScreen(navController: NavController, mainScreenViewModel: MainScreenView
                             if(mainScreenViewModel.graphs.typeList[index] == MainScreenViewModel.ViewModelType.Directed){
                                 mainScreenViewModel.initModel(index)
                             }
+                            if(mainScreenViewModel.graphs.typeList[index] == MainScreenViewModel.ViewModelType.Undirected){
+                                mainScreenViewModel.initModel(index)
+                            }
                             navController.navigate(
                                 when (mainScreenViewModel.graphs.typeList[index]) {
                                     MainScreenViewModel.ViewModelType.Undirected -> {"${Screen.UndirectedGraphScreen.route}/$index"}

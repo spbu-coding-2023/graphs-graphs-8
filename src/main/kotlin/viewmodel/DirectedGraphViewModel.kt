@@ -39,7 +39,6 @@ class DirectedGraphViewModel<V>(
     }
 
     fun saveSQLite(){
-
         var parameterCreate = "( Vertexes String,"
         var parameterInput = "( Vertexes,"
         var create = ("CREATE TABLE $name ")
@@ -54,7 +53,6 @@ class DirectedGraphViewModel<V>(
         parameterInput = parameterInput.slice(0.. parameterInput.length - 2)
         parameterInput = "$parameterInput )"
         create = create + parameterCreate + ";"
-
         val connection = DriverManager.getConnection("$DB_DRIVER:storage.db")
             ?: throw SQLException("Cannot connect to database")
         val delTable = "DROP TABLE $name"
