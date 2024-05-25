@@ -1,6 +1,9 @@
 package model.algos
 
 import height
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.yield
 import kotlinx.serialization.internal.throwMissingFieldException
 import viewmodel.AbstractGraphViewModel
 import viewmodel.VertexViewModel
@@ -10,13 +13,14 @@ import kotlin.math.sign
 import kotlin.math.sqrt
 
 const val repulsionK: Double = 150.0
-const val attractionK: Double = 150.0
+const val attractionK: Double = 250.0
 const val gravityK: Double = 5.0
 
 object ForceAtlas2 {
-    fun <V> forceDrawing(graphVM: AbstractGraphViewModel<V>) {
+    suspend fun <V> forceDrawing(graphVM: AbstractGraphViewModel<V>) {
         val vertices = graphVM.verticesVM
-        repeat(1000) {
+        while (true) {
+            yield()
             val forces = mutableMapOf<VertexViewModel<V>, Pair<Float, Float>>()
             for (vertex in vertices) {
                 val edges = vertex.edges

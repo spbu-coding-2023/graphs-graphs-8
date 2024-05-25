@@ -5,7 +5,7 @@ import androidx.lifecycle.ViewModel
 import java.sql.DriverManager
 import java.sql.SQLException
 
-enum class initType{
+enum class initType {
     SQLite,
     CSV,
     Neo4j,
@@ -24,6 +24,7 @@ class MainScreenViewModel : ViewModel() {
                 graphVM.inType = initType
                 graphs.undirectedGraphs.add(graphVM)
             }
+
             "directed" -> {
                 graphs.typeList.add(ViewModelType.Directed)
                 val graphVM = DirectedGraphViewModel<String>(name)
@@ -34,10 +35,10 @@ class MainScreenViewModel : ViewModel() {
         }
     }
 
-    fun initModel(index: Int){
-        if(graphs.typeList[index] == ViewModelType.Directed) {
+    fun initModel(index: Int) {
+        if (graphs.typeList[index] == ViewModelType.Directed) {
             val graph = graphs.getDirected(index)
-            if(graph.initedGraph) return
+            if (graph.initedGraph) return
             else graph.initedGraph = true
             if (graph.inType == initType.SQLite) {
                 val connection = DriverManager.getConnection("$DB_DRIVER:storage.db")
@@ -47,7 +48,8 @@ class MainScreenViewModel : ViewModel() {
                 val resEdges = getGraphs.executeQuery()
                 while (resVertex.next()) {
                     var vertexName = resVertex.getString("Vertexes")
-                    if(vertexName.length > 1) vertexName = vertexName.slice(1..vertexName.length - 1)
+                    if (vertexName.length > 1) vertexName =
+                        vertexName.slice(1..vertexName.length - 1)
                     graph.addVertex(vertexName)
                 }
                 while (resEdges.next()) {
@@ -56,16 +58,16 @@ class MainScreenViewModel : ViewModel() {
                         var to = resEdges.getString("Vertexes")
                         to = to.slice(1..<to.length)
                         println(weight)
-                        if(weight != null){
+                        if (weight != null) {
                             graph.addEdge(to, i, weight.toInt())
                         }
                     }
                 }
             }
         }
-        if(graphs.typeList[index] == ViewModelType.Undirected) {
+        if (graphs.typeList[index] == ViewModelType.Undirected) {
             val graph = graphs.getUndirected(index)
-            if(graph.initedGraph) return
+            if (graph.initedGraph) return
             else graph.initedGraph = true
             if (graph.inType == initType.SQLite) {
                 val connection = DriverManager.getConnection("$DB_DRIVER:storage.db")
@@ -75,7 +77,8 @@ class MainScreenViewModel : ViewModel() {
                 val resEdges = getGraphs.executeQuery()
                 while (resVertex.next()) {
                     var vertexName = resVertex.getString("Vertexes")
-                    if(vertexName.length > 1) vertexName = vertexName.slice(1..vertexName.length - 1)
+                    if (vertexName.length > 1) vertexName =
+                        vertexName.slice(1..vertexName.length - 1)
                     graph.addVertex(vertexName)
                 }
                 while (resEdges.next()) {
@@ -83,8 +86,7 @@ class MainScreenViewModel : ViewModel() {
                         val weight = resEdges.getString("V$i")
                         var to = resEdges.getString("Vertexes")
                         to = to.slice(1..<to.length)
-                        println(weight)
-                        if(weight != null){
+                        if (weight != null) {
                             graph.addEdge(to, i, weight.toInt())
                         }
                     }
@@ -93,7 +95,7 @@ class MainScreenViewModel : ViewModel() {
         }
     }
 
-    fun graphInit(){
+    fun graphInit() {
         val DB_DRIVER = "jdbc:sqlite"
         val connection = DriverManager.getConnection("$DB_DRIVER:storage.db")
             ?: throw SQLException("Cannot connect to database")
@@ -110,13 +112,12 @@ class MainScreenViewModel : ViewModel() {
                 stmt.close()
             }
         }
-        val getGraphs by lazy { connection.prepareStatement("SELECT * FROM BEBRA_KILLER")}
+        val getGraphs by lazy { connection.prepareStatement("SELECT * FROM BEBRA_KILLER") }
         val resSet = getGraphs.executeQuery()
-        while(resSet.next()) {
-            if(resSet.getString("type") == "Directed"){
+        while (resSet.next()) {
+            if (resSet.getString("type") == "Directed") {
                 addGraph(resSet.getString("name"), "directed", initType.SQLite)
-            }
-            else if(resSet.getString("type") == "Undirected"){
+            } else if (resSet.getString("type") == "Undirected") {
                 addGraph(resSet.getString("name"), "undirected", initType.SQLite)
             }
         }
@@ -186,6 +187,7 @@ class MainScreenViewModel : ViewModel() {
             }
 
         }
+
         fun getUndirected(index: Int): UndirectedGraphViewModel<String> {
             return undirectedGraphs[findGraph(index)]
         }

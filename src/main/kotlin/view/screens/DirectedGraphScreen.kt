@@ -16,6 +16,10 @@ import androidx.compose.ui.input.pointer.onPointerEvent
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import androidx.navigation.NavController
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.cancelChildren
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.launch
 import model.algos.ForceAtlas2
 import view.common.*
 import view.views.DirectedGraphView
@@ -73,6 +77,7 @@ fun DirectedGraphScreen(
         var isOpenedEdgeMenu by remember { mutableStateOf(false) }
         var isOpenedDijkstraMenu by remember { mutableStateOf(false) }
         var isOpenedFordBellmanMenu by remember { mutableStateOf(false) }
+        var isVisualizationRunning by remember { mutableStateOf(false) }
 
         // To MainScreen
         DefaultShortButton({ navController.popBackStack() }, "home")
@@ -86,10 +91,25 @@ fun DirectedGraphScreen(
         DefaultShortButton({ isOpenedEdgeMenu = !isOpenedEdgeMenu }, "open_edge")
         Spacer(modifier = Modifier.height(10.dp))
 
+        // Save button
         DefaultShortButton({ graphVM.saveSQLite() }, "save")
         Spacer(modifier = Modifier.height(16.dp))
 
-        DefaultShortButton({ ForceAtlas2.forceDrawing(graphVM) }, "visualize", Color(0xffFFCB32))
+        // Visualization Button
+        val scope = rememberCoroutineScope { Dispatchers.Default }
+        DefaultShortButton(
+            {
+                isVisualizationRunning = !isVisualizationRunning
+                if (isVisualizationRunning) {
+                    scope.launch {
+                        ForceAtlas2.forceDrawing(graphVM)
+                    }
+                } else {
+                    scope.coroutineContext.cancelChildren()
+                }
+            }, "visualize",
+            if (isVisualizationRunning) Color.Red else Color(0xffFFCB32)
+        )
         Spacer(modifier = Modifier.height(10.dp))
 
         DefaultShortButton({ graphVM.resetColors() }, "reset", Color.LightGray)
@@ -113,19 +133,19 @@ fun DirectedGraphScreen(
         DefaultShortButton(onClick = { graphVM.drawCycles("1") }, "find_cycles")
         Spacer(modifier = Modifier.height(10.dp))
 
+        // Add vertex Dialog
+        AddVertexDialog(
+            isOpenedVertexMenu && isVisualizationRunning.not(),
+            { isOpenedVertexMenu = false },
+            graphVM,
+        )
+
         // Add edge Dialog
         AddEdgeDialog(
             isOpenedEdgeMenu,
             { isOpenedEdgeMenu = !isOpenedEdgeMenu },
             graphVM,
             isDirected = true
-        )
-
-        // Add vertex Dialog
-        AddVertexDialog(
-            isOpenedVertexMenu,
-            { isOpenedVertexMenu = false },
-            graphVM,
         )
 
         // Dijkstra Dialog

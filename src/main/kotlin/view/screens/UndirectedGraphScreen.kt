@@ -16,6 +16,10 @@ import androidx.compose.ui.input.pointer.onPointerEvent
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import androidx.navigation.NavController
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.cancel
+import kotlinx.coroutines.cancelChildren
+import kotlinx.coroutines.launch
 import model.algos.ForceAtlas2
 import view.common.AddEdgeDialog
 import view.common.AddVertexDialog
@@ -74,6 +78,7 @@ fun UndirectedGraphScreen(
         var isOpenedEdgeMenu by remember { mutableStateOf(false) }
         var isDijkstraMenu by remember { mutableStateOf(false) }
         var isFordBellmanMenu by remember { mutableStateOf(false) }
+        var isVisualizationRunning by remember { mutableStateOf(false) }
 
         // To MainScreen
         DefaultShortButton({ navController.popBackStack() }, "home")
@@ -92,7 +97,20 @@ fun UndirectedGraphScreen(
         Spacer(modifier = Modifier.height(10.dp))
 
         // Visualization Button
-        DefaultShortButton({ ForceAtlas2.forceDrawing(graphVM) }, "visualize", Color(0xffFFCB32))
+        val scope = rememberCoroutineScope { Dispatchers.Default }
+        DefaultShortButton(
+            {
+                isVisualizationRunning = !isVisualizationRunning
+                if (isVisualizationRunning) {
+                    scope.launch {
+                        ForceAtlas2.forceDrawing(graphVM)
+                    }
+                } else {
+                    scope.coroutineContext.cancelChildren()
+                }
+            }, "visualize",
+            if (isVisualizationRunning) Color.Red else Color(0xffFFCB32)
+        )
         Spacer(modifier = Modifier.height(10.dp))
 
         // Reset colors Button
@@ -118,7 +136,7 @@ fun UndirectedGraphScreen(
 
         // Add vertex Dialog
         AddVertexDialog(
-            isOpenedVertexMenu,
+            isOpenedVertexMenu && isVisualizationRunning.not(),
             { isOpenedVertexMenu = false },
             graphVM,
         )
