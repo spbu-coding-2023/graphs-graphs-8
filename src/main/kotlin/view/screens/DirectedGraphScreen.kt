@@ -53,7 +53,12 @@ fun DirectedGraphScreen(
         DefaultShortButton({ graphVM.showStrongConnections() }, "find_strong_connections")
         Spacer(modifier = Modifier.height(10.dp))
 
-        // Dijkstra Button
+        DefaultShortButton({ graphVM.chinaWhisperCluster() }, "find_clusters")
+        Spacer(modifier = Modifier.height(10.dp))
+
+
+
+                // Dijkstra Button
         var isDijkstraMenu by remember { mutableStateOf(false) }
         val onCloseDijkstra = { isDijkstraMenu = !isDijkstraMenu }
         DefaultShortButton(onCloseDijkstra, "dijkstra")

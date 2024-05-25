@@ -3,6 +3,9 @@ package viewmodel
 import androidx.compose.ui.graphics.Color
 import model.algos.FindCycle
 import model.algos.StrongConnections
+import de.tudarmstadt.lt.cw.graph.ArrayBackedGraph
+import de.tudarmstadt.lt.cw.graph.ArrayBackedGraphCW
+import de.tudarmstadt.lt.cw.graph.Graph
 import model.graph.DirectedGraph
 import model.graph.edges.Edge
 import java.sql.DriverManager
@@ -44,7 +47,36 @@ class DirectedGraphViewModel<V>(
         }
     }
 
-    fun showStrongConnections() {
+    fun chinaWhisperCluster(){
+        val comparatorItoV = emptyMap<Int, V>().toMutableMap()
+        val comparatorVtoI = emptyMap<V, Int>().toMutableMap()
+        for (i in graph.vertices){
+            comparatorItoV[comparatorItoV.size] = i
+            comparatorVtoI[i] = comparatorVtoI.size
+        }
+        val cwGraph :Graph<Int, Float> = ArrayBackedGraph(comparatorVtoI.size, comparatorVtoI.size)
+        for (i in comparatorItoV){
+            cwGraph.addNode(i.key)
+        }
+        for (i in graph.edges){
+            cwGraph.addEdge(comparatorVtoI[i.from], comparatorVtoI[i.to],i.weight.toFloat())
+        }
+
+        val cw = ArrayBackedGraphCW(comparatorItoV.size)
+
+        val findClusters = cw.findClusters(cwGraph)
+        for (k in findClusters.values) {
+            val col = Color(Random.nextInt(30, 230), Random.nextInt(30, 230), Random.nextInt(30, 230))
+            for (j in k) {
+
+                graphVM[comparatorItoV[j]]?.color = col
+                println(graphVM[comparatorItoV[j]]?.color)
+                updateView()
+            }
+        }
+    }
+
+    fun showStrongConnections(){
         val k = StrongConnections<V>()
         for (i in k.findStrongConnections(graph.matrix)) {
             val col =
