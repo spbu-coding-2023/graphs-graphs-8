@@ -32,4 +32,28 @@ internal class FindCycleTest {
         )
         assertContentEquals(pathExpected, pathActual)
     }
+
+    @Test
+    fun pentagramm() {
+        val graph = UndirectedGraph<Int>()
+        for (i in 1..5) {
+            graph.addVertex(i)
+        }
+
+        for (i in 1..5) {
+            for (j in 1..5) {
+                graph.addEdge(i, j)
+            }
+        }
+
+        val pathActual = FindCycle.findCycle(graph, 1)
+        assertNotNull(pathActual)
+        val pathExpected = mutableListOf<Edge<Int>>()
+        for (i in 1..5) {
+            for (j in 1..5) {
+                if (i != j) pathExpected.add(Edge(i, j))
+            }
+        }
+        assertContentEquals(pathExpected, pathActual)
+    }
 }
