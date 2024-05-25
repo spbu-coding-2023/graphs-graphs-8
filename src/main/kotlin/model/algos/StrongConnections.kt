@@ -1,3 +1,5 @@
+package model.algos
+
 import model.graph.edges.Edge
 
 class StrongConnections<V>{
@@ -32,19 +34,19 @@ class StrongConnections<V>{
         return result
     }
 
-    fun findPath(source: Int, top: Int, adjustment: MutableMap<V, MutableList<V>>): Boolean {
+    private fun findPath(source: Int, top: Int, adjustment: MutableMap<V, MutableList<V>>): Boolean {
         val visited: MutableList<Int> = List(comparatorItoV.size + 1){ 0 }.toMutableList()
-        return DFS(source, top, adjustment, visited)
+        return dfs(source, top, adjustment, visited)
     }
 
-    fun DFS(current: Int, top: Int, adjustment: MutableMap<V, MutableList<V>>, visited: MutableList<Int>): Boolean {
+    private fun dfs(current: Int, top: Int, adjustment: MutableMap<V, MutableList<V>>, visited: MutableList<Int>): Boolean {
         if (current == top) {
             return true
         }
         visited[current] = 1
         for (x in adjustment[comparatorItoV[current]]!!) {
             if (visited[comparatorVtoI[x]!!] == 0) {
-                if (DFS(comparatorVtoI[x]!!, top, adjustment, visited)) {
+                if (dfs(comparatorVtoI[x]!!, top, adjustment, visited)) {
                     return true
                 }
             }

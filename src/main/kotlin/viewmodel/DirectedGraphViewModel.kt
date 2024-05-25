@@ -1,7 +1,7 @@
 package viewmodel
 
-import StrongConnections
 import androidx.compose.ui.graphics.Color
+import model.algos.StrongConnections
 import model.graph.DirectedGraph
 import model.graph.edges.Edge
 import java.sql.DriverManager
