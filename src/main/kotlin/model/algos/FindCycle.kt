@@ -3,7 +3,7 @@ package model.algos
 import model.graph.edges.Edge
 
 object FindCycle {
-    fun <V> findCycles(graph: MutableMap<V, MutableList<Edge<V>>>, startVertex: V): List<List<V>> {
+    fun findCycles(graph: MutableMap<V, MutableList<Edge<V>>>, startVertex: Int): List<List<V>> {
         val blockedSet = mutableSetOf<V>()
         val blockedMap = mutableMapOf<V, MutableSet<V>>()
         val stack = mutableListOf<V>()

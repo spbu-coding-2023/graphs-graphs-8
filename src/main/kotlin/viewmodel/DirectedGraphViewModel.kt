@@ -1,6 +1,7 @@
 package viewmodel
 
 import androidx.compose.ui.graphics.Color
+import model.algos.FindCycle
 import model.algos.StrongConnections
 import model.graph.DirectedGraph
 import model.graph.edges.Edge
@@ -58,6 +59,21 @@ class DirectedGraphViewModel<V>(
         }
     }
 
+    fun showFindCycles() {
+        val k = FindCycle
+        for (i in k.findCycles(graph.matrix, startVertex = 2)) {
+            val col =
+                Color(Random.nextInt(30, 230), Random.nextInt(30, 230), Random.nextInt(30, 230))
+            for (j in i) {
+                if (j in graphModel.vertices) {
+                    graphVM[j]?.color = col
+                    println(graphVM[j]?.color)
+                    updateView()
+                }
+            }
+        }
+    }
+    
     fun saveSQLite() {
         var parameterCreate = "( Vertexes String,"
         var parameterInput = "( Vertexes,"
