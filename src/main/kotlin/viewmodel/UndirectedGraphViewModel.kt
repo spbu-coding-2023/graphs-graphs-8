@@ -58,7 +58,7 @@ class UndirectedGraphViewModel<V>(
         drawEdges(result, Color.Magenta)
     }
 
-    fun showFindCycles(startVertex: Int) {
+    fun showFindCycles(startVertex: V) {
         val k = FindCycle
         for (i in k.findCycles(graph.matrix, startVertex)) {
             val col =

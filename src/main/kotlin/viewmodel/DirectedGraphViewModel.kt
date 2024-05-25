@@ -59,9 +59,9 @@ class DirectedGraphViewModel<V>(
         }
     }
 
-    fun showFindCycles() {
+    fun showFindCycles(startVertex: V) {
         val k = FindCycle
-        for (i in k.findCycles(graph.matrix, startVertex = 2)) {
+        for (i in k.findCycles(graph.matrix, startVertex)) {
             val col =
                 Color(Random.nextInt(30, 230), Random.nextInt(30, 230), Random.nextInt(30, 230))
             for (j in i) {
