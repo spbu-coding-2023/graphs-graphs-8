@@ -8,13 +8,14 @@ import model.graph.UndirectedGraph
 import model.graph.edges.Edge
 import java.sql.DriverManager
 import java.sql.SQLException
+import kotlin.random.Random
 
 class UndirectedGraphViewModel<V>(
     name: String,
     val graph: UndirectedGraph<V> = UndirectedGraph()
 ) : AbstractGraphViewModel<V>(name, graph) {
     private val DB_DRIVER = "jdbc:sqlite"
-    var inType = viewmodel.initType.Internal
+    var inType = initType.Internal
     var initedGraph = false
 
     override fun addEdge(from: V, to: V, weight: Int) {
@@ -57,11 +58,19 @@ class UndirectedGraphViewModel<V>(
         drawEdges(result, Color.Magenta)
     }
 
-    fun findCycles() {
-        if (this.size == 0) return
-        val start = graphModel.vertices.first()
-        val result = FindCycle.findCycle(graphModel as UndirectedGraph<V>, start) ?: emptyList()
-        drawEdges(result, Color.Magenta)
+    fun showFindCycles(startVertex: Int) {
+        val k = FindCycle
+        for (i in k.findCycles(graph.matrix, startVertex)) {
+            val col =
+                Color(Random.nextInt(30, 230), Random.nextInt(30, 230), Random.nextInt(30, 230))
+            for (j in i) {
+                if (j in graphModel.vertices) {
+                    graphVM[j]?.color = col
+                    println(graphVM[j]?.color)
+                    updateView()
+                }
+            }
+        }
     }
 
     fun findBridges() {
