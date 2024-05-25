@@ -67,7 +67,7 @@ fun UndirectedGraphScreen(
         DefaultShortButton(onClick = { graphVM.findMst() }, "find_mst")
         Spacer(modifier = Modifier.height(10.dp))
 
-        DefaultShortButton(onClick = { graphVM.findCycles() }, "find_cycles")
+        DefaultShortButton(onClick = { graphVM.showFindCycles("1") }, "find_cycles")
         Spacer(modifier = Modifier.height(10.dp))
 
         DefaultShortButton(onClick = { graphVM.findBridges() }, "find_bridges")
