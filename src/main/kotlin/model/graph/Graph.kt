@@ -1,18 +1,14 @@
 package model.graph
 
-import model.graph.edges.Edge
-
 abstract class Graph<V>() {
     protected val graph = mutableMapOf<V, MutableList<Edge<V>>>()
-    val matrix
-        get() = graph
     val entries
         get() = graph.entries
     var isWeighted = false
         protected set
     var negativeWeights = false
         protected set
-    
+
     val vertices
         get() = graph.keys
 

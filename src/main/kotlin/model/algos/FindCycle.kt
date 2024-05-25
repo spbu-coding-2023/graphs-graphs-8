@@ -1,9 +1,9 @@
 package model.algos
 
-import model.graph.edges.Edge
+import model.graph.Graph
 
 object FindCycle {
-    fun <V> findCycles(graph: MutableMap<V, MutableList<Edge<V>>>, startVertex: V): List<List<V>> {
+    fun <V> findCycles(graph: Graph<V>, startVertex: V): List<List<V>> {
         val blockedSet = mutableSetOf<V>()
         val blockedMap = mutableMapOf<V, MutableSet<V>>()
         val stack = mutableListOf<V>()
@@ -14,15 +14,23 @@ object FindCycle {
         for (subGraph in sccResult) {
             if (subGraph.size > 1) {
                 val startNode = subGraph.first()
-                findCyclesInSCC(startNode, startNode, graph, blockedSet, blockedMap, stack, preResult)
+                findCyclesInSCC(
+                    startNode,
+                    startNode,
+                    graph,
+                    blockedSet,
+                    blockedMap,
+                    stack,
+                    preResult
+                )
                 blockedSet.clear()
                 blockedMap.clear()
             }
         }
 
         val result = mutableListOf<List<V>>()
-        for (res in preResult){
-            if(res.contains(startVertex)){
+        for (res in preResult) {
+            if (res.contains(startVertex)) {
                 result.add(res)
             }
         }
@@ -32,7 +40,7 @@ object FindCycle {
     private fun <V> findCyclesInSCC(
         start: V,
         current: V,
-        graph: MutableMap<V, MutableList<Edge<V>>>,
+        graph: Graph<V>,
         blockedSet: MutableSet<V>,
         blockedMap: MutableMap<V, MutableSet<V>>,
         stack: MutableList<V>,
@@ -42,14 +50,23 @@ object FindCycle {
         stack.add(current)
         blockedSet.add(current)
 
-        for (edge in graph[current] ?: mutableListOf()) {
+        for (edge in graph.edgesOf(current)) {
             val neighbor = edge.to
             if (neighbor == start) {
                 val cycle = stack.toList()
                 result.add(cycle)
                 foundCycle = true
             } else if (neighbor !in blockedSet) {
-                if (findCyclesInSCC(start, neighbor, graph, blockedSet, blockedMap, stack, result)) {
+                if (findCyclesInSCC(
+                        start,
+                        neighbor,
+                        graph,
+                        blockedSet,
+                        blockedMap,
+                        stack,
+                        result
+                    )
+                ) {
                     foundCycle = true
                 }
             }
@@ -58,7 +75,7 @@ object FindCycle {
         if (foundCycle) {
             unblock(current, blockedSet, blockedMap)
         } else {
-            for (edge in graph[current] ?: mutableListOf()) {
+            for (edge in graph.edgesOf(current)) {
                 val neighbor = edge.to
                 blockedMap.computeIfAbsent(neighbor) { mutableSetOf() }.add(current)
             }
@@ -68,7 +85,11 @@ object FindCycle {
         return foundCycle
     }
 
-    private fun <V> unblock(node: V, blockedSet: MutableSet<V>, blockedMap: MutableMap<V, MutableSet<V>>) {
+    private fun <V> unblock(
+        node: V,
+        blockedSet: MutableSet<V>,
+        blockedMap: MutableMap<V, MutableSet<V>>
+    ) {
         val stack = mutableListOf(node)
         while (stack.isNotEmpty()) {
             val current = stack.removeAt(stack.size - 1)

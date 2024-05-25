@@ -1,14 +1,12 @@
 package viewmodel
 
 import androidx.compose.ui.graphics.Color
-import model.algos.FindCycle
 import model.algos.Prim
 import model.algos.findBridges
 import model.graph.UndirectedGraph
-import model.graph.edges.Edge
+import model.graph.Edge
 import java.sql.DriverManager
 import java.sql.SQLException
-import kotlin.random.Random
 
 class UndirectedGraphViewModel<V>(
     name: String,
@@ -51,29 +49,14 @@ class UndirectedGraphViewModel<V>(
         }
     }
 
-    fun findMst() {
+    fun drawMst() {
         if (size == 0) return
         val startVertex = graphModel.vertices.first()
         val result = Prim.findMst(graphModel as UndirectedGraph<V>, startVertex)
         drawEdges(result, Color.Magenta)
     }
 
-    fun showFindCycles(startVertex: V) {
-        val k = FindCycle
-        for (i in k.findCycles(graph.matrix, startVertex)) {
-            val col =
-                Color(Random.nextInt(30, 230), Random.nextInt(30, 230), Random.nextInt(30, 230))
-            for (j in i) {
-                if (j in graphModel.vertices) {
-                    graphVM[j]?.color = col
-                    println(graphVM[j]?.color)
-                    updateView()
-                }
-            }
-        }
-    }
-
-    fun findBridges() {
+    fun drawBridges() {
         val result = findBridges(graphModel as UndirectedGraph<V>)
         drawEdges(result, Color.Yellow)
     }

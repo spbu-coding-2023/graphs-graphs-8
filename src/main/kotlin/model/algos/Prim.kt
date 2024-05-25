@@ -1,6 +1,6 @@
 package model.algos
 
-import model.graph.edges.Edge
+import model.graph.Edge
 import model.graph.UndirectedGraph
 import java.util.PriorityQueue
 

@@ -2,7 +2,7 @@ package algos
 
 import model.algos.FordBellman
 import model.graph.DirectedGraph
-import model.graph.edges.Edge
+import model.graph.Edge
 import kotlin.test.*
 
 internal class FordBellmanTest {

@@ -1,13 +1,12 @@
 package viewmodel
 
 import androidx.compose.ui.graphics.Color
-import model.algos.FindCycle
 import model.algos.StrongConnections
 import de.tudarmstadt.lt.cw.graph.ArrayBackedGraph
 import de.tudarmstadt.lt.cw.graph.ArrayBackedGraphCW
 import de.tudarmstadt.lt.cw.graph.Graph
 import model.graph.DirectedGraph
-import model.graph.edges.Edge
+import model.graph.Edge
 import java.sql.DriverManager
 import java.sql.SQLException
 import kotlin.random.Random
@@ -47,65 +46,47 @@ class DirectedGraphViewModel<V>(
         }
     }
 
-    fun chinaWhisperCluster(){
+    fun chinaWhisperCluster() {
         val comparatorItoV = emptyMap<Int, V>().toMutableMap()
         val comparatorVtoI = emptyMap<V, Int>().toMutableMap()
-        for (i in graph.vertices){
+        for (i in graph.vertices) {
             comparatorItoV[comparatorItoV.size] = i
             comparatorVtoI[i] = comparatorVtoI.size
         }
-        val cwGraph :Graph<Int, Float> = ArrayBackedGraph(comparatorVtoI.size, comparatorVtoI.size)
-        for (i in comparatorItoV){
+        val cwGraph: Graph<Int, Float> = ArrayBackedGraph(comparatorVtoI.size, comparatorVtoI.size)
+        for (i in comparatorItoV) {
             cwGraph.addNode(i.key)
         }
-        for (i in graph.edges){
-            cwGraph.addEdge(comparatorVtoI[i.from], comparatorVtoI[i.to],i.weight.toFloat())
+        for (i in graph.edges) {
+            cwGraph.addEdge(comparatorVtoI[i.from], comparatorVtoI[i.to], i.weight.toFloat())
         }
 
         val cw = ArrayBackedGraphCW(comparatorItoV.size)
 
         val findClusters = cw.findClusters(cwGraph)
         for (k in findClusters.values) {
-            val col = Color(Random.nextInt(30, 230), Random.nextInt(30, 230), Random.nextInt(30, 230))
+            val col =
+                Color(Random.nextInt(30, 230), Random.nextInt(30, 230), Random.nextInt(30, 230))
             for (j in k) {
 
                 graphVM[comparatorItoV[j]]?.color = col
-                println(graphVM[comparatorItoV[j]]?.color)
-                updateView()
             }
         }
     }
 
-    fun showStrongConnections(){
-        val k = StrongConnections<V>()
-        for (i in k.findStrongConnections(graph.matrix)) {
+    fun drawStrongConnections() {
+        val strongConnections = StrongConnections<V>()
+        for (component in strongConnections.findStrongConnections(graphModel)) {
             val col =
                 Color(Random.nextInt(30, 230), Random.nextInt(30, 230), Random.nextInt(30, 230))
-            for (j in i) {
-                if (j in graphModel.vertices) {
-                    graphVM[j]?.color = col
-                    println(graphVM[j]?.color)
-                    updateView()
+            for (vertex in component) {
+                if (vertex in graphModel.vertices) {
+                    graphVM[vertex]?.color = col
                 }
             }
         }
     }
 
-    fun showFindCycles(startVertex: V) {
-        val k = FindCycle
-        for (i in k.findCycles(graph.matrix, startVertex)) {
-            val col =
-                Color(Random.nextInt(30, 230), Random.nextInt(30, 230), Random.nextInt(30, 230))
-            for (j in i) {
-                if (j in graphModel.vertices) {
-                    graphVM[j]?.color = col
-                    println(graphVM[j]?.color)
-                    updateView()
-                }
-            }
-        }
-    }
-    
     fun saveSQLite() {
         var parameterCreate = "( Vertexes String,"
         var parameterInput = "( Vertexes,"

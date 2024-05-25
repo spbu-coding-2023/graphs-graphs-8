@@ -89,8 +89,8 @@ fun DirectedAlgorithmDialog(
             Spacer(modifier = Modifier.height(36.dp))
             Row {
                 Spacer(modifier = Modifier.width(30.dp))
-                val dijkstra = { graphVM.dijkstraAlgo(source, destination) }
-                val fordBellman = { graphVM.fordBellman(source, destination) }
+                val dijkstra = { graphVM.drawDijkstra(source, destination) }
+                val fordBellman = { graphVM.drawFordBellman(source, destination) }
                 val onClick = if (action == "Dijkstra") {
                     dijkstra
                 } else if (action == "FordBellman") {

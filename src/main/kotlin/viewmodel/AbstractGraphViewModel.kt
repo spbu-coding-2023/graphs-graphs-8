@@ -6,10 +6,12 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.ViewModel
+import model.algos.FindCycle
 import model.algos.FordBellman
 import model.graph.Graph
-import model.graph.edges.Edge
+import model.graph.Edge
 import view.common.DefaultColors
+import kotlin.random.Random
 
 abstract class AbstractGraphViewModel<V>(_name: String, graph: Graph<V>) : ViewModel() {
     val name = _name
@@ -60,15 +62,34 @@ abstract class AbstractGraphViewModel<V>(_name: String, graph: Graph<V>) : ViewM
 
     abstract fun drawEdges(edges: Collection<Edge<V>>, color: Color)
 
-    fun dijkstraAlgo(start: V, end: V) {
+    fun updateView() {
+        val keep = graphVM
+        graphVM = mutableMapOf<V, VertexViewModel<V>>()
+        graphVM = keep
+    }
+
+    fun drawDijkstra(start: V, end: V) {
         if (this.negativeWeights) return
-        val result = Dijkstra(graphModel.matrix, graphModel.size).dijkstra(start, end)
+        val result = Dijkstra(graphModel, graphModel.size).dijkstra(start, end)
         drawEdges(result, Color.Red)
     }
 
-    fun fordBellman(from: V, to: V) {
+    fun drawFordBellman(from: V, to: V) {
         val path = FordBellman.findShortestPath(from, to, this.graphModel).second ?: emptyList()
         drawEdges(path, Color.Cyan)
+    }
+
+    fun drawCycles(startVertex: V) {
+        val findCycle = FindCycle
+        for (cycle in findCycle.findCycles(graphModel, startVertex)) {
+            val col =
+                Color(Random.nextInt(30, 230), Random.nextInt(30, 230), Random.nextInt(30, 230))
+            for (edge in cycle) {
+                if (edge in graphModel.vertices) {
+                    graphVM[edge]?.color = col
+                }
+            }
+        }
     }
 
     fun vertexVmOf(vertex: V): VertexViewModel<V>? {
@@ -93,11 +114,5 @@ abstract class AbstractGraphViewModel<V>(_name: String, graph: Graph<V>) : ViewM
         for (vertexVM in verticesVM) {
             vertexVM.color = DefaultColors.primary
         }
-    }
-
-    fun updateView() {
-        val keep = graphVM
-        graphVM = mutableMapOf<V, VertexViewModel<V>>()
-        graphVM = keep
     }
 }
