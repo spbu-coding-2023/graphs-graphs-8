@@ -32,11 +32,11 @@ fun AddEdgeDialog(
         visible = visible,
         title = "New Edge",
         onCloseRequest = onClose,
-        state = rememberDialogState(height = 600.dp, width = 880.dp)
+        state = rememberDialogState(height = 420.dp, width = 580.dp)
     ) {
         var source by remember { mutableStateOf("") }
         var destination by remember { mutableStateOf("") }
-        var checkedState by remember { mutableStateOf(true) }
+        var notWeighted by remember { mutableStateOf(true) }
         var weight by remember { mutableStateOf("1") }
         Column(modifier = Modifier.padding(30.dp, 24.dp)) {
             val textWidth = 90.dp
@@ -49,8 +49,7 @@ fun AddEdgeDialog(
                 )
                 TextField(
                     modifier = Modifier
-                        .weight(1f)
-                        .width(115.dp)
+                        .fillMaxWidth()
                         .border(4.dp, color = Color.Black, shape = RoundedCornerShape(25.dp)),
 
                     colors = TextFieldDefaults.textFieldColors(
@@ -73,8 +72,7 @@ fun AddEdgeDialog(
                 )
                 TextField(
                     modifier = Modifier
-                        .weight(1f)
-                        .width(115.dp)
+                        .fillMaxWidth()
                         .border(4.dp, color = Color.Black, shape = RoundedCornerShape(25.dp)),
 
                     colors = TextFieldDefaults.textFieldColors(
@@ -88,9 +86,9 @@ fun AddEdgeDialog(
                 )
                 Spacer(modifier = Modifier.width(rightPadding))
             }
-            Spacer(modifier = Modifier.height(36.dp))
+            Spacer(modifier = Modifier.height(20.dp))
             Row {
-                if (!checkedState) {
+                if (!notWeighted) {
                     Text(
                         text = localisation("weight"),
                         style = defaultStyle,
@@ -98,7 +96,7 @@ fun AddEdgeDialog(
                             .width(textWidth + 30.dp)
                     )
                     TextField(
-                        enabled = !checkedState,
+                        enabled = !notWeighted,
                         modifier = Modifier
                             .weight(1f)
                             .width(115.dp)
@@ -126,10 +124,10 @@ fun AddEdgeDialog(
                 }
                 Checkbox(
                     modifier = Modifier.align(Alignment.CenterVertically),
-                    checked = checkedState,
+                    checked = notWeighted,
                     onCheckedChange = {
-                        checkedState = it;
-                        weight = if (checkedState) "1" else ""
+                        notWeighted = it;
+                        weight = if (notWeighted) "1" else ""
                     }
                 )
                 Text(
@@ -139,7 +137,7 @@ fun AddEdgeDialog(
                 )
                 Spacer(modifier = Modifier.width(rightPadding))
             }
-            Spacer(modifier = Modifier.height(36.dp))
+            Spacer(modifier = Modifier.height(20.dp))
             Row {
                 val onClick = {
                     if (weight == "") weight = "1"
@@ -148,9 +146,7 @@ fun AddEdgeDialog(
 
                 }
                 DefaultButton(onClick, "add_edge")
-            }
-            Spacer(modifier = Modifier.height(36.dp))
-            Row {
+                Spacer(modifier = Modifier.width(30.dp))
                 DefaultButton(onClose, "back", Color.Red)
             }
         }

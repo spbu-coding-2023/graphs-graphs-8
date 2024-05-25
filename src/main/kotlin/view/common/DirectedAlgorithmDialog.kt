@@ -29,24 +29,21 @@ fun DirectedAlgorithmDialog(
         visible = visible,
         title = title,
         onCloseRequest = onCloseRequest,
-        state = rememberDialogState(height = 600.dp, width = 880.dp)
+        state = rememberDialogState(height = 380.dp, width = 580.dp)
     ) {
         var source by remember { mutableStateOf("") }
         var destination by remember { mutableStateOf("") }
-        Column {
-            Spacer(modifier = Modifier.height(24.dp))
+        val textWidth = 90.dp
+        Column(modifier = Modifier.padding(30.dp, 24.dp)) {
             Row {
-                Spacer(modifier = Modifier.width(30.dp))
                 Text(
                     text = localisation("from"),
                     style = defaultStyle,
-                    modifier = Modifier.align(Alignment.CenterVertically)
+                    modifier = Modifier.align(Alignment.CenterVertically).width(textWidth)
                 )
-                Spacer(modifier = Modifier.width(26.dp))
                 TextField(
                     modifier = Modifier
-                        .weight(1f)
-                        .width(115.dp)
+                        .fillMaxWidth()
                         .border(4.dp, color = Color.Black, shape = RoundedCornerShape(25.dp)),
 
                     colors = TextFieldDefaults.textFieldColors(
@@ -58,21 +55,17 @@ fun DirectedAlgorithmDialog(
                     value = source,
                     onValueChange = { newValue -> source = newValue },
                 )
-                Spacer(modifier = Modifier.width(200.dp))
             }
             Spacer(modifier = Modifier.height(36.dp))
             Row {
-                Spacer(modifier = Modifier.width(30.dp))
                 Text(
                     text = localisation("to"),
                     style = defaultStyle,
-                    modifier = Modifier.align(Alignment.CenterVertically)
+                    modifier = Modifier.align(Alignment.CenterVertically).width(textWidth)
                 )
-                Spacer(modifier = Modifier.width(62.dp))
                 TextField(
                     modifier = Modifier
-                        .weight(1f)
-                        .width(115.dp)
+                        .fillMaxWidth()
                         .border(4.dp, color = Color.Black, shape = RoundedCornerShape(25.dp)),
 
                     colors = TextFieldDefaults.textFieldColors(
@@ -88,7 +81,6 @@ fun DirectedAlgorithmDialog(
             }
             Spacer(modifier = Modifier.height(36.dp))
             Row {
-                Spacer(modifier = Modifier.width(30.dp))
                 val dijkstra = { graphVM.drawDijkstra(source, destination) }
                 val fordBellman = { graphVM.drawFordBellman(source, destination) }
                 val onClick = if (action == "Dijkstra") {
@@ -99,9 +91,6 @@ fun DirectedAlgorithmDialog(
                     {}
                 }
                 DefaultButton(onClick, "start")
-            }
-            Spacer(modifier = Modifier.height(36.dp))
-            Row {
                 Spacer(modifier = Modifier.width(30.dp))
                 DefaultButton(onCloseRequest, "back", Color.Red)
             }

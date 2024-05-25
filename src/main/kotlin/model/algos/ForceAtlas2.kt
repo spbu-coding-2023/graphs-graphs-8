@@ -9,14 +9,14 @@ import kotlin.math.ln
 import kotlin.math.sign
 import kotlin.math.sqrt
 
-const val repulsionK: Double = 250.0
+const val repulsionK: Double = 150.0
 const val attractionK: Double = 150.0
 const val gravityK: Double = 5.0
 
 object ForceAtlas2 {
     fun <V> forceDrawing(graphVM: AbstractGraphViewModel<V>) {
         val vertices = graphVM.verticesVM
-        repeat(100) {
+        repeat(1000) {
             val forces = mutableMapOf<VertexViewModel<V>, Pair<Float, Float>>()
             for (vertex in vertices) {
                 val edges = vertex.edges
@@ -50,12 +50,12 @@ object ForceAtlas2 {
             for (vertex in forces.keys) {
                 val forcesPair = forces[vertex]!!
                 if (!forcesPair.first.isNaN()) {
-                    val newX = (vertex.x + forcesPair.first).coerceIn(20f, width.toFloat() - 70f)
+                    val newX = (vertex.x + forcesPair.first)
                     vertex.x = newX
                 }
                 if (!forcesPair.second.isNaN()) {
                     val newY =
-                        (vertex.y + forcesPair.second).coerceIn(20f, height.toFloat() - 200f)
+                        (vertex.y + forcesPair.second)
                     vertex.y = newY
                 }
             }

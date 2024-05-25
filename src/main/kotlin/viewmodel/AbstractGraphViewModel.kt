@@ -11,6 +11,7 @@ import model.algos.FordBellman
 import model.graph.Graph
 import model.graph.Edge
 import view.common.DefaultColors
+import javax.swing.text.StyledEditorKit.BoldAction
 import kotlin.random.Random
 
 abstract class AbstractGraphViewModel<V>(_name: String, graph: Graph<V>) : ViewModel() {
@@ -100,11 +101,13 @@ abstract class AbstractGraphViewModel<V>(_name: String, graph: Graph<V>) : ViewM
         return graphVM[vertex]?.edges?.toList() ?: emptyList()
     }
 
-    fun addVertex(vertex: V) {
+    fun addVertex(vertex: V, centerCoordinates: Boolean = false) {
         size += 1
-        graphVM.putIfAbsent(vertex, VertexViewModel(vertex))
+        graphVM.putIfAbsent(
+            vertex,
+            VertexViewModel(vertex, centerCoordinates = centerCoordinates),
+        )
         graphModel.addVertex(vertex)
-        updateView()
     }
 
     fun resetColors() {
