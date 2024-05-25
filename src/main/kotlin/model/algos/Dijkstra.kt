@@ -1,23 +1,25 @@
-import model.graph.edges.Edge
+import model.graph.Edge
+import model.graph.Graph
 import java.util.*
 
-class Dijkstra<V>(var graph:  MutableMap<V, MutableList<Edge<V>>>, private val totalNodes: Int) {
+class Dijkstra<V>(val graph: Graph<V>, private val totalNodes: Int) {
     private val vertexValues: MutableMap<V, Int> = emptyMap<V, Int>().toMutableMap()
     private val visitedSet: MutableSet<V> = HashSet()
     private val prioraQueue = PriorityQueue<V>(totalNodes)
-    private val pathMap: MutableMap<V, MutableList<Edge<V>>> = emptyMap<V, MutableList<Edge<V>>>().toMutableMap()
+    private val pathMap: MutableMap<V, MutableList<Edge<V>>> =
+        emptyMap<V, MutableList<Edge<V>>>().toMutableMap()
 
-    fun dijkstra(start: V, end: V) : MutableList<Edge<V>>{
-        for (j in graph.keys) {
-            vertexValues.put(j, Int.MAX_VALUE)
-            pathMap.put(j, emptyList<Edge<V>>().toMutableList())
+    fun dijkstra(start: V, end: V): MutableList<Edge<V>> {
+        for (vertex in graph.vertices) {
+            vertexValues.put(vertex, Int.MAX_VALUE)
+            pathMap.put(vertex, emptyList<Edge<V>>().toMutableList())
         }
         prioraQueue.add(start)
         vertexValues[start] = 0
 
         while (visitedSet.size != totalNodes) {
             println(vertexValues)
-            for (i in pathMap){
+            for (i in pathMap) {
                 println(i)
             }
             if (prioraQueue.isEmpty()) {
@@ -38,16 +40,16 @@ class Dijkstra<V>(var graph:  MutableMap<V, MutableList<Edge<V>>>, private val t
 
     private fun refreshSearch(currentVertex: V) {
         var newRange = -1
-        for (j in graph[currentVertex]!!) {
-            if (!visitedSet.contains(j.to)) {
-                newRange = vertexValues[currentVertex]!! + j.weight
-                if (newRange < vertexValues[j.to]!!) {
-                    vertexValues[j.to] = newRange
-                    val k = pathMap[j.from]?.toMutableList()
-                    k?.add(j)
-                    pathMap[j.to] = k!!
+        for (edge in graph.edgesOf(currentVertex)) {
+            if (!visitedSet.contains(edge.to)) {
+                newRange = vertexValues[currentVertex]!! + edge.weight
+                if (newRange < vertexValues[edge.to]!!) {
+                    vertexValues[edge.to] = newRange
+                    val k = pathMap[edge.from]?.toMutableList()
+                    k?.add(edge)
+                    pathMap[edge.to] = k!!
                 }
-                prioraQueue.add(j.to)
+                prioraQueue.add(edge.to)
             }
         }
     }

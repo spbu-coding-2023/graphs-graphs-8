@@ -2,7 +2,7 @@ package algos
 
 import model.algos.Prim
 import model.graph.UndirectedGraph
-import model.graph.edges.Edge
+import model.graph.Edge
 import kotlin.test.Test
 import kotlin.test.assertContentEquals
 import kotlin.test.assertNotNull

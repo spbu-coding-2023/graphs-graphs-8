@@ -64,13 +64,13 @@ fun UndirectedGraphScreen(
         DefaultShortButton(onCloseFB, "ford_bellman")
         Spacer(modifier = Modifier.height(10.dp))
 
-        DefaultShortButton(onClick = { graphVM.findMst() }, "find_mst")
+        DefaultShortButton(onClick = { graphVM.drawMst() }, "find_mst")
         Spacer(modifier = Modifier.height(10.dp))
 
-        DefaultShortButton(onClick = { graphVM.findCycles() }, "find_cycles")
+        DefaultShortButton(onClick = { graphVM.drawCycles("1") }, "find_cycles")
         Spacer(modifier = Modifier.height(10.dp))
 
-        DefaultShortButton(onClick = { graphVM.findBridges() }, "find_bridges")
+        DefaultShortButton(onClick = { graphVM.drawBridges() }, "find_bridges")
         Spacer(modifier = Modifier.height(10.dp))
 
         val onClose = { isOpenedEdgeMenu = false }

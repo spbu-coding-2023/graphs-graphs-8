@@ -1,11 +1,10 @@
 package viewmodel
 
 import androidx.compose.ui.graphics.Color
-import model.algos.FindCycle
 import model.algos.Prim
 import model.algos.findBridges
 import model.graph.UndirectedGraph
-import model.graph.edges.Edge
+import model.graph.Edge
 import java.sql.DriverManager
 import java.sql.SQLException
 
@@ -14,7 +13,7 @@ class UndirectedGraphViewModel<V>(
     val graph: UndirectedGraph<V> = UndirectedGraph()
 ) : AbstractGraphViewModel<V>(name, graph) {
     private val DB_DRIVER = "jdbc:sqlite"
-    var inType = viewmodel.initType.Internal
+    var inType = initType.Internal
     var initedGraph = false
 
     override fun addEdge(from: V, to: V, weight: Int) {
@@ -50,21 +49,14 @@ class UndirectedGraphViewModel<V>(
         }
     }
 
-    fun findMst() {
+    fun drawMst() {
         if (size == 0) return
         val startVertex = graphModel.vertices.first()
         val result = Prim.findMst(graphModel as UndirectedGraph<V>, startVertex)
         drawEdges(result, Color.Magenta)
     }
 
-    fun findCycles() {
-        if (this.size == 0) return
-        val start = graphModel.vertices.first()
-        val result = FindCycle.findCycle(graphModel as UndirectedGraph<V>, start) ?: emptyList()
-        drawEdges(result, Color.Magenta)
-    }
-
-    fun findBridges() {
+    fun drawBridges() {
         val result = findBridges(graphModel as UndirectedGraph<V>)
         drawEdges(result, Color.Yellow)
     }

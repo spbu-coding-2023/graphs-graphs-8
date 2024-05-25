@@ -1,7 +1,7 @@
 package model.algos
 
 import model.graph.UndirectedGraph
-import model.graph.edges.Edge
+import model.graph.Edge
 
 fun <V> findBridges(graph: UndirectedGraph<V>): Set<Edge<V>> {
     val timeIn = mutableMapOf<V, Int>()

@@ -50,15 +50,13 @@ fun DirectedGraphScreen(
         DefaultShortButton({ graphVM.resetColors() }, "reset", Color.LightGray)
         Spacer(modifier = Modifier.height(10.dp))
 
-        DefaultShortButton({ graphVM.showStrongConnections() }, "find_strong_connections")
+        DefaultShortButton({ graphVM.drawStrongConnections() }, "find_strong_connections")
         Spacer(modifier = Modifier.height(10.dp))
 
         DefaultShortButton({ graphVM.chinaWhisperCluster() }, "find_clusters")
         Spacer(modifier = Modifier.height(10.dp))
 
-
-
-                // Dijkstra Button
+        // Dijkstra Button
         var isDijkstraMenu by remember { mutableStateOf(false) }
         val onCloseDijkstra = { isDijkstraMenu = !isDijkstraMenu }
         DefaultShortButton(onCloseDijkstra, "dijkstra")
@@ -68,6 +66,9 @@ fun DirectedGraphScreen(
         var isFordBellmanMenu by remember { mutableStateOf(false) }
         val onCloseFB = { isFordBellmanMenu = !isFordBellmanMenu }
         DefaultShortButton(onCloseFB, "ford_bellman")
+        Spacer(modifier = Modifier.height(10.dp))
+
+        DefaultShortButton(onClick = { graphVM.drawCycles("1") }, "find_cycles")
         Spacer(modifier = Modifier.height(10.dp))
 
         AddEdgeDialog(isOpenedEdgeMenu, onCloseEdge, graphVM, isDirected = true)
