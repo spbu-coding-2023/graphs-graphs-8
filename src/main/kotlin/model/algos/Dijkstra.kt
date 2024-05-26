@@ -18,9 +18,7 @@ class Dijkstra<V>(val graph: Graph<V>, private val totalNodes: Int) {
         vertexValues[start] = 0
 
         while (visitedSet.size != totalNodes) {
-            println(vertexValues)
             for (i in pathMap) {
-                println(i)
             }
             if (prioraQueue.isEmpty()) {
                 return pathMap[end]!!
@@ -33,7 +31,6 @@ class Dijkstra<V>(val graph: Graph<V>, private val totalNodes: Int) {
                 visitedSet.add(ux)
                 refreshSearch(ux)
             }
-            println(vertexValues)
         }
         return pathMap[end]!!
     }
