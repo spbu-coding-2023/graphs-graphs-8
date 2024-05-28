@@ -1,4 +1,4 @@
-package viewmodel
+package viewmodel.graph
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
@@ -13,6 +13,7 @@ import kotlin.random.Random
 class VertexViewModel<V>(
     _vertex: V,
     _edges: MutableList<EdgeViewModel<V>> = mutableListOf(),
+    graphVM: AbstractGraphViewModel<V>,
     centerCoordinates: Boolean = false
 ) :
     ViewModel() {
@@ -20,6 +21,7 @@ class VertexViewModel<V>(
     var edges = mutableStateListOf<EdgeViewModel<V>>()
     var x by mutableStateOf(0f)
     var y by mutableStateOf(0f)
+    val graphVM = graphVM
 
     init {
         for (edge in _edges) {
@@ -33,6 +35,11 @@ class VertexViewModel<V>(
             y = Random.nextInt(0, 30000).toFloat()
         }
     }
+
+    val offsetX
+        get() = (graphVM.canvasSize.x / 2) + ((x - graphVM.center.x) * graphVM.zoom)
+    val offsetY
+        get() = (graphVM.canvasSize.y / 2) + ((y - graphVM.center.y) * graphVM.zoom)
 
     val vertexSize = 60f
     var color by mutableStateOf(DefaultColors.primary)

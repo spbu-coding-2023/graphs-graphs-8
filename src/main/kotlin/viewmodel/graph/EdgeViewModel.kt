@@ -1,4 +1,4 @@
-package viewmodel
+package viewmodel.graph
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -15,6 +15,7 @@ class EdgeViewModel<V>(
     ViewModel() {
     val fromVM = vertexFromVM
     val toVM = vertexToVM
+
     val fromX
         get() = fromVM.x
     val fromY

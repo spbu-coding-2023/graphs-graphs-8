@@ -5,14 +5,18 @@ import model.algos.Prim
 import model.algos.findBridges
 import model.graph.Edge
 import model.graph.UndirectedGraph
+import viewmodel.GraphType
+import viewmodel.graph.AbstractGraphViewModel
+import viewmodel.graph.EdgeViewModel
+import viewmodel.graph.VertexViewModel
 
 class UndirectedGraphViewModel<V>(
     name: String,
     val graph: UndirectedGraph<V> = UndirectedGraph()
 ) : AbstractGraphViewModel<V>(name, graph) {
     private val DB_DRIVER = "jdbc:sqlite"
-    var inType = initType.Internal
     var initedGraph = false
+    override val graphType = GraphType.Undirected
 
     override fun addEdge(from: V, to: V, weight: Int) {
         val source: VertexViewModel<V>

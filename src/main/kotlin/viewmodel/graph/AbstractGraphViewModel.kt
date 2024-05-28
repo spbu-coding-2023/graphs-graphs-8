@@ -1,17 +1,21 @@
-package viewmodel
+package viewmodel.graph
 
 import Dijkstra
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.ViewModel
+import height
 import model.algos.FindCycle
 import model.algos.FordBellman
 import model.graph.Graph
 import model.graph.Edge
 import view.common.DefaultColors
-import javax.swing.text.StyledEditorKit.BoldAction
+import viewmodel.GraphType
+import viewmodel.SaveType
+import width
 import kotlin.random.Random
 
 abstract class AbstractGraphViewModel<V>(_name: String, graph: Graph<V>) : ViewModel() {
@@ -37,10 +41,15 @@ abstract class AbstractGraphViewModel<V>(_name: String, graph: Graph<V>) : ViewM
             }
             return result.toList()
         }
+    var saveType = SaveType.SQLite
+    abstract val graphType: GraphType
+    var zoom by mutableStateOf(1f)
+    var canvasSize by mutableStateOf(Offset(400f, 400f))
+    var center by mutableStateOf(Offset((width / 2).toFloat(), (height / 2).toFloat()))
 
     init {
         for (vertex in graphModel.entries) {
-            graphVM[vertex.key] = VertexViewModel(vertex.key)
+            graphVM[vertex.key] = VertexViewModel(vertex.key, graphVM = this)
         }
         for (vertex in graphModel.entries) {
             for (edge in vertex.value) {
@@ -105,7 +114,7 @@ abstract class AbstractGraphViewModel<V>(_name: String, graph: Graph<V>) : ViewM
         size += 1
         graphVM.putIfAbsent(
             vertex,
-            VertexViewModel(vertex, centerCoordinates = centerCoordinates),
+            VertexViewModel(vertex, graphVM = this, centerCoordinates = centerCoordinates),
         )
         graphModel.addVertex(vertex)
     }

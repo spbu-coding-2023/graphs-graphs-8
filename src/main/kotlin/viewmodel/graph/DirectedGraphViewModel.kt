@@ -1,12 +1,15 @@
 package viewmodel
 
 import androidx.compose.ui.graphics.Color
+import model.algos.StrongConnections
 import de.tudarmstadt.lt.cw.graph.ArrayBackedGraph
 import de.tudarmstadt.lt.cw.graph.ArrayBackedGraphCW
 import de.tudarmstadt.lt.cw.graph.Graph
-import model.algos.StrongConnections
 import model.graph.DirectedGraph
 import model.graph.Edge
+import viewmodel.graph.AbstractGraphViewModel
+import viewmodel.graph.EdgeViewModel
+import viewmodel.graph.VertexViewModel
 import kotlin.random.Random
 
 class DirectedGraphViewModel<V>(
@@ -14,8 +17,9 @@ class DirectedGraphViewModel<V>(
     val graph: DirectedGraph<V> = DirectedGraph()
 ) : AbstractGraphViewModel<V>(name, graph) {
 
-    var inType = initType.Internal
+    private val DB_DRIVER = "jdbc:sqlite"
     var initedGraph = false
+    override val graphType = GraphType.Directed
 
     override fun addEdge(from: V, to: V, weight: Int) {
         val source: VertexViewModel<V>
