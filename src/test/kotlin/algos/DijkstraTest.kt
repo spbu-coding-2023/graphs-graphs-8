@@ -11,7 +11,7 @@ import kotlin.test.assertNotNull
 internal class DijkstraTest {
 
     @Test
-    fun `basic find without negative cycle and possible to reach destination`() {
+    fun `dijkstra basic find and possible to reach destination`() {
         val graph = DirectedGraph<Int>()
         for (i in 1..4) {
             graph.addVertex(i)
@@ -47,7 +47,7 @@ internal class DijkstraTest {
     }
 
     @Test
-    fun `not possible to reach destination`() {
+    fun `dijkstra not possible to reach destination`() {
         val graph = DirectedGraph<Int>()
         for (i in 1..6) {
             graph.addVertex(i)
@@ -68,7 +68,7 @@ internal class DijkstraTest {
         val pathActual = result
         assertContentEquals(
             pathExpected, pathActual,
-            "FordBellman must return null as shortest path if it is not possible to reach destination"
+            "Dijkstra must return empty list as shortest path if it is not possible to reach destination"
         )
     }
 }
