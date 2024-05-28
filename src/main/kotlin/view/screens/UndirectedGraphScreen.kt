@@ -1,29 +1,31 @@
 package view.screens
 
-import androidx.compose.foundation.background
-import androidx.compose.foundation.border
+import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.PointerMatcher
+import androidx.compose.foundation.gestures.detectDragGestures
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.*
 import androidx.compose.runtime.*
-import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
+import androidx.compose.ui.awt.awtEventOrNull
+import androidx.compose.ui.draw.clipToBounds
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.input.pointer.*
+import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.window.DialogWindow
-import androidx.compose.ui.window.rememberDialogState
 import androidx.compose.ui.zIndex
 import androidx.navigation.NavController
-import localisation.localisation
-import view.DefaultColors
-import view.defaultStyle
-import view.views.GraphViewUndirect
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.cancelChildren
+import kotlinx.coroutines.launch
+import localisation.getLocalisation
+import model.algos.ForceAtlas2
+import view.common.*
+import view.graph.UndirectedGraphView
 import viewmodel.MainScreenViewModel
-import viewmodel.UndirectedGraphViewModel
 
+@OptIn(ExperimentalComposeUiApi::class, ExperimentalFoundationApi::class)
 @Composable
 fun UndirectedGraphScreen(
     navController: NavController,
@@ -31,223 +33,154 @@ fun UndirectedGraphScreen(
     graphId: Int
 ) {
     val graphVM by mutableStateOf(mainScreenViewModel.graphs.getUndirected(graphId))
+    val language = getLocalisation()
 
-    Box(modifier = Modifier.fillMaxSize()) {
-        GraphViewUndirect(graphVM)
+    Box(modifier = Modifier
+        .fillMaxSize()
+        .onPointerEvent(PointerEventType.Scroll) {
+            if (it.changes.first().scrollDelta.y > 0) {
+                graphVM.zoom = (graphVM.zoom - graphVM.zoom / 8).coerceIn(0.01f, 15f)
+            } else {
+                graphVM.zoom = (graphVM.zoom + graphVM.zoom / 8).coerceIn(0.01f, 15f)
+
+                val awtEvent = it.awtEventOrNull
+                if (awtEvent != null) {
+                    val xPosition = awtEvent.x.toFloat()
+                    val yPosition = awtEvent.y.toFloat()
+                    val pointerVector =
+                        (Offset(
+                            xPosition,
+                            yPosition
+                        ) - (graphVM.canvasSize / 2f)) * (1 / graphVM.zoom)
+                    graphVM.center += pointerVector * 0.15f
+                }
+            }
+        }.pointerInput(Unit) {
+            detectDragGestures(
+                matcher = PointerMatcher.Primary
+            ) {
+                graphVM.center -= it * (1 / graphVM.zoom)
+            }
+        }.pointerHoverIcon(PointerIcon.Hand)
+        .onSizeChanged {
+            graphVM.canvasSize = Offset(it.width.toFloat(), it.height.toFloat())
+        }
+        .clipToBounds()
+    ) {
+        UndirectedGraphView(graphVM)
     }
 
     Column(modifier = Modifier.zIndex(1f).padding(16.dp).width(300.dp)) {
-        // To MainScreen
-        Text(text = "Undirected")
-        Button(
-            onClick = { navController.popBackStack() },
-            modifier = Modifier
-                .clip(shape = RoundedCornerShape(45.dp))
-                .border(5.dp, color = Color.Black, shape = RoundedCornerShape(45.dp))
-                .size(240.dp, 80.dp),
-            colors = ButtonDefaults.buttonColors(DefaultColors.primary)
-        ) {
-            Text(localisation("home"), style = defaultStyle)
-        }
-
-        Spacer(modifier = Modifier.height(16.dp))
-
-        // Add vertex
-        Button(
-            onClick = { graphVM.addVertex(graphVM.size) },
-            modifier = Modifier
-                .clip(shape = RoundedCornerShape(45.dp))
-                .border(5.dp, color = Color.Black, shape = RoundedCornerShape(45.dp))
-                .size(240.dp, 80.dp),
-            colors = ButtonDefaults.buttonColors(backgroundColor = DefaultColors.primary)
-        ) {
-            Text(localisation("add_vertex"), style = defaultStyle)
-        }
-
-        Spacer(modifier = Modifier.height(16.dp))
+        var isOpenedVertexMenu by remember { mutableStateOf(false) }
         var isOpenedEdgeMenu by remember { mutableStateOf(false) }
+        var isDijkstraMenu by remember { mutableStateOf(false) }
+        var isFordBellmanMenu by remember { mutableStateOf(false) }
+        var isVisualizationRunning by remember { mutableStateOf(false) }
 
-        Button(
-            onClick = { isOpenedEdgeMenu = !isOpenedEdgeMenu },
-            modifier = Modifier
-                .clip(shape = RoundedCornerShape(45.dp))
-                .border(5.dp, color = Color.Black, shape = RoundedCornerShape(45.dp))
-                .size(240.dp, 80.dp),
-            colors = ButtonDefaults.buttonColors(backgroundColor = DefaultColors.primary)
-        ) {
-            Text(localisation("open_edge"), style = defaultStyle)
-        }
-
+        // To MainScreen
+        DefaultShortButton({ navController.popBackStack() }, "home", defaultStyle)
         Spacer(modifier = Modifier.height(10.dp))
 
-        DialogWindow(
-            visible = isOpenedEdgeMenu,
-            title = "New Edge",
-            onCloseRequest = { isOpenedEdgeMenu = false },
-            state = rememberDialogState(height = 600.dp, width = 880.dp)
-        ) {
-            var source by remember { mutableStateOf("") }
-            var destination by remember { mutableStateOf("") }
-            var checkedState by remember { mutableStateOf(false) }
-            var weight by remember { mutableStateOf("") }
-            Column {
-                Spacer(modifier = Modifier.height(24.dp))
-                Row {
-                    Spacer(modifier = Modifier.width(30.dp))
-                    Text(text = localisation("1st"), style = defaultStyle,modifier = Modifier.align(Alignment.CenterVertically))
-                    Spacer(modifier = Modifier.width(62.dp))
-                    TextField(
-                        modifier = Modifier
-                            .weight(1f)
-                            .width(115.dp)
-                            .border(4.dp, color = Color.Black,shape = RoundedCornerShape(25.dp),),
+        // Add vertex Button
+        DefaultShortButton({ isOpenedVertexMenu = !isOpenedVertexMenu }, "add_vertex", when(language) {
+            ("en-US") -> defaultStyle
+            ("ru-RU") -> smallDickSize
+            else -> defaultStyle })
+        Spacer(modifier = Modifier.height(10.dp))
 
-                        colors = TextFieldDefaults.textFieldColors(
-                            focusedIndicatorColor = Color.Transparent,
-                            unfocusedIndicatorColor = Color.Transparent,
-                        ),
-                        shape = RoundedCornerShape(25.dp),
-                        textStyle = defaultStyle,
-                        value = source,
-                        onValueChange = { newValue -> source = newValue },
-                    )
-                    Spacer(modifier = Modifier.width(200.dp))
-                }
-                Spacer(modifier = Modifier.height(36.dp))
-                Row {
-                    Spacer(modifier = Modifier.width(30.dp))
-                    Text(text = localisation("2nd"), style = defaultStyle,modifier = Modifier.align(Alignment.CenterVertically))
-                    Spacer(modifier = Modifier.width(54.dp))
-                    TextField(
-                        modifier = Modifier
-                            .weight(1f)
-                            .width(115.dp)
-                            .border(4.dp, color = Color.Black,shape = RoundedCornerShape(25.dp),),
+        // Add edge button
+        DefaultShortButton({ isOpenedEdgeMenu = !isOpenedEdgeMenu }, "open_edge", defaultStyle)
+        Spacer(modifier = Modifier.height(16.dp))
 
-                        colors = TextFieldDefaults.textFieldColors(
-                            focusedIndicatorColor = Color.Transparent,
-                            unfocusedIndicatorColor = Color.Transparent,
-                        ),
-                        shape = RoundedCornerShape(25.dp),
-                        textStyle = defaultStyle,
-                        value = destination,
-                        onValueChange = { newValue -> destination = newValue },)
-                    Spacer(modifier = Modifier.width(200.dp))
-                }
-                Spacer(modifier = Modifier.height(36.dp))
-                Row {
-                    Spacer(modifier = Modifier.width(30.dp))
-                    if(!checkedState) {
-                        Text(
-                            text = localisation("weight"),
-                            style = defaultStyle,
-                            modifier = Modifier.align(Alignment.CenterVertically)
-                        )
-                        Spacer(modifier = Modifier.width(30.dp))
-                        TextField(
-                            enabled = !checkedState,
-                            modifier = Modifier
-                                .weight(1f)
-                                .width(115.dp)
-                                .border(3.dp, color = Color.Black, shape = RoundedCornerShape(10.dp),)
-                                .background(color = Color.White, shape = RoundedCornerShape(10.dp)),
-                            shape = RoundedCornerShape(10.dp),
+        // Save button
+        DefaultShortButton({ graphVM.saveSQLite() }, "save", defaultStyle)
+        Spacer(modifier = Modifier.height(10.dp))
 
-                            colors = TextFieldDefaults.textFieldColors(
-                                focusedIndicatorColor = Color.Transparent,
-                                unfocusedIndicatorColor = Color.Transparent,
-                            ),
-                            textStyle = defaultStyle,
-                            value = weight,
-                            onValueChange = { value -> if (value.length < 10) weight = value.filter { it.isDigit() } },
-                            keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number)
-                        )
-                        Spacer(modifier = Modifier.width(20.dp))
+        // Visualization Button
+        val scope = rememberCoroutineScope { Dispatchers.Default }
+        DefaultShortButton(
+            {
+                isVisualizationRunning = !isVisualizationRunning
+                if (isVisualizationRunning) {
+                    scope.launch {
+                        ForceAtlas2.forceDrawing(graphVM)
                     }
-                    Checkbox(
-                        modifier = Modifier.align(Alignment.CenterVertically),
-                        checked = checkedState,
-                        onCheckedChange = { checkedState = it;
-                            weight = if(checkedState) "1" else "" }
-                    )
-                    Text(text = localisation("unweighted"), style = defaultStyle,modifier = Modifier.align(Alignment.CenterVertically))
-                    Spacer(modifier = Modifier.width(200.dp))
+                } else {
+                    scope.coroutineContext.cancelChildren()
                 }
-                Spacer(modifier = Modifier.height(36.dp))
-                Row {
-                    Spacer(modifier = Modifier.width(30.dp))
-                    Button(
-                        onClick = {
-                            val sourceInt = source.toIntOrNull()
-                            val destinationInt = destination.toIntOrNull()
-                            if (sourceInt != null && destinationInt != null) {
-                                graphVM.addEdge(sourceInt, destinationInt, weight.toInt())
-                                isOpenedEdgeMenu = false
-                            }
-                        }, modifier = Modifier
-                            .clip(shape = RoundedCornerShape(45.dp))
-                            .border(5.dp, color = Color.Black, shape = RoundedCornerShape(45.dp))
-                            .size(240.dp, 80.dp),
-                        colors = ButtonDefaults.buttonColors(backgroundColor = DefaultColors.primary)
-                    ) {
-                        Text(localisation("add_edge"), style = defaultStyle)
-                    }
-                }
-                Spacer(modifier = Modifier.height(36.dp))
-                Row {
-                    Spacer(modifier = Modifier.width(30.dp))
-                    Button(
-                        onClick = { isOpenedEdgeMenu = false }, modifier = Modifier
-                            .clip(shape = RoundedCornerShape(45.dp))
-                            .border(5.dp, color = Color.Black, shape = RoundedCornerShape(45.dp))
-                            .size(240.dp, 80.dp),
-                        colors = ButtonDefaults.buttonColors(backgroundColor = Color.Red)
-                    ) {
-                        Text(localisation("back"), style = defaultStyle)
-                    }
-                }
-            }
-        }
-    }
-}
-
-@Composable
-fun AddUUEdgeMenu(graphModel: UndirectedGraphViewModel<Int>) {
-    var source by remember { mutableStateOf("") }
-    var destination by remember { mutableStateOf("") }
-    Row {
-        TextField(
-            modifier = Modifier
-                .width(115.dp)
-                .border(3.dp, color = Color.Black),
-            textStyle = defaultStyle,
-            value = source,
-            onValueChange = { newValue -> source = newValue },
+            }, "visualize",  defaultStyle,
+            if (isVisualizationRunning) Color.Red else Color(0xffFFCB32)
         )
-        Spacer(modifier = Modifier.width(10.dp))
-        TextField(
-            modifier = Modifier
-                .width(115.dp)
-                .border(3.dp, color = Color.Black),
-            textStyle = defaultStyle,
-            value = destination,
-            onValueChange = { newValue -> destination = newValue })
-    }
+        Spacer(modifier = Modifier.height(10.dp))
 
-    Spacer(modifier = Modifier.height(16.dp))
-    Button(
-        onClick = {
-            val sourceInt = source.toIntOrNull()
-            val destinationInt = destination.toIntOrNull()
-            if (sourceInt != null && destinationInt != null) {
-                graphModel.addEdge(sourceInt, destinationInt, 1)
-            }
-        }, modifier = Modifier
-            .clip(shape = RoundedCornerShape(45.dp))
-            .border(5.dp, color = Color.Black, shape = RoundedCornerShape(45.dp))
-            .size(240.dp, 80.dp),
-        colors = ButtonDefaults.buttonColors(backgroundColor = DefaultColors.primary)
-    ) {
-        Text(localisation("add_edge"), style = defaultStyle)
+        // Reset colors Button
+        DefaultShortButton({ graphVM.resetColors() }, "reset", when(language) {
+            ("en-US") -> defaultStyle
+            ("ru-RU") -> smallDickSize
+            else -> defaultStyle }, Color.LightGray)
+        Spacer(modifier = Modifier.height(10.dp))
+
+        // Dijkstra Button
+        DefaultShortButton({ isDijkstraMenu = !isDijkstraMenu }, "dijkstra", when(language) {
+            ("en-US") -> defaultStyle
+            ("ru-RU") -> smallDickSize
+            ("cn-CN") -> smallDickSize
+            else -> defaultStyle })
+        Spacer(modifier = Modifier.height(10.dp))
+
+        // FordBellman Button
+        DefaultShortButton({ isFordBellmanMenu = !isFordBellmanMenu }, "ford_bellman", when(language) {
+            ("en-US") -> defaultStyle
+            ("ru-RU") -> microDickSize
+            ("cn-CN") -> smallDickSize
+            else -> defaultStyle })
+        Spacer(modifier = Modifier.height(10.dp))
+
+        DefaultShortButton(onClick = { graphVM.drawMst() }, "find_mst", when(language) {
+            ("en-US") -> smallDickSize
+            ("ru-RU") -> microDickSize
+            else -> defaultStyle })
+        Spacer(modifier = Modifier.height(10.dp))
+
+        DefaultShortButton(onClick = { graphVM.drawCycles("1") }, "find_cycles", when(language) {
+            ("en-US") -> defaultStyle
+            ("ru-RU") -> mediumDickSize
+            else -> defaultStyle })
+        Spacer(modifier = Modifier.height(10.dp))
+
+        DefaultShortButton(onClick = { graphVM.drawBridges() }, "find_bridges", when(language) {
+            ("en-US") -> defaultStyle
+            ("ru-RU") -> smallDickSize
+            else -> defaultStyle })
+        Spacer(modifier = Modifier.height(10.dp))
+
+        // Add vertex Dialog
+        AddVertexDialog(
+            isOpenedVertexMenu && isVisualizationRunning.not(),
+            { isOpenedVertexMenu = false },
+            graphVM,
+        )
+
+        // Add edge Dialog
+        AddEdgeDialog(isOpenedEdgeMenu, { isOpenedEdgeMenu = false }, graphVM)
+
+        // Dijkstra Dialog
+        DirectedAlgorithmDialog(
+            isDijkstraMenu,
+            "Dijkstra Algorithm",
+            { isDijkstraMenu = false },
+            graphVM,
+            "Dijkstra"
+        )
+
+        // Ford-Bellman Dialog
+        DirectedAlgorithmDialog(
+            isFordBellmanMenu,
+            "Ford Bellman Algorithm",
+            { isFordBellmanMenu = false },
+            graphVM,
+            "FordBellman"
+        )
+
     }
 }

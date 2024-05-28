@@ -39,6 +39,66 @@
     {
       "code": "enter_new_graph_name",
       "localisation": "创建新图表"
+    },
+    {
+      "code": "save",
+      "localisation": "储蓄"
+    },
+    {
+      "code": "visualize",
+      "localisation": "图形布局"
+    },
+    {
+      "code": "reset",
+      "localisation": "重置颜色"
+    },
+    {
+      "code": "find_strong_connections",
+      "localisation": "强连通性的组成部分"
+    },
+    {
+      "code": "find_clusters",
+      "localisation": "查找集群"
+    },
+    {
+      "code": "dijkstra",
+      "localisation": "Dijkstra的算法"
+    },
+    {
+      "code": "ford_bellman",
+      "localisation": "福特-贝尔曼算法"
+    },
+    {
+      "code": "find_cycles",
+      "localisation": "查找周期"
+    },
+    {
+      "code": "find_mst",
+      "localisation": "最小生成树"
+    },
+    {
+      "code": "find_bridges",
+      "localisation": "寻找桥梁"
+    },
+    {
+      "code": "center_coordinates",
+      "localisation": "中心坐标"
+    },
+    {
+      "code": "number",
+      "localisation": "数量"
+    },
+    {
+      "code": "unweighted",
+      "localisation": "未加权"
+    },
+    {
+      "code": "start",
+      "localisation": "开始"
+    },
+    {
+      "code": "end",
+      "localisation": "结局"
     }
   ]
 }

@@ -1,8 +1,8 @@
 package algos
 
-import model.algos.Bridges.searchBridges
+import model.algos.findBridges
 import model.graph.UndirectedGraph
-import model.graph.edges.Edge
+import model.graph.Edge
 import kotlin.test.Test
 import kotlin.test.assertTrue
 
@@ -23,7 +23,7 @@ internal class SearchBridgesTest {
         val graph = UndirectedGraph<Int>()
 
         val expectedBridges = setOf<Edge<Int>>()
-        val actualBridges = searchBridges(graph)
+        val actualBridges = findBridges(graph)
         assertTrue(
             bridgesEquals(expectedBridges, actualBridges),
             "Empty graph must not contain bridges"
@@ -49,7 +49,7 @@ internal class SearchBridgesTest {
         }
 
         val expectedBridges = setOf(Edge(3, 4), Edge(6, 7))
-        val actualBridges = searchBridges(graph)
+        val actualBridges = findBridges(graph)
         assertTrue(
             bridgesEquals(expectedBridges, actualBridges),
             "searchBridges must return set of graph bridges"
