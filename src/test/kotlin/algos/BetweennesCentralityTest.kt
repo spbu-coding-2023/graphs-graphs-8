@@ -1,6 +1,7 @@
 package algos
 
 import model.algos.BetweenesCentrality
+import model.algos.BetweenesCentralityUndirected
 import model.graph.UndirectedGraph
 import kotlin.test.Test
 import kotlin.test.assertNotNull
@@ -12,8 +13,8 @@ class BetweennesCentralityTest {
        for (i in 0..9) {
            graph.addVertex(i)
        }
-        graph.addEdge(1, 2, 1)
-        graph.addEdge(1, 3, 1)
+        graph.addEdge(1, 2)
+        graph.addEdge(1, 3)
         graph.addEdge(1, 4)
         graph.addEdge(2, 3)
         graph.addEdge(2, 4)
@@ -28,10 +29,7 @@ class BetweennesCentralityTest {
         graph.addEdge(7, 8)
         graph.addEdge(7, 9)
         graph.addEdge(8, 9)
-        val (centrality, v) = BetweenesCentrality.hits(100, graph)
-        for ((vertex, value) in centrality) {
-            println("Vertex: $vertex, Betweenness Centrality: $value")
-        }
+        val centrality = BetweenesCentralityUndirected.compute(graph, 9)
         for ((vertex, value) in centrality) {
             println("Vertex: $vertex, Betweenness Centrality: $value")
         }
