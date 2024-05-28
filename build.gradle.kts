@@ -29,6 +29,14 @@ dependencies {
     implementation("org.jetbrains.androidx.navigation:navigation-compose:$nav_version")
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.3")
     implementation("com.github.uhh-lt:chinese-whispers:-SNAPSHOT")
+
+    //neo4j
+    implementation("org.neo4j.driver", "neo4j-java-driver", "5.6.0")
+
+    // logging
+    implementation("io.github.microutils", "kotlin-logging-jvm", "2.0.6")
+    implementation("org.slf4j", "slf4j-simple", "1.7.29")
+
     testImplementation(kotlin("test"))
 }
 
