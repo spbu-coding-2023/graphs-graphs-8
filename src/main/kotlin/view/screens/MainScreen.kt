@@ -27,8 +27,9 @@ import view.common.DefaultColors
 import view.common.bigStyle
 import view.common.bounceClick
 import view.common.defaultStyle
+import viewmodel.GraphType
 import viewmodel.MainScreenViewModel
-import viewmodel.initType
+import viewmodel.SaveType
 
 @Composable
 fun MainScreen(navController: NavController, mainScreenViewModel: MainScreenViewModel) {
@@ -39,7 +40,7 @@ fun MainScreen(navController: NavController, mainScreenViewModel: MainScreenView
     val expandedDropDown = remember { mutableStateOf(false) }
     val selectedOptionTextDropDown = remember { mutableStateOf(optionsDropDown[0]) }
 
-    if(!mainScreenViewModel.inited) {
+    if (!mainScreenViewModel.inited) {
         mainScreenViewModel.graphInit()
         mainScreenViewModel.inited = true
     }
@@ -175,7 +176,11 @@ fun MainScreen(navController: NavController, mainScreenViewModel: MainScreenView
                 ),
                 onClick = {
                     if (graphName != "") {
-                        mainScreenViewModel.addGraph(graphName, selectedOptionTextDropDown.value, initType.Internal)
+                        mainScreenViewModel.addGraph(
+                            graphName,
+                            selectedOptionTextDropDown.value,
+                            SaveType.Internal
+                        )
                         graphName = ""
                         dialogState.value = false
                     }
@@ -257,16 +262,19 @@ fun MainScreen(navController: NavController, mainScreenViewModel: MainScreenView
                 Row(modifier = Modifier.padding(vertical = 15.dp)) {
                     Button(
                         onClick = {
-                            if(mainScreenViewModel.graphs.typeList[index] == MainScreenViewModel.ViewModelType.Directed){
+                            if (mainScreenViewModel.graphs.typeList[index] == GraphType.Directed) {
                                 mainScreenViewModel.initModel(index)
                             }
-                            if(mainScreenViewModel.graphs.typeList[index] == MainScreenViewModel.ViewModelType.Undirected){
+                            if (mainScreenViewModel.graphs.typeList[index] == GraphType.Undirected) {
                                 mainScreenViewModel.initModel(index)
                             }
                             navController.navigate(
                                 when (mainScreenViewModel.graphs.typeList[index]) {
-                                    MainScreenViewModel.ViewModelType.Undirected -> {"${Screen.UndirectedGraphScreen.route}/$index"}
-                                    MainScreenViewModel.ViewModelType.Directed -> "${Screen.DirectedGraphScreen.route}/$index"
+                                    GraphType.Undirected -> {
+                                        "${Screen.UndirectedGraphScreen.route}/$index"
+                                    }
+
+                                    GraphType.Directed -> "${Screen.DirectedGraphScreen.route}/$index"
 
                                 }
                             )

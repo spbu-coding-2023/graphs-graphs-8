@@ -1,20 +1,24 @@
-package viewmodel
+package viewmodel.graph
 
 import androidx.compose.ui.graphics.Color
-import model.algos.Prim
-import model.algos.findBridges
-import model.graph.UndirectedGraph
+import model.algos.StrongConnections
+import de.tudarmstadt.lt.cw.graph.ArrayBackedGraph
+import de.tudarmstadt.lt.cw.graph.ArrayBackedGraphCW
+import de.tudarmstadt.lt.cw.graph.Graph
+import model.graph.DirectedGraph
 import model.graph.Edge
+import viewmodel.GraphType
 import java.sql.DriverManager
 import java.sql.SQLException
+import kotlin.random.Random
 
-class UndirectedGraphViewModel<V>(
+class DirectedGraphViewModel<V>(
     name: String,
-    val graph: UndirectedGraph<V> = UndirectedGraph()
+    val graph: DirectedGraph<V> = DirectedGraph()
 ) : AbstractGraphViewModel<V>(name, graph) {
     private val DB_DRIVER = "jdbc:sqlite"
-    var inType = initType.Internal
     var initedGraph = false
+    override val graphType = GraphType.Directed
 
     override fun addEdge(from: V, to: V, weight: Int) {
         val source: VertexViewModel<V>
@@ -27,14 +31,10 @@ class UndirectedGraphViewModel<V>(
             return
         }
         for (edge in source.edges) if (edge.to == to) return
-        for (edge in destination.edges) if (edge.from == from) return
 
-        val edgeFromSource = Edge(from, to, weight)
-        val edgeFromDestination = Edge(to, from, weight)
-        val edgeFromSourceVM = EdgeViewModel(edgeFromSource, source, destination)
-        val edgeFromDestinationVM = EdgeViewModel(edgeFromDestination, destination, source)
-        source.edges.add(edgeFromSourceVM)
-        destination.edges.add(edgeFromDestinationVM)
+        val edge = Edge(from, to, weight)
+        val edgeVM = EdgeViewModel(edge, source, destination)
+        source.edges.add(edgeVM)
         graphModel.addEdge(from, to, weight)
     }
 
@@ -43,22 +43,48 @@ class UndirectedGraphViewModel<V>(
             for (edgeVM in this.edgesVmOf(edge.from)) {
                 if (edgeVM.to == edge.to) edgeVM.color = color
             }
-            for (edgeVM in this.edgesVmOf(edge.to)) {
-                if (edgeVM.to == edge.from) edgeVM.color = color
+        }
+    }
+
+    fun chinaWhisperCluster() {
+        val comparatorItoV = emptyMap<Int, V>().toMutableMap()
+        val comparatorVtoI = emptyMap<V, Int>().toMutableMap()
+        for (i in graph.vertices) {
+            comparatorItoV[comparatorItoV.size] = i
+            comparatorVtoI[i] = comparatorVtoI.size
+        }
+        val cwGraph: Graph<Int, Float> = ArrayBackedGraph(comparatorVtoI.size, comparatorVtoI.size)
+        for (i in comparatorItoV) {
+            cwGraph.addNode(i.key)
+        }
+        for (i in graph.edges) {
+            cwGraph.addEdge(comparatorVtoI[i.from], comparatorVtoI[i.to], i.weight.toFloat())
+        }
+
+        val cw = ArrayBackedGraphCW(comparatorItoV.size)
+
+        val findClusters = cw.findClusters(cwGraph)
+        for (k in findClusters.values) {
+            val col =
+                Color(Random.nextInt(30, 230), Random.nextInt(30, 230), Random.nextInt(30, 230))
+            for (j in k) {
+
+                graphVM[comparatorItoV[j]]?.color = col
             }
         }
     }
 
-    fun drawMst() {
-        if (size == 0) return
-        val startVertex = graphModel.vertices.first()
-        val result = Prim.findMst(graphModel as UndirectedGraph<V>, startVertex)
-        drawEdges(result, Color.Magenta)
-    }
-
-    fun drawBridges() {
-        val result = findBridges(graphModel as UndirectedGraph<V>)
-        drawEdges(result, Color.Yellow)
+    fun drawStrongConnections() {
+        val strongConnections = StrongConnections<V>()
+        for (component in strongConnections.findStrongConnections(graphModel)) {
+            val col =
+                Color(Random.nextInt(30, 230), Random.nextInt(30, 230), Random.nextInt(30, 230))
+            for (vertex in component) {
+                if (vertex in graphModel.vertices) {
+                    graphVM[vertex]?.color = col
+                }
+            }
+        }
     }
 
     fun saveSQLite() {
@@ -66,7 +92,7 @@ class UndirectedGraphViewModel<V>(
         var parameterInput = "( Vertexes,"
         var create = ("CREATE TABLE $name ")
         val createIndex = ("CREATE TABLE BEBRA_KILLER (name TEXT, type TEXT);")
-        val insertIndex = ("INSERT INTO BEBRA_KILLER (name, type) VALUES('$name', 'Undirected');")
+        val insertIndex = ("INSERT INTO BEBRA_KILLER (name, type) VALUES('$name', 'Directed');")
         for (i in graph.entries) {
             parameterCreate = "$parameterCreate V${i.key.toString()} INTEGER, "
             parameterInput = "$parameterInput V${i.key.toString()},"
@@ -83,9 +109,9 @@ class UndirectedGraphViewModel<V>(
         connection.createStatement().also { stmt ->
             try {
                 stmt.execute(delTable)
-                println("Table deleted")
+                println("Tables created or already exists")
             } catch (ex: Exception) {
-                println("Cannot delete table in database")
+                println("Cannot create table in database")
                 println(ex)
             } finally {
                 stmt.close()
@@ -94,9 +120,9 @@ class UndirectedGraphViewModel<V>(
         connection.createStatement().also { stmt ->
             try {
                 stmt.execute(delIndexRec)
-                println("Table deleted")
+                println("Tables created or already exists")
             } catch (ex: Exception) {
-                println("Cannot delete table in database")
+                println("Cannot create table in database")
                 println(ex)
             } finally {
                 stmt.close()

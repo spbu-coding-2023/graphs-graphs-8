@@ -18,7 +18,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.DialogWindow
 import androidx.compose.ui.window.rememberDialogState
 import localisation.localisation
-import viewmodel.AbstractGraphViewModel
+import viewmodel.graph.AbstractGraphViewModel
 
 @Composable
 fun AddEdgeDialog(
@@ -32,13 +32,13 @@ fun AddEdgeDialog(
         visible = visible,
         title = "New Edge",
         onCloseRequest = onClose,
-        state = rememberDialogState(height = 420.dp, width = 580.dp)
+        state = rememberDialogState(height = 520.dp, width = 580.dp)
     ) {
         var source by remember { mutableStateOf("") }
         var destination by remember { mutableStateOf("") }
         var notWeighted by remember { mutableStateOf(true) }
         var weight by remember { mutableStateOf("1") }
-        Column(modifier = Modifier.padding(30.dp, 24.dp)) {
+        Column(modifier = Modifier.padding(30.dp, 24.dp).fillMaxSize()) {
             val textWidth = 90.dp
             val rightPadding = 200.dp
             Row {
@@ -98,8 +98,7 @@ fun AddEdgeDialog(
                     TextField(
                         enabled = !notWeighted,
                         modifier = Modifier
-                            .weight(1f)
-                            .width(115.dp)
+                            .fillMaxWidth()
                             .border(
                                 3.dp,
                                 color = Color.Black,
@@ -122,6 +121,9 @@ fun AddEdgeDialog(
                     )
                     Spacer(modifier = Modifier.width(20.dp))
                 }
+            }
+            Spacer(modifier = Modifier.weight(1f))
+            Row {
                 Checkbox(
                     modifier = Modifier.align(Alignment.CenterVertically),
                     checked = notWeighted,

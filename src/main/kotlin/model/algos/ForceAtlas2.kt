@@ -1,14 +1,10 @@
 package model.algos
 
 import height
-import kotlinx.coroutines.coroutineScope
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.yield
-import kotlinx.serialization.internal.throwMissingFieldException
-import viewmodel.AbstractGraphViewModel
-import viewmodel.VertexViewModel
+import viewmodel.graph.AbstractGraphViewModel
+import viewmodel.graph.VertexViewModel
 import width
-import kotlin.math.ln
 import kotlin.math.sign
 import kotlin.math.sqrt
 

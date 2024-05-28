@@ -1,23 +1,23 @@
 package view.screens
 
-import androidx.compose.foundation.focusable
-import androidx.compose.foundation.gestures.rememberTransformableState
-import androidx.compose.foundation.gestures.transformable
+import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.PointerMatcher
+import androidx.compose.foundation.gestures.detectDragGestures
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.awt.awtEventOrNull
+import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.graphicsLayer
-import androidx.compose.ui.input.pointer.PointerEventType
-import androidx.compose.ui.input.pointer.onPointerEvent
+import androidx.compose.ui.input.pointer.*
+import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import androidx.navigation.NavController
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.cancel
 import kotlinx.coroutines.cancelChildren
 import kotlinx.coroutines.launch
 import model.algos.ForceAtlas2
@@ -25,12 +25,10 @@ import view.common.AddEdgeDialog
 import view.common.AddVertexDialog
 import view.common.DefaultShortButton
 import view.common.DirectedAlgorithmDialog
-import view.views.UndirectedGraphView
+import view.graph.UndirectedGraphView
 import viewmodel.MainScreenViewModel
-import kotlin.math.exp
-import kotlin.math.sign
 
-@OptIn(ExperimentalComposeUiApi::class)
+@OptIn(ExperimentalComposeUiApi::class, ExperimentalFoundationApi::class)
 @Composable
 fun UndirectedGraphScreen(
     navController: NavController,
@@ -39,35 +37,39 @@ fun UndirectedGraphScreen(
 ) {
     val graphVM by mutableStateOf(mainScreenViewModel.graphs.getUndirected(graphId))
 
-    var scale by remember { mutableStateOf(1f) }
-    var rotation by remember { mutableStateOf(0f) }
-    var offset by remember { mutableStateOf(Offset.Zero) }
-    val state = rememberTransformableState { zoomChange, offsetChange, rotationChange ->
-        scale *= zoomChange
-        rotation += rotationChange
-        offset += offsetChange
-    }
-
-    fun scale(delta: Int) {
-        scale = (scale * exp(delta * 0.2f)).coerceIn(0.01f, 1.75f)
-    }
 
     Box(modifier = Modifier
         .fillMaxSize()
-        .transformable(state = state)
         .onPointerEvent(PointerEventType.Scroll) {
-            val change = it.changes.first()
-            val delta = change.scrollDelta.y.toInt().sign
-            scale(delta)
+            if (it.changes.first().scrollDelta.y > 0) {
+                graphVM.zoom = (graphVM.zoom - graphVM.zoom / 8).coerceIn(0.01f, 15f)
+            } else {
+                graphVM.zoom = (graphVM.zoom + graphVM.zoom / 8).coerceIn(0.01f, 15f)
+
+                val awtEvent = it.awtEventOrNull
+                if (awtEvent != null) {
+                    val xPosition = awtEvent.x.toFloat()
+                    val yPosition = awtEvent.y.toFloat()
+                    val pointerVector =
+                        (Offset(
+                            xPosition,
+                            yPosition
+                        ) - (graphVM.canvasSize / 2f)) * (1 / graphVM.zoom)
+                    graphVM.center += pointerVector * 0.15f
+                }
+            }
+        }.pointerInput(Unit) {
+            detectDragGestures(
+                matcher = PointerMatcher.Primary
+            ) {
+                graphVM.center -= it * (1 / graphVM.zoom)
+            }
+        }.pointerHoverIcon(PointerIcon.Hand)
+        .onSizeChanged {
+            graphVM.canvasSize = Offset(it.width.toFloat(), it.height.toFloat())
         }
-        .focusable()
-        .graphicsLayer(
-            scaleX = scale,
-            scaleY = scale,
-            rotationZ = rotation,
-            translationX = offset.x,
-            translationY = offset.y
-        )) {
+        .clipToBounds()
+    ) {
         UndirectedGraphView(graphVM)
     }
 
