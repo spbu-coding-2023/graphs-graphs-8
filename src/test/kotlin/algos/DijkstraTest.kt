@@ -30,7 +30,6 @@ internal class DijkstraTest {
             shortestLengthActual += i.weight
         }
         assertNotNull(shortestLengthActual)
-        println("$shortestLengthActual, $shortestLengthExpected")
         assertEquals(
             shortestLengthExpected, shortestLengthActual,
             "Dijkstra must return weight of the shortest path"

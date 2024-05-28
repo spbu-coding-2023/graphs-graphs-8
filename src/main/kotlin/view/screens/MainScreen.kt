@@ -259,10 +259,10 @@ fun MainScreen(navController: NavController, mainScreenViewModel: MainScreenView
                     Button(
                         onClick = {
                             if(mainScreenViewModel.graphs.typeList[index] == MainScreenViewModel.ViewModelType.Directed){
-                                mainScreenViewModel.initModel(index)
+                                mainScreenViewModel.initModel(index, "storage")
                             }
                             if(mainScreenViewModel.graphs.typeList[index] == MainScreenViewModel.ViewModelType.Undirected){
-                                mainScreenViewModel.initModel(index)
+                                mainScreenViewModel.initModel(index, "storage")
                             }
                             navController.navigate(
                                 when (mainScreenViewModel.graphs.typeList[index]) {

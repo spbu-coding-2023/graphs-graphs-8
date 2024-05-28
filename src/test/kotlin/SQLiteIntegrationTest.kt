@@ -27,7 +27,7 @@ internal class SQLiteIntegrationTest {
 
         val graphVM = MainScreenViewModel()
         graphVM.graphInit("test")
-        graphVM.initModel(0)
+        graphVM.initModel(0, "test")
         val loadedGraph = graphVM.graphs.getDirected(0).graph
         val result = Dijkstra(loadedGraph, 4).dijkstra("1", "4")
         val shortestLengthExpected = 6
@@ -36,7 +36,6 @@ internal class SQLiteIntegrationTest {
             shortestLengthActual += i.weight
         }
         assertNotNull(shortestLengthActual)
-        println("$shortestLengthActual, $shortestLengthExpected")
         assertEquals(
             shortestLengthExpected, shortestLengthActual,
             "Dijkstra must return weight of the shortest path"
