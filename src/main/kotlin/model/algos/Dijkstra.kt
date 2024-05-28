@@ -18,8 +18,6 @@ class Dijkstra<V>(val graph: Graph<V>, private val totalNodes: Int) {
         vertexValues[start] = 0
 
         while (visitedSet.size != totalNodes) {
-            for (i in pathMap) {
-            }
             if (prioraQueue.isEmpty()) {
                 return pathMap[end]!!
             }
@@ -39,7 +37,7 @@ class Dijkstra<V>(val graph: Graph<V>, private val totalNodes: Int) {
         var newRange = -1
         for (edge in graph.edgesOf(currentVertex)) {
             if (!visitedSet.contains(edge.to)) {
-                newRange = vertexValues[currentVertex]!! + edge.weight
+                newRange = vertexValues[edge.from]!! + edge.weight
                 if (newRange < vertexValues[edge.to]!!) {
                     vertexValues[edge.to] = newRange
                     val k = pathMap[edge.from]?.toMutableList()
