@@ -2,8 +2,6 @@ package viewmodel
 
 import androidx.compose.runtime.mutableStateListOf
 import androidx.lifecycle.ViewModel
-import viewmodel.graph.DirectedGraphViewModel
-import viewmodel.graph.UndirectedGraphViewModel
 import java.sql.DriverManager
 import java.sql.SQLException
 
@@ -42,13 +40,13 @@ class MainScreenViewModel : ViewModel() {
         }
     }
 
-    fun initModel(index: Int) {
+    fun initModel(index: Int, source: String) {
         if (graphs.typeList[index] == GraphType.Directed) {
             val graph = graphs.getDirected(index)
             if (graph.initedGraph) return
             else graph.initedGraph = true
             if (graph.saveType == SaveType.SQLite) {
-                val connection = DriverManager.getConnection("$DB_DRIVER:storage.db")
+                val connection = DriverManager.getConnection("$DB_DRIVER:$source.db")
                 val getGraphs by lazy { connection.prepareStatement("SELECT * FROM ${graph.name}") }
                 val getVertex by lazy { connection.prepareStatement("SELECT Vertexes FROM ${graph.name}") }
                 val resVertex = getVertex.executeQuery()
@@ -102,9 +100,9 @@ class MainScreenViewModel : ViewModel() {
         }
     }
 
-    fun graphInit() {
+    fun graphInit(source: String) {
         val DB_DRIVER = "jdbc:sqlite"
-        val connection = DriverManager.getConnection("$DB_DRIVER:storage.db")
+        val connection = DriverManager.getConnection("$DB_DRIVER:$source.db")
             ?: throw SQLException("Cannot connect to database")
         val createIndex = ("CREATE TABLE BEBRA_KILLER (name TEXT, type TEXT);")
 
@@ -129,6 +127,11 @@ class MainScreenViewModel : ViewModel() {
             }
         }
         connection.close()
+    }
+
+    enum class graphType() {
+        Undirected,
+        Directed,
     }
 
     inner class GraphStorage() {

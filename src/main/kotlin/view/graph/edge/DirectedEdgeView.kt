@@ -13,7 +13,7 @@ import androidx.compose.ui.text.drawText
 import androidx.compose.ui.text.rememberTextMeasurer
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
-import viewmodel.graph.DirectedGraphViewModel
+import viewmodel.DirectedGraphViewModel
 import viewmodel.graph.EdgeViewModel
 import kotlin.math.atan2
 

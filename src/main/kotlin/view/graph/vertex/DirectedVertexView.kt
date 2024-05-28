@@ -14,7 +14,7 @@ import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import view.graph.edge.DirectedEdgeView
-import viewmodel.graph.DirectedGraphViewModel
+import viewmodel.DirectedGraphViewModel
 import viewmodel.graph.VertexViewModel
 
 @Composable

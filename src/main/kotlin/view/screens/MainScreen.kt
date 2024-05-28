@@ -41,7 +41,7 @@ fun MainScreen(navController: NavController, mainScreenViewModel: MainScreenView
     val selectedOptionTextDropDown = remember { mutableStateOf(optionsDropDown[0]) }
 
     if (!mainScreenViewModel.inited) {
-        mainScreenViewModel.graphInit()
+        mainScreenViewModel.graphInit("storage")
         mainScreenViewModel.inited = true
     }
     Column(modifier = Modifier.fillMaxSize().background(DefaultColors.background).padding(16.dp)) {
@@ -263,10 +263,10 @@ fun MainScreen(navController: NavController, mainScreenViewModel: MainScreenView
                     Button(
                         onClick = {
                             if (mainScreenViewModel.graphs.typeList[index] == GraphType.Directed) {
-                                mainScreenViewModel.initModel(index)
+                                mainScreenViewModel.initModel(index, "storage")
                             }
                             if (mainScreenViewModel.graphs.typeList[index] == GraphType.Undirected) {
-                                mainScreenViewModel.initModel(index)
+                                mainScreenViewModel.initModel(index, "storage")
                             }
                             navController.navigate(
                                 when (mainScreenViewModel.graphs.typeList[index]) {
