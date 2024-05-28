@@ -18,7 +18,7 @@ object BetweenesCentrality {
             vertices.forEach { vertex ->
                 var rankSum = 0.0
                 vertices.forEach { neighbor ->
-                    val edges = graph.matrix[neighbor]
+                    val edges = graph.edgesOf(neighbor)
                     if (neighbor != vertex && edges != null) {
                         if (edges.any { it.to == vertex }) {
                             rankSum += ranks[neighbor]?.div(edges.size) ?: 0.0
