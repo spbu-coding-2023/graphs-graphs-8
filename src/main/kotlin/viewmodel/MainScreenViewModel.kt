@@ -95,9 +95,9 @@ class MainScreenViewModel : ViewModel() {
         }
     }
 
-    fun graphInit() {
+    fun graphInit(source: String) {
         val DB_DRIVER = "jdbc:sqlite"
-        val connection = DriverManager.getConnection("$DB_DRIVER:storage.db")
+        val connection = DriverManager.getConnection("$DB_DRIVER:$source.db")
             ?: throw SQLException("Cannot connect to database")
         val createIndex = ("CREATE TABLE BEBRA_KILLER (name TEXT, type TEXT);")
 
