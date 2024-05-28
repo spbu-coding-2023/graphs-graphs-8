@@ -35,13 +35,13 @@ class MainScreenViewModel : ViewModel() {
         }
     }
 
-    fun initModel(index: Int) {
+    fun initModel(index: Int, source: String) {
         if (graphs.typeList[index] == ViewModelType.Directed) {
             val graph = graphs.getDirected(index)
             if (graph.initedGraph) return
             else graph.initedGraph = true
             if (graph.inType == initType.SQLite) {
-                val connection = DriverManager.getConnection("$DB_DRIVER:storage.db")
+                val connection = DriverManager.getConnection("$DB_DRIVER:$source.db")
                 val getGraphs by lazy { connection.prepareStatement("SELECT * FROM ${graph.name}") }
                 val getVertex by lazy { connection.prepareStatement("SELECT Vertexes FROM ${graph.name}") }
                 val resVertex = getVertex.executeQuery()
@@ -95,9 +95,9 @@ class MainScreenViewModel : ViewModel() {
         }
     }
 
-    fun graphInit() {
+    fun graphInit(source: String) {
         val DB_DRIVER = "jdbc:sqlite"
-        val connection = DriverManager.getConnection("$DB_DRIVER:storage.db")
+        val connection = DriverManager.getConnection("$DB_DRIVER:$source.db")
             ?: throw SQLException("Cannot connect to database")
         val createIndex = ("CREATE TABLE BEBRA_KILLER (name TEXT, type TEXT);")
 

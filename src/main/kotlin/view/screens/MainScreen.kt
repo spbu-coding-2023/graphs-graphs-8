@@ -40,9 +40,10 @@ fun MainScreen(navController: NavController, mainScreenViewModel: MainScreenView
     val selectedOptionTextDropDown = remember { mutableStateOf(optionsDropDown[0]) }
 
     if(!mainScreenViewModel.inited) {
-        mainScreenViewModel.graphInit()
+        mainScreenViewModel.graphInit("storage")
         mainScreenViewModel.inited = true
     }
+    println("TYPE LIST IS ${mainScreenViewModel.graphs.typeList}, ${mainScreenViewModel.graphs.directedGraphs.toList()}")
     Column(modifier = Modifier.fillMaxSize().background(DefaultColors.background).padding(16.dp)) {
         Row(modifier = Modifier.fillMaxWidth().height(100.dp)) {
             // Search tab
@@ -258,10 +259,10 @@ fun MainScreen(navController: NavController, mainScreenViewModel: MainScreenView
                     Button(
                         onClick = {
                             if(mainScreenViewModel.graphs.typeList[index] == MainScreenViewModel.ViewModelType.Directed){
-                                mainScreenViewModel.initModel(index)
+                                mainScreenViewModel.initModel(index, "storage")
                             }
                             if(mainScreenViewModel.graphs.typeList[index] == MainScreenViewModel.ViewModelType.Undirected){
-                                mainScreenViewModel.initModel(index)
+                                mainScreenViewModel.initModel(index, "storage")
                             }
                             navController.navigate(
                                 when (mainScreenViewModel.graphs.typeList[index]) {
