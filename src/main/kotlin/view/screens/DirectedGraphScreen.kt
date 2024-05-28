@@ -40,9 +40,9 @@ fun DirectedGraphScreen(
             .fillMaxSize()
             .onPointerEvent(PointerEventType.Scroll) {
                 if (it.changes.first().scrollDelta.y > 0) {
-                    graphVM.zoom = (graphVM.zoom - graphVM.zoom / 8).coerceIn(0.01f, 15f)
+                    graphVM.zoom = (graphVM.zoom - graphVM.zoom / 8).coerceIn(0.01f, 15f).dp.toPx()
                 } else {
-                    graphVM.zoom = (graphVM.zoom + graphVM.zoom / 8).coerceIn(0.01f, 15f)
+                    graphVM.zoom = (graphVM.zoom + graphVM.zoom / 8).coerceIn(0.01f, 15f).dp.toPx()
 
                     val awtEvent = it.awtEventOrNull
                     if (awtEvent != null) {
@@ -50,17 +50,17 @@ fun DirectedGraphScreen(
                         val yPosition = awtEvent.y.toFloat()
                         val pointerVector =
                             (Offset(
-                                xPosition,
-                                yPosition
+                                xPosition.dp.toPx(),
+                                yPosition.dp.toPx()
                             ) - (graphVM.canvasSize / 2f)) * (1 / graphVM.zoom)
-                        graphVM.center += pointerVector * 0.15f
+                        graphVM.center += pointerVector * (0.15f.dp.toPx())
                     }
                 }
             }.pointerInput(Unit) {
                 detectDragGestures(
                     matcher = PointerMatcher.Primary
                 ) {
-                    graphVM.center -= it * (1 / graphVM.zoom)
+                    graphVM.center -= it * (1 / graphVM.zoom).dp.toPx()
                 }
             }.pointerHoverIcon(PointerIcon.Hand)
             .onSizeChanged {
