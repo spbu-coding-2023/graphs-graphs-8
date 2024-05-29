@@ -15,18 +15,18 @@ object BetweenesCentralityDirected {
         vertices.forEach { vertex -> ranks[vertex] = 1.0 / vertices.size }
         repeat(100) {
             val newRanks = mutableMapOf<V, Double>()
-            vertices.forEach { vertex ->
+            vertices.forEach(fun(vertex: V) {
                 var rankSum = 0.0
                 vertices.forEach { neighbor ->
                     val edges = graph.edgesOf(neighbor)
-                    if (neighbor != vertex && edges != null) {
+                    if (neighbor != vertex) {
                         if (edges.any { it.to == vertex }) {
                             rankSum += ranks[neighbor]?.div(edges.size) ?: 0.0
                         }
                     }
                 }
                 newRanks[vertex] = (1 - dampingFactor) / vertices.size + dampingFactor * rankSum
-            }
+            })
             newRanks.forEach { (vertex, value) ->
                 ranks[vertex] = value
             }
