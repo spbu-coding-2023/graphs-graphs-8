@@ -20,6 +20,8 @@ class UndirectedGraphViewModel<V>(
     name: String,
     val graph: UndirectedGraph<V> = UndirectedGraph()
 ) : AbstractGraphViewModel<V>(name, graph) {
+    private val DB_DRIVER = "jdbc:sqlite"
+    var initedGraph = false
     override val graphType = GraphType.Undirected
 
     override fun addEdge(from: V, to: V, weight: Int) {

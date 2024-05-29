@@ -14,6 +14,7 @@ import model.graph.Graph
 import model.graph.Edge
 import view.common.DefaultColors
 import viewmodel.GraphType
+import viewmodel.SaveType
 import width
 import kotlin.random.Random
 
@@ -26,7 +27,6 @@ abstract class AbstractGraphViewModel<V>(_name: String, graph: Graph<V>) : ViewM
         get() = graphModel.isWeighted
     val negativeWeights
         get() = graphModel.negativeWeights
-    var isInited = false
     var visibleCentrality by mutableStateOf(false)
     val model
         get() = graphModel
@@ -42,6 +42,8 @@ abstract class AbstractGraphViewModel<V>(_name: String, graph: Graph<V>) : ViewM
             }
             return result.toList()
         }
+
+    var saveType = SaveType.SQLite
     abstract val graphType: GraphType
     var zoom by mutableStateOf(1f)
     var canvasSize by mutableStateOf(Offset(400f, 400f))

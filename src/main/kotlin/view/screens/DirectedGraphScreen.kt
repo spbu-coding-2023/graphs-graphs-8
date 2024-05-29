@@ -24,16 +24,16 @@ import localisation.getLocalisation
 import model.algos.ForceAtlas2
 import view.common.*
 import view.graph.DirectedGraphView
-import viewmodel.DirectedGraphViewModel
 import viewmodel.MainScreenViewModel
 
 @OptIn(ExperimentalComposeUiApi::class, ExperimentalFoundationApi::class)
 @Composable
 fun DirectedGraphScreen(
-    mainScreenViewModel: MainScreenViewModel,
     navController: NavController,
-    graphVM: DirectedGraphViewModel<String>
+    mainScreenViewModel: MainScreenViewModel,
+    graphId: Int
 ) {
+    val graphVM by mutableStateOf(mainScreenViewModel.graphs.getDirected(graphId))
     val language = getLocalisation()
     Box(
         modifier = Modifier
@@ -97,7 +97,7 @@ fun DirectedGraphScreen(
         Spacer(modifier = Modifier.height(10.dp))
 
         // Save button
-        DefaultShortButton({ mainScreenViewModel.saveGraph(graphVM.name) }, "save")
+        DefaultShortButton({ graphVM.saveSQLite() }, "save", defaultStyle)
         Spacer(modifier = Modifier.height(16.dp))
 
         // Visualization Button

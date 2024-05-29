@@ -17,18 +17,6 @@
       "localisation": "На главную"
     },
     {
-      "code": "saving",
-      "localisation": "Сохранение"
-    },
-    {
-      "code": "neo4j_data",
-      "localisation": "Данные для Neo4j"
-    },
-    {
-      "code": "language",
-      "localisation": "Язык"
-    },
-    {
       "code": "add_vertex",
       "localisation": "Добавить вершину"
     },

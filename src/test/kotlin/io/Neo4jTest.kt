@@ -6,7 +6,7 @@ import view.graph.UndirectedGraphView
 import view.screens.UndirectedGraphScreen
 import viewmodel.DirectedGraphViewModel
 import viewmodel.UndirectedGraphViewModel
-import viewmodel.io.Neo4jRepository
+import viewmodel.io.neo4j.Neo4jRepository
 import kotlin.test.assertContentEquals
 import kotlin.test.assertEquals
 
