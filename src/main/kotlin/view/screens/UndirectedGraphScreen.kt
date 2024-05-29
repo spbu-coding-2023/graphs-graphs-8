@@ -24,15 +24,15 @@ import model.algos.ForceAtlas2
 import view.common.*
 import view.graph.UndirectedGraphView
 import viewmodel.MainScreenViewModel
+import viewmodel.UndirectedGraphViewModel
 
 @OptIn(ExperimentalComposeUiApi::class, ExperimentalFoundationApi::class)
 @Composable
 fun UndirectedGraphScreen(
-    navController: NavController,
     mainScreenViewModel: MainScreenViewModel,
-    graphId: Int
+    navController: NavController,
+    graphVM: UndirectedGraphViewModel<String>,
 ) {
-    val graphVM by mutableStateOf(mainScreenViewModel.graphs.getUndirected(graphId))
     val language = getLocalisation()
 
     Box(modifier = Modifier
@@ -96,7 +96,7 @@ fun UndirectedGraphScreen(
         Spacer(modifier = Modifier.height(16.dp))
 
         // Save button
-        DefaultShortButton({ graphVM.saveSQLite() }, "save", defaultStyle)
+        DefaultShortButton({ mainScreenViewModel.saveGraph(graphVM.name) }, "save")
         Spacer(modifier = Modifier.height(10.dp))
 
         // Visualization Button
