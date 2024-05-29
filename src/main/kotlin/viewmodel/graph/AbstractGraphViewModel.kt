@@ -126,7 +126,7 @@ abstract class AbstractGraphViewModel<V>(_name: String, graph: Graph<V>) : ViewM
             edgeVM.color = Color.Black
         }
         for (vertexVM in verticesVM) {
-            vertexVM.color = DefaultColors.primary
+            vertexVM.color = DefaultColors.primaryBright
         }
         visibleCentrality = false
     }

@@ -10,7 +10,7 @@ fun DefaultShortButton(
     onClick: () -> Unit,
     localisationCode: String,
     style: TextStyle = defaultStyle,
-    color: Color = DefaultColors.primary,
+    color: Color = DefaultColors.primaryBright,
 
     ) {
     DefaultButton(onClick, localisationCode, style, color, 220.dp, 70.dp)

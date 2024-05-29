@@ -17,6 +17,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.DialogWindow
 import androidx.compose.ui.window.rememberDialogState
+import localisation.getLocalisation
 import localisation.localisation
 import viewmodel.graph.AbstractGraphViewModel
 
@@ -38,6 +39,7 @@ fun AddEdgeDialog(
         var destination by remember { mutableStateOf("") }
         var notWeighted by remember { mutableStateOf(true) }
         var weight by remember { mutableStateOf("1") }
+        val language = getLocalisation()
         Column(modifier = Modifier.padding(30.dp, 24.dp).fillMaxSize()) {
             val textWidth = 90.dp
             val rightPadding = 200.dp
@@ -147,7 +149,12 @@ fun AddEdgeDialog(
                     visible = false
 
                 }
-                DefaultButton(onClick, "add_edge", defaultStyle)
+                DefaultButton(
+                    onClick, "add", when (language) {
+                        "ru-RU" -> smallStyle
+                        else -> defaultStyle
+                    }
+                )
                 Spacer(modifier = Modifier.width(30.dp))
                 DefaultButton(onClose, "back", defaultStyle, Color.Red)
             }

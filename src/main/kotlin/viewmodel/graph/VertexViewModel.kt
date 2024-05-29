@@ -43,7 +43,7 @@ class VertexViewModel<V>(
 
     var vertexSize by mutableStateOf(60f)
     var centrality by mutableStateOf(0.0)
-    var color by mutableStateOf(DefaultColors.primary)
+    var color by mutableStateOf(DefaultColors.primaryBright)
     val degree
         get() = edges.size
 }

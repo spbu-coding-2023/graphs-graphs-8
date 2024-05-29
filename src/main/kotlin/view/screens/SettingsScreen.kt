@@ -1,6 +1,5 @@
 package view.screens
 
-import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -13,25 +12,26 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import kotlinx.serialization.Serializable
-import localisation.getLocalisation
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import localisation.localisation
 import view.common.DefaultColors
-import view.common.bigStyle
 import view.common.bounceClick
 import view.common.defaultStyle
+import viewmodel.MainScreenViewModel
 import java.io.File
 
 const val pathToSettings = "src/main/kotlin/settings.json"
+const val boldLine = 8
+const val defaultLine = 3
 
 @Serializable
 class SettingsJSON(
     var language: String,
     var bd: String,
-    var neo4jUri: String = "dsfds",
-    var neo4jUser: String = "dfsds",
-    var neo4jPassword: String = "dsfds",
+    var neo4jUri: String = "",
+    var neo4jUser: String = "",
+    var neo4jPassword: String = "",
 )
 
 enum class SettingType {
@@ -87,13 +87,12 @@ fun getSetting(type: SettingType): String {
 }
 
 @Composable
-fun SettingsScreen(navController: NavController) {
-    var language by mutableStateOf(getLocalisation())
+fun SettingsScreen(navController: NavController, mainScreenViewModel: MainScreenViewModel) {
     Column(modifier = Modifier.padding(20.dp, 10.dp)) {
         Row(modifier = Modifier.fillMaxSize()) {
             Language(navController)
             Spacer(Modifier.width(10.dp))
-            Saving()
+            Saving(mainScreenViewModel)
             Spacer(Modifier.width(10.dp))
         }
     }
@@ -115,12 +114,15 @@ fun Language(navController: NavController) {
             },
             modifier = Modifier
                 .padding(horizontal = 16.dp, vertical = 20.dp)
-                .border(width = if (language == "cn-CN") 5.dp else 3.dp, color = Color.Black)
+                .border(
+                    width = if (language == "cn-CN") boldLine.dp else defaultLine.dp,
+                    color = Color.Black
+                )
                 .bounceClick()
                 .size(200.dp, 80.dp),
             colors = ButtonDefaults.buttonColors(
                 backgroundColor =
-                if (language == "cn-CN") DefaultColors.primarySelected else DefaultColors.primary
+                if (language == "cn-CN") DefaultColors.primaryBright else DefaultColors.primaryDark
             )
         ) {
             Text("汉语", style = defaultStyle)
@@ -132,12 +134,15 @@ fun Language(navController: NavController) {
             },
             modifier = Modifier
                 .padding(horizontal = 16.dp, vertical = 20.dp)
-                .border(width = if (language == "ru-RU") 5.dp else 3.dp, color = Color.Black)
+                .border(
+                    width = if (language == "ru-RU") boldLine.dp else defaultLine.dp,
+                    color = Color.Black
+                )
                 .bounceClick()
                 .size(200.dp, 80.dp),
             colors = ButtonDefaults.buttonColors(
                 backgroundColor =
-                if (language == "ru-RU") DefaultColors.primarySelected else DefaultColors.primary
+                if (language == "ru-RU") DefaultColors.primaryBright else DefaultColors.primaryDark
             )
         ) {
             Text("Русский", style = defaultStyle)
@@ -149,12 +154,15 @@ fun Language(navController: NavController) {
             },
             modifier = Modifier
                 .padding(horizontal = 16.dp, vertical = 20.dp)
-                .border(width = if (language == "en-US") 5.dp else 3.dp, color = Color.Black)
+                .border(
+                    width = if (language == "en-US") boldLine.dp else defaultLine.dp,
+                    color = Color.Black
+                )
                 .bounceClick()
                 .size(200.dp, 80.dp),
             colors = ButtonDefaults.buttonColors(
                 backgroundColor =
-                if (language == "en-US") DefaultColors.primarySelected else DefaultColors.primary
+                if (language == "en-US") DefaultColors.primaryBright else DefaultColors.primaryDark
             )
         ) {
             Text("English", style = defaultStyle)
@@ -163,7 +171,7 @@ fun Language(navController: NavController) {
             onClick = { navController.navigate(Screen.MainScreen.route) },
             modifier = Modifier
                 .padding(16.dp)
-                .border(width = 3.dp, color = Color.Black)
+                .border(width = defaultLine.dp, color = Color.Black)
                 .bounceClick()
                 .size(200.dp, 80.dp),
             colors = ButtonDefaults.buttonColors(backgroundColor = Color.Red)
@@ -174,8 +182,7 @@ fun Language(navController: NavController) {
 }
 
 @Composable
-fun Saving() {
-    var saving by mutableStateOf(getSetting(SettingType.BD))
+fun Saving(mainScreenViewModel: MainScreenViewModel) {
     Column {
         Text(
             text = localisation("saving"),
@@ -185,15 +192,22 @@ fun Saving() {
         Button(
             onClick = {
                 makeSetting(SettingType.BD, "sqlite")
-                saving = "sqlite"
+                mainScreenViewModel.saveType = "sqlite"
+                mainScreenViewModel.inited = false
+                DefaultColors.primaryBright = DefaultColors.pinkBright
+                DefaultColors.primaryDark = DefaultColors.pinkDark
             },
             modifier = Modifier
                 .padding(horizontal = 16.dp, vertical = 20.dp)
-                .border(width = if (saving == "sqlite") 5.dp else 3.dp, color = Color.Black)
+                .border(
+                    width = if (mainScreenViewModel.saveType == "sqlite") boldLine.dp else defaultLine.dp,
+                    color = Color.Black
+                )
                 .bounceClick()
                 .size(200.dp, 80.dp),
             colors = ButtonDefaults.buttonColors(
-                backgroundColor = Color(0xFF17f908)
+                backgroundColor = if (mainScreenViewModel.saveType == "sqlite")
+                    DefaultColors.pinkBright else DefaultColors.pinkDark
             )
         ) {
             Text("SQLite", style = defaultStyle)
@@ -201,31 +215,45 @@ fun Saving() {
         Button(
             onClick = {
                 makeSetting(SettingType.BD, "neo4j")
-                saving = "neo4j"
+                mainScreenViewModel.saveType = "neo4j"
+                mainScreenViewModel.inited = false
+                DefaultColors.primaryBright = DefaultColors.blueBright
+                DefaultColors.primaryDark = DefaultColors.blueDark
             },
             modifier = Modifier
                 .padding(horizontal = 16.dp, vertical = 20.dp)
-                .border(width = if (saving == "neo4j") 5.dp else 3.dp, color = Color.Black)
+                .border(
+                    width = if (mainScreenViewModel.saveType == "neo4j") boldLine.dp else defaultLine.dp,
+                    color = Color.Black
+                )
                 .bounceClick()
                 .size(200.dp, 80.dp),
             colors = ButtonDefaults.buttonColors(
-                backgroundColor = Color(0xFF0c97ff)
+                backgroundColor = if (mainScreenViewModel.saveType == "neo4j")
+                    DefaultColors.blueBright else DefaultColors.blueDark
             )
         ) {
             Text("Neo4j", style = defaultStyle)
         }
         Button(
             onClick = {
-                makeSetting(SettingType.BD, "local_file")
-                saving = "local_file"
+                makeSetting(SettingType.BD, "local")
+                mainScreenViewModel.saveType = "local"
+                mainScreenViewModel.inited = false
+                DefaultColors.primaryBright = DefaultColors.yellowBright
+                DefaultColors.primaryDark = DefaultColors.yellowDark
             },
             modifier = Modifier
                 .padding(horizontal = 16.dp, vertical = 20.dp)
-                .border(width = if (saving == "local_file") 5.dp else 3.dp, color = Color.Black)
+                .border(
+                    width = if (mainScreenViewModel.saveType == "local") boldLine.dp else defaultLine.dp,
+                    color = Color.Black
+                )
                 .bounceClick()
                 .size(200.dp, 80.dp),
             colors = ButtonDefaults.buttonColors(
-                backgroundColor = Color.Yellow
+                backgroundColor = if (mainScreenViewModel.saveType == "local")
+                    DefaultColors.yellowBright else DefaultColors.yellowDark
             )
         ) {
             Text("Local file", style = defaultStyle)
@@ -235,7 +263,7 @@ fun Saving() {
     var uri by remember { mutableStateOf(getSetting(SettingType.NEO4JURI)) }
     var user by remember { mutableStateOf(getSetting(SettingType.NEO4JUSER)) }
     var password by remember { mutableStateOf(getSetting(SettingType.NEO4JPASSWORD)) }
-    if (saving == "neo4j") {
+    if (mainScreenViewModel.saveType == "neo4j") {
         Column(modifier = Modifier.fillMaxSize()) {
             Text(
                 text = localisation("neo4j_data"),
@@ -321,7 +349,7 @@ fun Saving() {
                     .bounceClick()
                     .size(200.dp, 80.dp),
                 colors = ButtonDefaults.buttonColors(
-                    backgroundColor = Color(0xFF0c97ff)
+                    backgroundColor = DefaultColors.blueBright
                 )
             ) {
                 Text("Connect", style = defaultStyle)

@@ -85,19 +85,27 @@ fun UndirectedGraphScreen(
         // Add vertex Button
         DefaultShortButton(
             { isOpenedVertexMenu = !isOpenedVertexMenu }, "add_vertex", when (language) {
-                ("en-US") -> defaultStyle
-                ("ru-RU") -> smallSize
+                ("ru-RU") -> microStyle
                 else -> defaultStyle
             }
         )
         Spacer(modifier = Modifier.height(10.dp))
 
         // Add edge button
-        DefaultShortButton({ isOpenedEdgeMenu = !isOpenedEdgeMenu }, "open_edge", defaultStyle)
+        DefaultShortButton(
+            { isOpenedEdgeMenu = !isOpenedEdgeMenu }, "add_edge", when (language) {
+                ("ru-RU") -> smallStyle
+                else -> defaultStyle
+            }
+        )
         Spacer(modifier = Modifier.height(16.dp))
 
         // Save button
-        DefaultShortButton({ mainScreenViewModel.saveGraph(graphVM.name) }, "save")
+        DefaultShortButton(
+            { mainScreenViewModel.saveGraph(graphVM.name) },
+            "save",
+            color = DefaultColors.greenBright
+        )
         Spacer(modifier = Modifier.height(10.dp))
 
         // Visualization Button
@@ -113,7 +121,7 @@ fun UndirectedGraphScreen(
                     scope.coroutineContext.cancelChildren()
                 }
             }, "visualize", defaultStyle,
-            if (isVisualizationRunning) Color.Red else Color(0xffFFCB32)
+            if (isVisualizationRunning) Color.Red else Color(0xffFFB300)
         )
         Spacer(modifier = Modifier.height(10.dp))
 
@@ -121,7 +129,7 @@ fun UndirectedGraphScreen(
         DefaultShortButton(
             { graphVM.resetColors() }, "reset", when (language) {
                 ("en-US") -> defaultStyle
-                ("ru-RU") -> smallSize
+                ("ru-RU") -> smallStyle
                 else -> defaultStyle
             }, Color.LightGray
         )
@@ -130,7 +138,7 @@ fun UndirectedGraphScreen(
         DefaultShortButton(
             { graphVM.drawBetweennessCentrality() },
             "betweenness_centrality",
-            microSize
+            microStyle
         )
         Spacer(modifier = Modifier.height(10.dp))
 
@@ -138,8 +146,8 @@ fun UndirectedGraphScreen(
         DefaultShortButton(
             { isDijkstraMenu = !isDijkstraMenu }, "dijkstra", when (language) {
                 ("en-US") -> defaultStyle
-                ("ru-RU") -> smallSize
-                ("cn-CN") -> smallSize
+                ("ru-RU") -> microStyle
+                ("cn-CN") -> smallStyle
                 else -> defaultStyle
             }
         )
@@ -149,8 +157,8 @@ fun UndirectedGraphScreen(
         DefaultShortButton(
             { isFordBellmanMenu = !isFordBellmanMenu }, "ford_bellman", when (language) {
                 ("en-US") -> defaultStyle
-                ("ru-RU") -> microSize
-                ("cn-CN") -> smallSize
+                ("ru-RU") -> microStyle
+                ("cn-CN") -> smallStyle
                 else -> defaultStyle
             }
         )
@@ -158,8 +166,8 @@ fun UndirectedGraphScreen(
 
         DefaultShortButton(
             onClick = { graphVM.drawMst() }, "find_mst", when (language) {
-                ("en-US") -> smallSize
-                ("ru-RU") -> microSize
+                ("en-US") -> smallStyle
+                ("ru-RU") -> microStyle
                 else -> defaultStyle
             }
         )
@@ -168,7 +176,7 @@ fun UndirectedGraphScreen(
         DefaultShortButton(
             onClick = { graphVM.drawBridges() }, "find_bridges", when (language) {
                 ("en-US") -> defaultStyle
-                ("ru-RU") -> smallSize
+                ("ru-RU") -> smallStyle
                 else -> defaultStyle
             }
         )
