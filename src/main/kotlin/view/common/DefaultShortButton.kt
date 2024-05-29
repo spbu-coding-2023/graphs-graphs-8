@@ -9,9 +9,9 @@ import androidx.compose.ui.unit.dp
 fun DefaultShortButton(
     onClick: () -> Unit,
     localisationCode: String,
-    style: TextStyle,
+    style: TextStyle = defaultStyle,
     color: Color = DefaultColors.primary,
 
-) {
-    DefaultButton(onClick, localisationCode, style, color, 220.dp, 70.dp, )
+    ) {
+    DefaultButton(onClick, localisationCode, style, color, 220.dp, 70.dp)
 }

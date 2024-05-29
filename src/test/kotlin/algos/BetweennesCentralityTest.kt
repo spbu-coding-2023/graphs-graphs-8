@@ -1,6 +1,5 @@
 package algos
 
-import model.algos.BetweenesCentrality
 import model.algos.BetweenesCentralityUndirected
 import model.graph.UndirectedGraph
 import kotlin.test.Test
@@ -10,9 +9,9 @@ class BetweennesCentralityTest {
     @Test
     fun basic() {
         val graph = UndirectedGraph<Int>()
-       for (i in 0..9) {
-           graph.addVertex(i)
-       }
+        for (i in 0..9) {
+            graph.addVertex(i)
+        }
         graph.addEdge(1, 2)
         graph.addEdge(1, 3)
         graph.addEdge(1, 4)

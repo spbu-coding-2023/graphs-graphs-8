@@ -6,13 +6,13 @@ import java.util.LinkedList
 import java.util.Queue
 import java.util.Stack
 
-object BetweenesCentrality {
+object BetweenesCentralityDirected {
     fun <V> pagerank(graph: DirectedGraph<V>, top: Int): Map<V, Double> {
         val ranks = mutableMapOf<V, Double>()
         val dampingFactor = 0.8
         val vertices = graph.vertices
 
-        vertices.forEach { vertex -> ranks[vertex] = 1.0/ vertices.size }
+        vertices.forEach { vertex -> ranks[vertex] = 1.0 / vertices.size }
         repeat(100) {
             val newRanks = mutableMapOf<V, Double>()
             vertices.forEach { vertex ->
@@ -80,7 +80,8 @@ object BetweenesCentralityUndirected {
             while (stack.isNotEmpty()) {
                 val w = stack.pop()
                 for (v in predecessors[w]!!) {
-                    dependency[v] = dependency[v]!! + (shortestPaths[v]!!.toDouble() / shortestPaths[w]!!) * (1 + dependency[w]!!)
+                    dependency[v] =
+                        dependency[v]!! + (shortestPaths[v]!!.toDouble() / shortestPaths[w]!!) * (1 + dependency[w]!!)
                 }
                 if (w != s) {
                     centrality[w] = centrality[w]!! + dependency[w]!!
@@ -88,6 +89,7 @@ object BetweenesCentralityUndirected {
             }
         }
 
-        return centrality.entries.sortedByDescending { it.value }.take(top).associate { it.toPair() }
+        return centrality.entries.sortedByDescending { it.value }.take(top)
+            .associate { it.toPair() }
     }
 }

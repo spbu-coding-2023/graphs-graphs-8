@@ -5,12 +5,16 @@ import model.algos.StrongConnections
 import de.tudarmstadt.lt.cw.graph.ArrayBackedGraph
 import de.tudarmstadt.lt.cw.graph.ArrayBackedGraphCW
 import de.tudarmstadt.lt.cw.graph.Graph
+import model.algos.BetweenesCentralityDirected
 import model.graph.DirectedGraph
 import model.graph.Edge
+import mu.KotlinLogging
 import viewmodel.graph.AbstractGraphViewModel
 import viewmodel.graph.EdgeViewModel
 import viewmodel.graph.VertexViewModel
 import kotlin.random.Random
+
+private val logger = KotlinLogging.logger { }
 
 class DirectedGraphViewModel<V>(
     name: String,
@@ -75,14 +79,25 @@ class DirectedGraphViewModel<V>(
         }
     }
 
+    override fun drawBetweennessCentrality() {
+        val result = BetweenesCentralityDirected.pagerank(graphModel as DirectedGraph<V>, size)
+        for (vertexVM in verticesVM) {
+            vertexVM.centrality = (result[vertexVM.vertex] ?: run {
+                logger.error { "Can't find centrality value for vertex in graph" }
+                0.0
+            }) * 100
+        }
+        this.visibleCentrality = true
+    }
+
     fun drawStrongConnections() {
         val strongConnections = StrongConnections<V>()
         for (component in strongConnections.findStrongConnections(graphModel)) {
-            val col =
+            val color =
                 Color(Random.nextInt(30, 230), Random.nextInt(30, 230), Random.nextInt(30, 230))
             for (vertex in component) {
                 if (vertex in graphModel.vertices) {
-                    graphVM[vertex]?.color = col
+                    graphVM[vertex]?.color = color
                 }
             }
         }

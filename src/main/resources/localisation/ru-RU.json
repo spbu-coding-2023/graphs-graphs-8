@@ -41,6 +41,10 @@
       "localisation": "Создание нового графа"
     },
     {
+      "code": "betweenness_centrality",
+      "localisation": "Ключевые вершины"
+    },
+    {
       "code": "save",
       "localisation": "Сохранить"
     },
@@ -58,7 +62,7 @@
     },
     {
       "code": "find_clusters",
-      "localisation": "Найти Кластера"
+      "localisation": "Найти Кластеры"
     },
     {
       "code": "dijkstra",
