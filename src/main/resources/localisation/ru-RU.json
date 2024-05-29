@@ -51,6 +51,70 @@
     {
       "code": "enter_new_graph_name",
       "localisation": "Создание нового графа"
+    },
+    {
+      "code": "betweenness_centrality",
+      "localisation": "Ключевые вершины"
+    },
+    {
+      "code": "save",
+      "localisation": "Сохранить"
+    },
+    {
+      "code": "visualize",
+      "localisation": "Раскладка"
+    },
+    {
+      "code": "reset",
+      "localisation": "Сбросить цвета"
+    },
+    {
+      "code": "find_strong_connections",
+      "localisation": "Компоненты Сильной Связности"
+    },
+    {
+      "code": "find_clusters",
+      "localisation": "Найти Кластеры"
+    },
+    {
+      "code": "dijkstra",
+      "localisation": "Алгоритм Дейкстры"
+    },
+    {
+      "code": "ford_bellman",
+      "localisation": "Алгоритм Форда Беллмана"
+    },
+    {
+      "code": "find_cycles",
+      "localisation": "Найти циклы"
+    },
+    {
+      "code": "find_mst",
+      "localisation": "Минимальное остовное дерево"
+    },
+    {
+      "code": "find_bridges",
+      "localisation": "Найти мосты"
+    },
+    {
+      "code": "center_coordinates",
+      "localisation": "Центрировать координаты"
+    },
+    {
+      "code": "number",
+      "localisation": "Количество"
+    },
+    {
+      "code": "unweighted",
+      "localisation": "Невзвешенный"
+    },
+    {
+      "code": "start",
+      "localisation": "Начало"
+    },
+    {
+      "code": "end",
+      "localisation": "Конец"
     }
   ]
 }

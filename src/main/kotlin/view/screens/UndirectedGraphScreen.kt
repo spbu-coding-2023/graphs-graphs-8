@@ -4,7 +4,6 @@ import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.PointerMatcher
 import androidx.compose.foundation.gestures.detectDragGestures
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
@@ -20,11 +19,9 @@ import androidx.navigation.NavController
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.cancelChildren
 import kotlinx.coroutines.launch
+import localisation.getLocalisation
 import model.algos.ForceAtlas2
-import view.common.AddEdgeDialog
-import view.common.AddVertexDialog
-import view.common.DefaultShortButton
-import view.common.DirectedAlgorithmDialog
+import view.common.*
 import view.graph.UndirectedGraphView
 import viewmodel.MainScreenViewModel
 import viewmodel.UndirectedGraphViewModel
@@ -36,6 +33,7 @@ fun UndirectedGraphScreen(
     navController: NavController,
     graphVM: UndirectedGraphViewModel<String>,
 ) {
+    val language = getLocalisation()
 
     Box(modifier = Modifier
         .fillMaxSize()
@@ -73,8 +71,6 @@ fun UndirectedGraphScreen(
     }
 
     Column(modifier = Modifier.zIndex(1f).padding(16.dp).width(300.dp)) {
-        Text("Undirected")
-
         var isOpenedVertexMenu by remember { mutableStateOf(false) }
         var isOpenedEdgeMenu by remember { mutableStateOf(false) }
         var isDijkstraMenu by remember { mutableStateOf(false) }
@@ -82,15 +78,21 @@ fun UndirectedGraphScreen(
         var isVisualizationRunning by remember { mutableStateOf(false) }
 
         // To MainScreen
-        DefaultShortButton({ navController.popBackStack() }, "home")
+        DefaultShortButton({ navController.popBackStack() }, "home", defaultStyle)
         Spacer(modifier = Modifier.height(10.dp))
 
         // Add vertex Button
-        DefaultShortButton({ isOpenedVertexMenu = !isOpenedVertexMenu }, "add_vertex")
+        DefaultShortButton(
+            { isOpenedVertexMenu = !isOpenedVertexMenu }, "add_vertex", when (language) {
+                ("en-US") -> defaultStyle
+                ("ru-RU") -> smallSize
+                else -> defaultStyle
+            }
+        )
         Spacer(modifier = Modifier.height(10.dp))
 
         // Add edge button
-        DefaultShortButton({ isOpenedEdgeMenu = !isOpenedEdgeMenu }, "open_edge")
+        DefaultShortButton({ isOpenedEdgeMenu = !isOpenedEdgeMenu }, "open_edge", defaultStyle)
         Spacer(modifier = Modifier.height(16.dp))
 
         // Save button
@@ -109,30 +111,66 @@ fun UndirectedGraphScreen(
                 } else {
                     scope.coroutineContext.cancelChildren()
                 }
-            }, "visualize",
+            }, "visualize", defaultStyle,
             if (isVisualizationRunning) Color.Red else Color(0xffFFCB32)
         )
         Spacer(modifier = Modifier.height(10.dp))
 
         // Reset colors Button
-        DefaultShortButton({ graphVM.resetColors() }, "reset", Color.LightGray)
+        DefaultShortButton(
+            { graphVM.resetColors() }, "reset", when (language) {
+                ("en-US") -> defaultStyle
+                ("ru-RU") -> smallSize
+                else -> defaultStyle
+            }, Color.LightGray
+        )
+        Spacer(modifier = Modifier.height(10.dp))
+
+        DefaultShortButton(
+            { graphVM.drawBetweennessCentrality() },
+            "betweenness_centrality",
+            microSize
+        )
         Spacer(modifier = Modifier.height(10.dp))
 
         // Dijkstra Button
-        DefaultShortButton({ isDijkstraMenu = !isDijkstraMenu }, "dijkstra")
+        DefaultShortButton(
+            { isDijkstraMenu = !isDijkstraMenu }, "dijkstra", when (language) {
+                ("en-US") -> defaultStyle
+                ("ru-RU") -> smallSize
+                ("cn-CN") -> smallSize
+                else -> defaultStyle
+            }
+        )
         Spacer(modifier = Modifier.height(10.dp))
 
         // FordBellman Button
-        DefaultShortButton({ isFordBellmanMenu = !isFordBellmanMenu }, "ford_bellman")
+        DefaultShortButton(
+            { isFordBellmanMenu = !isFordBellmanMenu }, "ford_bellman", when (language) {
+                ("en-US") -> defaultStyle
+                ("ru-RU") -> microSize
+                ("cn-CN") -> smallSize
+                else -> defaultStyle
+            }
+        )
         Spacer(modifier = Modifier.height(10.dp))
 
-        DefaultShortButton(onClick = { graphVM.drawMst() }, "find_mst")
+        DefaultShortButton(
+            onClick = { graphVM.drawMst() }, "find_mst", when (language) {
+                ("en-US") -> smallSize
+                ("ru-RU") -> microSize
+                else -> defaultStyle
+            }
+        )
         Spacer(modifier = Modifier.height(10.dp))
 
-        DefaultShortButton(onClick = { graphVM.drawCycles("1") }, "find_cycles")
-        Spacer(modifier = Modifier.height(10.dp))
-
-        DefaultShortButton(onClick = { graphVM.drawBridges() }, "find_bridges")
+        DefaultShortButton(
+            onClick = { graphVM.drawBridges() }, "find_bridges", when (language) {
+                ("en-US") -> defaultStyle
+                ("ru-RU") -> smallSize
+                else -> defaultStyle
+            }
+        )
         Spacer(modifier = Modifier.height(10.dp))
 
         // Add vertex Dialog

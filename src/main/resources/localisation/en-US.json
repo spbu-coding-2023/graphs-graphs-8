@@ -51,6 +51,70 @@
     {
       "code": "enter_new_graph_name",
       "localisation": "Create new graph"
+    },
+    {
+      "code": "save",
+      "localisation": "Save"
+    },
+    {
+      "code": "visualize",
+      "localisation": "Visualize"
+    },
+    {
+      "code": "reset",
+      "localisation": "Reset"
+    },
+    {
+      "code": "find_strong_connections",
+      "localisation": "Strong Connections"
+    },
+    {
+      "code": "find_clusters",
+      "localisation": "Find Clusters"
+    },
+    {
+      "code": "dijkstra",
+      "localisation": "Dijkstra Path"
+    },
+    {
+      "code": "betweenness_centrality",
+      "localisation": "Betweenness Centrality"
+    },
+    {
+      "code": "ford_bellman",
+      "localisation": "Ford Bellman"
+    },
+    {
+      "code": "find_cycles",
+      "localisation": "Find Cycles"
+    },
+    {
+      "code": "find_mst",
+      "localisation": "Minimal Spanning Tree"
+    },
+    {
+      "code": "find_bridges",
+      "localisation": "Find Bridges"
+    },
+    {
+      "code": "center_coordinates",
+      "localisation": "Center Coordinates"
+    },
+    {
+      "code": "number",
+      "localisation": "Amount"
+    },
+    {
+      "code": "unweighted",
+      "localisation": "Unweighted"
+    },
+    {
+      "code": "start",
+      "localisation": "Start"
+    },
+    {
+      "code": "end",
+      "localisation": "End"
     }
   ]
 }
