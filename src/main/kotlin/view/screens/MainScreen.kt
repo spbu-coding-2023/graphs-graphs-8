@@ -27,7 +27,6 @@ import view.common.bounceClick
 import view.common.defaultStyle
 import viewmodel.GraphType
 import viewmodel.MainScreenViewModel
-import viewmodel.SaveType
 import java.io.File
 
 
@@ -280,13 +279,13 @@ fun MainScreen(navController: NavController, mainScreenViewModel: MainScreenView
                                 color = Color.Black,
                                 shape = RoundedCornerShape(45.dp)
                             ),
-                        colors = ButtonDefaults.buttonColors(backgroundColor = if (mainScreenViewModel.graphs.typeList[index] == GraphType.Undirected) DefaultColors.primary
+                        colors = ButtonDefaults.buttonColors(backgroundColor = if (graphVM.graphType == GraphType.Undirected) DefaultColors.primary
                         else Color.Cyan
                         )) {
                         Row{
                              Column (modifier = Modifier.align(Alignment.CenterVertically)){
                                 Image(
-                                    bitmap = if (mainScreenViewModel.graphs.typeList[index] == GraphType.Directed) loadImageBitmap(File("src/main/resources/directed.png").inputStream())
+                                    bitmap = if (graphVM.graphType == GraphType.Directed) loadImageBitmap(File("src/main/resources/directed.png").inputStream())
                                     else loadImageBitmap(File("src/main/resources/undirected.png").inputStream()),
                                     contentDescription = "Type",
 
@@ -297,7 +296,7 @@ fun MainScreen(navController: NavController, mainScreenViewModel: MainScreenView
                             }
                             Column (modifier = Modifier.align(Alignment.CenterVertically)){
                                 Text(
-                                    text = mainScreenViewModel.graphs.getName(index),
+                                    text = name,
                                     style = bigStyle,
                                     modifier = Modifier.clip(RoundedCornerShape(45.dp))
                                 )

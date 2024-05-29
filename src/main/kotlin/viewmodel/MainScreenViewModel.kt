@@ -10,7 +10,6 @@ import view.screens.getSetting
 import viewmodel.graph.AbstractGraphViewModel
 import viewmodel.io.Neo4jRepository
 import viewmodel.io.SQLiteRepository
-import kotlin.math.log
 
 enum class GraphType() {
     Undirected,
