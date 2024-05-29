@@ -30,7 +30,7 @@ class MainScreenViewModel(val saveType: String = getSetting(SettingType.BD)) : V
         }
         val graphVM: AbstractGraphViewModel<String>
         when (type) {
-            "Undirected" -> {
+            "undirected" -> {
                 graphVM = UndirectedGraphViewModel(name)
 
             }
