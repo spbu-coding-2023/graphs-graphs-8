@@ -1,9 +1,6 @@
 package view.screens
 
-import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.background
-import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
@@ -16,6 +13,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.loadImageBitmap
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -29,6 +27,8 @@ import view.common.bounceClick
 import view.common.defaultStyle
 import viewmodel.GraphType
 import viewmodel.MainScreenViewModel
+import java.io.File
+
 
 @Composable
 fun MainScreen(navController: NavController, mainScreenViewModel: MainScreenViewModel) {
@@ -279,13 +279,30 @@ fun MainScreen(navController: NavController, mainScreenViewModel: MainScreenView
                                 color = Color.Black,
                                 shape = RoundedCornerShape(45.dp)
                             ),
-                        colors = ButtonDefaults.buttonColors(backgroundColor = DefaultColors.primary)
-                    ) {
-                        Text(
-                            text = name,
-                            style = bigStyle,
-                            modifier = Modifier.clip(RoundedCornerShape(45.dp))
-                        )
+                        colors = ButtonDefaults.buttonColors(backgroundColor = if (graphVM.graphType == GraphType.Undirected) DefaultColors.primary
+                        else Color.Cyan
+                        )) {
+                        Row{
+                             Column (modifier = Modifier.align(Alignment.CenterVertically)){
+                                Image(
+                                    bitmap = if (graphVM.graphType == GraphType.Directed) loadImageBitmap(File("src/main/resources/directed.png").inputStream())
+                                    else loadImageBitmap(File("src/main/resources/undirected.png").inputStream()),
+                                    contentDescription = "Type",
+
+                                    modifier = Modifier
+                                        .padding(15.dp)
+                                        .align(Alignment.End),
+                                    )
+                            }
+                            Column (modifier = Modifier.align(Alignment.CenterVertically)){
+                                Text(
+                                    text = name,
+                                    style = bigStyle,
+                                    modifier = Modifier.clip(RoundedCornerShape(45.dp))
+                                )
+                            }
+                        }
+
                     }
 
                     Spacer(modifier = Modifier.width(10.dp))

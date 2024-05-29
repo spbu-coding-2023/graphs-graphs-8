@@ -34,10 +34,10 @@ fun UndirectedGraphScreen(
     graphVM: UndirectedGraphViewModel<String>,
 ) {
     val language = getLocalisation()
-
     Box(modifier = Modifier
         .fillMaxSize()
         .onPointerEvent(PointerEventType.Scroll) {
+
             if (it.changes.first().scrollDelta.y > 0) {
                 graphVM.zoom = (graphVM.zoom - graphVM.zoom / 8).coerceIn(0.01f, 15f)
             } else {
@@ -76,6 +76,7 @@ fun UndirectedGraphScreen(
         var isDijkstraMenu by remember { mutableStateOf(false) }
         var isFordBellmanMenu by remember { mutableStateOf(false) }
         var isVisualizationRunning by remember { mutableStateOf(false) }
+
 
         // To MainScreen
         DefaultShortButton({ navController.popBackStack() }, "home", defaultStyle)
