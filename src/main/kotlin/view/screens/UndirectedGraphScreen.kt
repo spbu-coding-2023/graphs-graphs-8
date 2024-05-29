@@ -165,15 +165,6 @@ fun UndirectedGraphScreen(
         Spacer(modifier = Modifier.height(10.dp))
 
         DefaultShortButton(
-            onClick = { graphVM.drawCycles("1") }, "find_cycles", when (language) {
-                ("en-US") -> defaultStyle
-                ("ru-RU") -> mediumSize
-                else -> defaultStyle
-            }
-        )
-        Spacer(modifier = Modifier.height(10.dp))
-
-        DefaultShortButton(
             onClick = { graphVM.drawBridges() }, "find_bridges", when (language) {
                 ("en-US") -> defaultStyle
                 ("ru-RU") -> smallSize

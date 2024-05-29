@@ -90,7 +90,7 @@ fun getSetting(type: SettingType): String {
 fun SettingsScreen(navController: NavController) {
     var language by mutableStateOf(getLocalisation())
     Column(modifier = Modifier.padding(20.dp, 10.dp)) {
-        Row {
+        Row(modifier = Modifier.fillMaxSize()) {
             Language(navController)
             Spacer(Modifier.width(10.dp))
             Saving()
