@@ -31,9 +31,9 @@ object SQLiteRepository {
         val resSet = getGraphs.executeQuery()
         while (resSet.next()) {
             if (resSet.getString("type") == "Directed") {
-                mainScreenVM.addGraph(resSet.getString("name"), "directed")
+                mainScreenVM.addGraph(resSet.getString("name"), "Directed")
             } else if (resSet.getString("type") == "Undirected") {
-                mainScreenVM.addGraph(resSet.getString("name"), "undirected")
+                mainScreenVM.addGraph(resSet.getString("name"), "Undirected")
             }
         }
         connection.close()

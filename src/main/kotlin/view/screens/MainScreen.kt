@@ -177,7 +177,7 @@ fun MainScreen(navController: NavController, mainScreenViewModel: MainScreenView
                     if (graphName != "") {
                         mainScreenViewModel.addGraph(
                             graphName,
-                            selectedOptionTextDropDown.value,
+                            if (selectedOptionTextDropDown.value == "undirected") "Undirected" else "Directed",
                         )
                         mainScreenViewModel.saveGraph(graphName)
                         graphName = ""

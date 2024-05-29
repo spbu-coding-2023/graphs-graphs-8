@@ -30,14 +30,16 @@ class MainScreenViewModel(val saveType: String = getSetting(SettingType.BD)) : V
         }
         val graphVM: AbstractGraphViewModel<String>
         when (type) {
-            "undirected" -> {
+            "Undirected" -> {
                 graphVM = UndirectedGraphViewModel(name)
 
             }
 
-            else -> {
+            "Directed" -> {
                 graphVM = DirectedGraphViewModel(name)
             }
+
+            else -> throw IllegalStateException("Given wrong type of graph")
         }
         graphs[name] = graphVM
         graphsNames.add(name)
