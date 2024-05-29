@@ -6,6 +6,7 @@ import org.neo4j.driver.AuthTokens
 import org.neo4j.driver.GraphDatabase
 import org.neo4j.driver.TransactionContext
 import viewmodel.DirectedGraphViewModel
+import viewmodel.GraphType
 import viewmodel.MainScreenViewModel
 import viewmodel.UndirectedGraphViewModel
 import viewmodel.graph.AbstractGraphViewModel
@@ -39,21 +40,21 @@ class Neo4jRepository<V>(uri: String, user: String, password: String) : Closeabl
         session.executeWrite { tx ->
             for (vertexVM in graphVM.verticesVM) {
                 tx.run(
-                    "CREATE (v: $graphName {value : \$vertexValue});",
+                    "CREATE (v: `$graphName` {value : \$vertexValue});",
                     mapOf("vertexValue" to vertexVM.vertex.toString())
                 )
             }
         }
         session.executeWrite { tx ->
-            tx.run("CREATE CONSTRAINT IF NOT EXISTS FOR (n: $graphName) REQUIRE (n.value) IS UNIQUE;")
-            tx.run("CREATE INDEX IF NOT EXISTS FOR (n: $graphName) ON (n.value);")
+            tx.run("CREATE CONSTRAINT IF NOT EXISTS FOR (n: `$graphName`) REQUIRE (n.value) IS UNIQUE;")
+            tx.run("CREATE INDEX IF NOT EXISTS FOR (n: `$graphName`) ON (n.value);")
         }
         // create edges in a graph
         session.executeWrite { tx ->
             for (edgeVM in graphVM.edgesVM) {
                 tx.run(
-                    "MATCH (v1:$graphName) WHERE v1.value = \$vertex1 \n" +
-                            "MATCH (v2: $graphName) WHERE v2.value = \$vertex2 \n" +
+                    "MATCH (v1: `$graphName`) WHERE v1.value = \$vertex1 \n" +
+                            "MATCH (v2: `$graphName`) WHERE v2.value = \$vertex2 \n" +
                             "CREATE (v1)-[:Edge {weight: \$edgeWeight}]->(v2)",
                     mapOf(
                         "vertex1" to edgeVM.from.toString(),
@@ -63,7 +64,6 @@ class Neo4jRepository<V>(uri: String, user: String, password: String) : Closeabl
                 )
             }
         }
-        println("fds")
     }
 
     fun removeGraph(name: String) {
@@ -86,7 +86,7 @@ class Neo4jRepository<V>(uri: String, user: String, password: String) : Closeabl
             return
         }
         tx.run(
-            "OPTIONAL MATCH (n: $name)" +
+            "OPTIONAL MATCH (n: `$name`)" +
                     "OPTIONAL MATCH (graph: Graph) WHERE graph.name = '$name'" +
                     "DETACH DELETE n, graph;"
         )
@@ -113,11 +113,11 @@ class Neo4jRepository<V>(uri: String, user: String, password: String) : Closeabl
         val graph: AbstractGraphViewModel<String>
         if (graphData["type"] == "Undirected") {
             graph = UndirectedGraphViewModel(graphData["name"].toString())
-        } else {
+        } else if (graphData["type"] == "Directed") {
             graph = DirectedGraphViewModel(graphData["name"].toString())
-        }
+        } else throw IllegalArgumentException("graph type in db isn't correct")
         val vertices = session.executeRead() { tx ->
-            val result = tx.run("MATCH (v: $graphName) RETURN v.value as value")
+            val result = tx.run("MATCH (v: `$graphName`) RETURN v.value as value")
             return@executeRead result.list() { it.asMap()["value"].toString() }
         }
         for (vertex in vertices) {
@@ -126,7 +126,7 @@ class Neo4jRepository<V>(uri: String, user: String, password: String) : Closeabl
         session.executeRead { tx ->
             for (vertex in vertices) {
                 val destinations =
-                    tx.run("MATCH (v: $graphName {value: '$vertex'})-[:Edge]->(n) RETURN n.value as destination")
+                    tx.run("MATCH (v: `$graphName` {value: '$vertex'})-[:Edge]->(n) RETURN n.value as destination")
                         .list() { it.asMap()["destination"].toString() }
                 for (destination in destinations) {
                     graph.addEdge(vertex, destination)
@@ -143,7 +143,9 @@ class Neo4jRepository<V>(uri: String, user: String, password: String) : Closeabl
             return@executeRead result.list() { it.asMap() }
         }
         for (graph in graphs) {
-            mainScreenViewModel.addGraph(graph["name"].toString(), graph["type"].toString())
+            val graphType =
+                if (graph["type"] == "Undirected") GraphType.Undirected else GraphType.Directed
+            mainScreenViewModel.addGraph(graph["name"].toString(), graphType)
         }
     }
 

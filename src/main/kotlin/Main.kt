@@ -38,7 +38,6 @@ fun main() {
 
 @Composable
 fun App() {
-
     MaterialTheme() {
         Navigation()
     }

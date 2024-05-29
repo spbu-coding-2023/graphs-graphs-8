@@ -42,9 +42,9 @@ abstract class Graph<V>() {
     fun saveSQLite(name: String, type: String, bdName: String) {
         var parameterCreate = "( Vertexes String,"
         var parameterInput = "( Vertexes,"
-        var create = ("CREATE TABLE $name")
-        val createIndex = ("CREATE TABLE BEBRA_KILLER (name TEXT, type TEXT);")
-        val insertIndex = ("INSERT INTO BEBRA_KILLER (name, type) VALUES('$name', '$type');")
+        var create = ("CREATE TABLE '$name'")
+        val createIndex = ("CREATE TABLE IF NOT EXISTS Graphs (name TEXT, type TEXT);")
+        val insertIndex = ("INSERT INTO Graphs (name, type) VALUES('$name', '$type');")
         for (i in graph.entries) {
             parameterCreate = "$parameterCreate V${i.key.toString()} INTEGER, "
             parameterInput = "$parameterInput V${i.key.toString()},"
@@ -56,14 +56,13 @@ abstract class Graph<V>() {
         create = create + parameterCreate + ";"
         val connection = DriverManager.getConnection("$DB_DRIVER:$bdName.db")
             ?: throw SQLException("Cannot connect to database")
-        val delTable = "DROP TABLE $name"
-        val delIndexRec = "DELETE FROM BEBRA_KILLER WHERE name='$name';"
+        val delTable = "DROP TABLE IF EXISTS '$name';"
+        val delIndexRec = "DELETE FROM Graphs WHERE name='$name';"
         connection.createStatement().also { stmt ->
             try {
                 stmt.execute(delTable)
-                println("Tables created or already exists")
             } catch (ex: Exception) {
-                println("Cannot create table in database")
+                println("Can't delete old table of graph")
                 println(ex)
             } finally {
                 stmt.close()
@@ -72,9 +71,8 @@ abstract class Graph<V>() {
         connection.createStatement().also { stmt ->
             try {
                 stmt.execute(delIndexRec)
-                println("Tables created or already exists")
             } catch (ex: Exception) {
-                println("Cannot create table in database")
+                println("Can't delete graph entry from Graphs")
                 println(ex)
             } finally {
                 stmt.close()
@@ -82,8 +80,8 @@ abstract class Graph<V>() {
         }
         connection.createStatement().also { stmt ->
             try {
-                stmt.execute(create)
                 stmt.execute(createIndex)
+                stmt.execute(create)
                 println("Tables created or already exists")
             } catch (ex: Exception) {
                 println("Cannot create table in database")
@@ -103,7 +101,7 @@ abstract class Graph<V>() {
             }
         }
 
-        var request = "INSERT INTO $name $parameterInput VALUES "
+        var request = "INSERT INTO '$name' $parameterInput VALUES "
         for (i in graph.entries) {
             var record = "( 'V${i.key}', "
             val recList = emptyMap<V, String>().toMutableMap()

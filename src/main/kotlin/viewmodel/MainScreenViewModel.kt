@@ -3,6 +3,7 @@ package viewmodel
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import mu.KotlinLogging
 import view.screens.SettingType
@@ -18,33 +19,33 @@ enum class GraphType() {
 
 private val logger = KotlinLogging.logger { }
 
-class MainScreenViewModel(val saveType: String = getSetting(SettingType.BD)) : ViewModel() {
+class MainScreenViewModel() : ViewModel() {
+    var saveType by mutableStateOf(getSetting(SettingType.BD))
     val graphs by mutableStateOf(mutableMapOf<String, AbstractGraphViewModel<String>>())
-    val graphsNames = mutableStateListOf<String>()
+    val graphNames = mutableStateListOf<String>()
     internal var inited = false
 
-    fun addGraph(name: String, type: String) {
-        if (graphsNames.contains(name)) {
+    fun addGraph(name: String, type: GraphType) {
+        if (graphNames.contains(name)) {
             return
         }
         val graphVM: AbstractGraphViewModel<String>
         when (type) {
-            "undirected" -> {
+            GraphType.Undirected -> {
                 graphVM = UndirectedGraphViewModel(name)
 
             }
 
-            else -> {
+            GraphType.Directed -> {
                 graphVM = DirectedGraphViewModel(name)
             }
         }
         graphs[name] = graphVM
-        graphsNames.add(name)
+        graphNames.add(name)
     }
 
     fun saveGraph(name: String, bdName: String = "storage") {
         try {
-
             val graphVM = getGraph(name)
             if (saveType == "sqlite") {
                 graphVM.model.saveSQLite(name, graphVM.graphType.toString(), bdName)
@@ -66,11 +67,11 @@ class MainScreenViewModel(val saveType: String = getSetting(SettingType.BD)) : V
             ?: throw IllegalStateException("Can't find graph with name $name")
     }
 
-    fun initGraph(name: String, sourceSQLite: String) {
+    fun loadGraph(name: String, bdName: String) {
         val graphVM = getGraph(name)
         if (graphVM.isInited) return
         if (saveType == "sqlite") {
-            SQLiteRepository.initGraph(graphVM, sourceSQLite)
+            SQLiteRepository.loadGraph(graphVM, bdName)
         } else if (saveType == "neo4j") {
             val rep = Neo4jRepository<String>(
                 getSetting(SettingType.NEO4JURI),
@@ -83,9 +84,11 @@ class MainScreenViewModel(val saveType: String = getSetting(SettingType.BD)) : V
 
     }
 
-    fun initGraphList(sourceSQLite: String) {
+    fun initGraphList(bdName: String = "storage") {
+        saveType = getSetting(SettingType.BD)
+        clear()
         if (saveType == "sqlite") {
-            SQLiteRepository.initGraphList("storage", this)
+            SQLiteRepository.initGraphList(bdName, this)
         } else if (saveType == "neo4j") {
             val rep = try {
                 Neo4jRepository<String>(
@@ -118,6 +121,11 @@ class MainScreenViewModel(val saveType: String = getSetting(SettingType.BD)) : V
             rep.removeGraph(name)
         }
         graphs.remove(name)
-        graphsNames.remove(name)
+        graphNames.remove(name)
+    }
+
+    fun clear() {
+        graphs.clear()
+        graphNames.clear()
     }
 }

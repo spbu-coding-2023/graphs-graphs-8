@@ -14,6 +14,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.DialogWindow
 import androidx.compose.ui.window.rememberDialogState
+import localisation.getLocalisation
 import localisation.localisation
 import viewmodel.graph.AbstractGraphViewModel
 
@@ -29,16 +30,16 @@ fun AddVertexDialog(
         visible = visible,
         title = "New Vertices",
         onCloseRequest = onClose,
-        state = rememberDialogState(height = 420.dp, width = 800.dp)
+        state = rememberDialogState(height = 340.dp, width = 560.dp)
     ) {
         var verticesNumber by remember { mutableStateOf("1") }
-        val textWidth = 130.dp
+        val language = getLocalisation()
         Column(modifier = Modifier.padding(30.dp, 24.dp)) {
             Row(modifier = Modifier.fillMaxWidth()) {
                 Text(
                     text = localisation("number"),
                     style = defaultStyle,
-                    modifier = Modifier.align(Alignment.CenterVertically).width(textWidth),
+                    modifier = Modifier.align(Alignment.CenterVertically).width(180.dp),
                 )
                 TextField(
                     modifier = Modifier
@@ -59,7 +60,7 @@ fun AddVertexDialog(
                     },
                 )
             }
-            Spacer(modifier = Modifier.height(20.dp))
+            Spacer(modifier = Modifier.height(30.dp))
             Row {
                 Checkbox(
                     modifier = Modifier.align(Alignment.CenterVertically),
@@ -72,7 +73,7 @@ fun AddVertexDialog(
                     modifier = Modifier.align(Alignment.CenterVertically)
                 )
             }
-            Spacer(modifier = Modifier.height(20.dp))
+            Spacer(modifier = Modifier.height(30.dp))
             Row {
                 val onClick = {
                     if (verticesNumber == "") verticesNumber = "1"
@@ -83,7 +84,7 @@ fun AddVertexDialog(
                     visible = false
 
                 }
-                DefaultButton(onClick, "add_edge", defaultStyle)
+                DefaultButton(onClick, "add", defaultStyle)
                 Spacer(modifier = Modifier.width(30.dp))
                 DefaultButton(onClose, "back", defaultStyle, Color.Red)
             }

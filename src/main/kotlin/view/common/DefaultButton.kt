@@ -19,7 +19,7 @@ fun DefaultButton(
     onClick: () -> Unit,
     localisationCode: String,
     style: TextStyle = defaultStyle,
-    color: Color = DefaultColors.primary,
+    color: Color = DefaultColors.primaryBright,
     width: androidx.compose.ui.unit.Dp = 240.dp,
     height: androidx.compose.ui.unit.Dp = 80.dp,
 ) {

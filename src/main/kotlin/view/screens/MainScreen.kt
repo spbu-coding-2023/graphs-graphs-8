@@ -35,13 +35,11 @@ fun MainScreen(navController: NavController, mainScreenViewModel: MainScreenView
     var search by remember { mutableStateOf("") }
     var graphName by remember { mutableStateOf("") }
     val dialogState = remember { mutableStateOf(false) }
-    val optionsDropDown = listOf("undirected", "directed")
     val expandedDropDown = remember { mutableStateOf(false) }
-    val selectedOptionTextDropDown = remember { mutableStateOf(optionsDropDown[0]) }
-
+    var selectedOptionTextDropDown = remember { GraphType.Undirected }
 
     if (!mainScreenViewModel.inited) {
-        mainScreenViewModel.initGraphList("storage")
+        mainScreenViewModel.initGraphList()
     }
     Column(modifier = Modifier.fillMaxSize().background(DefaultColors.background).padding(16.dp)) {
         Row(modifier = Modifier.fillMaxWidth().height(100.dp)) {
@@ -56,7 +54,7 @@ fun MainScreen(navController: NavController, mainScreenViewModel: MainScreenView
                     .fillMaxHeight()
                     .border(
                         width = 4.dp,
-                        color = DefaultColors.primary,
+                        color = DefaultColors.primaryBright,
                         shape = RoundedCornerShape(45.dp)
                     ),
                 shape = RoundedCornerShape(45.dp),
@@ -85,7 +83,7 @@ fun MainScreen(navController: NavController, mainScreenViewModel: MainScreenView
                     .size(100.dp)
                     .clip(shape = RoundedCornerShape(45.dp))
                     .clickable { }
-                    .background(DefaultColors.primary)
+                    .background(DefaultColors.primaryBright)
                     .border(
                         width = 5.dp,
                         color = Color.Black,
@@ -108,7 +106,7 @@ fun MainScreen(navController: NavController, mainScreenViewModel: MainScreenView
                     .size(100.dp)
                     .clip(shape = RoundedCornerShape(45.dp))
                     .clickable { }
-                    .background(DefaultColors.primary)
+                    .background(DefaultColors.primaryBright)
                     .border(
                         width = 5.dp,
                         color = Color.Black,
@@ -170,14 +168,14 @@ fun MainScreen(navController: NavController, mainScreenViewModel: MainScreenView
                     .width(300.dp)
                     .height(60.dp),
                 shape = RoundedCornerShape(25.dp),
-                colors = if (graphName != "") ButtonDefaults.buttonColors(backgroundColor = DefaultColors.simpleGreen) else ButtonDefaults.buttonColors(
-                    backgroundColor = DefaultColors.darkGreen
+                colors = if (graphName != "") ButtonDefaults.buttonColors(backgroundColor = DefaultColors.pinkBright) else ButtonDefaults.buttonColors(
+                    backgroundColor = DefaultColors.pinkDark
                 ),
                 onClick = {
                     if (graphName != "") {
                         mainScreenViewModel.addGraph(
                             graphName,
-                            selectedOptionTextDropDown.value,
+                            selectedOptionTextDropDown,
                         )
                         mainScreenViewModel.saveGraph(graphName)
                         graphName = ""
@@ -222,7 +220,7 @@ fun MainScreen(navController: NavController, mainScreenViewModel: MainScreenView
                     .clickable { expandedDropDown.value = !expandedDropDown.value },
             ) {
                 Text(
-                    text = selectedOptionTextDropDown.value,
+                    text = selectedOptionTextDropDown.toString(),
                     fontSize = 20.sp,
                     modifier = Modifier.padding(start = 20.dp)
                 )
@@ -234,33 +232,31 @@ fun MainScreen(navController: NavController, mainScreenViewModel: MainScreenView
                     expanded = expandedDropDown.value,
                     onDismissRequest = { expandedDropDown.value = false }
                 ) {
-                    optionsDropDown.forEach { selectionOption ->
+                    GraphType.entries.forEach { selectedOption ->
                         DropdownMenuItem(
                             onClick = {
-                                selectedOptionTextDropDown.value = selectionOption
+                                selectedOptionTextDropDown = selectedOption
                                 expandedDropDown.value = false
                             }
                         ) {
-                            Text(text = localisation(selectionOption))
+                            Text(text = localisation(selectedOption.toString().lowercase()))
                         }
                     }
                 }
             }
-
-
         }
 
         Spacer(modifier = Modifier.height(30.dp))
 
         LazyColumn(modifier = Modifier.fillMaxWidth()) {
-            itemsIndexed(mainScreenViewModel.graphsNames) { index, name ->
+            itemsIndexed(mainScreenViewModel.graphNames) { _, name ->
                 if (!name.startsWith(search)) return@itemsIndexed
                 // To GraphScreen
                 val graphVM = mainScreenViewModel.getGraph(name)
                 Row(modifier = Modifier.padding(vertical = 15.dp)) {
                     Button(
                         onClick = {
-                            mainScreenViewModel.initGraph(name, "storage")
+                            mainScreenViewModel.loadGraph(name, "storage")
                             if (graphVM.graphType == GraphType.Undirected) {
                                 navController.navigate(
                                     "${Screen.UndirectedGraphScreen.route}/$name"
@@ -279,22 +275,25 @@ fun MainScreen(navController: NavController, mainScreenViewModel: MainScreenView
                                 color = Color.Black,
                                 shape = RoundedCornerShape(45.dp)
                             ),
-                        colors = ButtonDefaults.buttonColors(backgroundColor = if (graphVM.graphType == GraphType.Undirected) DefaultColors.primary
-                        else Color.Cyan
-                        )) {
-                        Row{
-                             Column (modifier = Modifier.align(Alignment.CenterVertically)){
+                        colors = ButtonDefaults.buttonColors(
+                            backgroundColor = DefaultColors.primaryBright
+                        )
+                    ) {
+                        Row {
+                            Column(modifier = Modifier.align(Alignment.CenterVertically)) {
                                 Image(
-                                    bitmap = if (graphVM.graphType == GraphType.Directed) loadImageBitmap(File("src/main/resources/directed.png").inputStream())
+                                    bitmap = if (graphVM.graphType == GraphType.Directed) loadImageBitmap(
+                                        File("src/main/resources/directed.png").inputStream()
+                                    )
                                     else loadImageBitmap(File("src/main/resources/undirected.png").inputStream()),
                                     contentDescription = "Type",
 
                                     modifier = Modifier
                                         .padding(15.dp)
                                         .align(Alignment.End),
-                                    )
+                                )
                             }
-                            Column (modifier = Modifier.align(Alignment.CenterVertically)){
+                            Column(modifier = Modifier.align(Alignment.CenterVertically)) {
                                 Text(
                                     text = name,
                                     style = bigStyle,

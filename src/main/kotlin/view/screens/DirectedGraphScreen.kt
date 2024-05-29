@@ -85,19 +85,27 @@ fun DirectedGraphScreen(
         // Add vertex Button
         DefaultShortButton(
             { isOpenedVertexMenu = !isOpenedVertexMenu }, "add_vertex", when (language) {
-                ("en-US") -> defaultStyle
-                ("ru-RU") -> smallSize
+                ("ru-RU") -> microStyle
                 else -> defaultStyle
             }
         )
         Spacer(modifier = Modifier.height(10.dp))
 
         // Add edge Button
-        DefaultShortButton({ isOpenedEdgeMenu = !isOpenedEdgeMenu }, "open_edge", defaultStyle)
+        DefaultShortButton(
+            { isOpenedEdgeMenu = !isOpenedEdgeMenu }, "add_edge", when (language) {
+                ("ru-RU") -> smallStyle
+                else -> defaultStyle
+            }
+        )
         Spacer(modifier = Modifier.height(10.dp))
 
         // Save button
-        DefaultShortButton({ mainScreenViewModel.saveGraph(graphVM.name) }, "save")
+        DefaultShortButton(
+            { mainScreenViewModel.saveGraph(graphVM.name) },
+            "save",
+            color = DefaultColors.greenBright
+        )
         Spacer(modifier = Modifier.height(16.dp))
 
         // Visualization Button
@@ -113,14 +121,14 @@ fun DirectedGraphScreen(
                     scope.coroutineContext.cancelChildren()
                 }
             }, "visualize", defaultStyle,
-            if (isVisualizationRunning) Color.Red else Color(0xffFFCB32)
+            if (isVisualizationRunning) Color.Red else Color(0xffFFB300)
         )
         Spacer(modifier = Modifier.height(10.dp))
 
         DefaultShortButton(
             { graphVM.resetColors() }, "reset", when (language) {
                 ("en-US") -> defaultStyle
-                ("ru-RU") -> smallSize
+                ("ru-RU") -> smallStyle
                 else -> defaultStyle
             }, Color.LightGray
         )
@@ -129,14 +137,14 @@ fun DirectedGraphScreen(
         DefaultShortButton(
             { graphVM.drawBetweennessCentrality() },
             "betweenness_centrality",
-            microSize
+            microStyle
         )
         Spacer(modifier = Modifier.height(10.dp))
 
         DefaultShortButton(
             { graphVM.chinaWhisperCluster() }, "find_clusters", when (language) {
                 ("en-US") -> defaultStyle
-                ("ru-RU") -> smallSize
+                ("ru-RU") -> smallStyle
                 else -> defaultStyle
             }
         )
@@ -144,9 +152,9 @@ fun DirectedGraphScreen(
 
         DefaultShortButton(
             { graphVM.drawStrongConnections() }, "find_strong_connections", when (language) {
-                ("en-US") -> smallSize
-                ("ru-RU") -> microSize
-                ("cn-CN") -> microSize
+                ("en-US") -> smallStyle
+                ("ru-RU") -> microStyle
+                ("cn-CN") -> microStyle
                 else -> defaultStyle
             }
         )
@@ -156,8 +164,8 @@ fun DirectedGraphScreen(
         DefaultShortButton(
             { isOpenedDijkstraMenu = !isOpenedDijkstraMenu }, "dijkstra", when (language) {
                 ("en-US") -> defaultStyle
-                ("ru-RU") -> smallSize
-                ("cn-CN") -> smallSize
+                ("ru-RU") -> microStyle
+                ("cn-CN") -> smallStyle
                 else -> defaultStyle
             }
         )
@@ -169,8 +177,8 @@ fun DirectedGraphScreen(
             "ford_bellman",
             when (language) {
                 ("en-US") -> defaultStyle
-                ("ru-RU") -> microSize
-                ("cn-CN") -> smallSize
+                ("ru-RU") -> microStyle
+                ("cn-CN") -> smallStyle
                 else -> defaultStyle
             }
         )
@@ -180,7 +188,7 @@ fun DirectedGraphScreen(
         DefaultShortButton(
             onClick = { graphVM.drawCycles("1") }, "find_cycles", when (language) {
                 ("en-US") -> defaultStyle
-                ("ru-RU") -> mediumSize
+                ("ru-RU") -> mediumStyle
                 else -> defaultStyle
             }
         )
