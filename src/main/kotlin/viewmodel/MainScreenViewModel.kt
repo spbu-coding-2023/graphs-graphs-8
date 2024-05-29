@@ -1,208 +1,124 @@
 package viewmodel
 
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
-import java.sql.DriverManager
-import java.sql.SQLException
-
-enum class SaveType {
-    SQLite,
-    CSV,
-    Neo4j,
-    Internal
-}
+import mu.KotlinLogging
+import view.screens.SettingType
+import view.screens.getSetting
+import viewmodel.graph.AbstractGraphViewModel
+import viewmodel.io.Neo4jRepository
+import viewmodel.io.SQLiteRepository
+import kotlin.math.log
 
 enum class GraphType() {
     Undirected,
     Directed,
 }
 
-class MainScreenViewModel : ViewModel() {
-    val graphs = GraphStorage()
+private val logger = KotlinLogging.logger { }
+
+class MainScreenViewModel(val saveType: String = getSetting(SettingType.BD)) : ViewModel() {
+    val graphs by mutableStateOf(mutableMapOf<String, AbstractGraphViewModel<String>>())
+    val graphsNames = mutableStateListOf<String>()
     internal var inited = false
-    private val DB_DRIVER = "jdbc:sqlite"
-    fun addGraph(name: String, type: String, saveType: SaveType) {
+
+    fun addGraph(name: String, type: String) {
+        if (graphsNames.contains(name)) {
+            return
+        }
+        val graphVM: AbstractGraphViewModel<String>
         when (type) {
             "undirected" -> {
-                graphs.typeList.add(GraphType.Undirected)
-                val graphVM = UndirectedGraphViewModel<String>(name)
-                graphVM.saveType = saveType
-                graphs.undirectedGraphs.add(graphVM)
+                graphVM = UndirectedGraphViewModel(name)
+
             }
 
-            "directed" -> {
-                graphs.typeList.add(GraphType.Directed)
-                val graphVM = DirectedGraphViewModel<String>(name)
-                graphVM.saveType = saveType
-                graphs.directedGraphs.add(graphVM)
+            else -> {
+                graphVM = DirectedGraphViewModel(name)
             }
+        }
+        graphs[name] = graphVM
+        graphsNames.add(name)
+    }
 
+    fun saveGraph(name: String, bdName: String = "storage") {
+        try {
+
+            val graphVM = getGraph(name)
+            if (saveType == "sqlite") {
+                graphVM.model.saveSQLite(name, graphVM.graphType.toString(), bdName)
+            } else if (saveType == "neo4j") {
+                val rep = Neo4jRepository<String>(
+                    getSetting(SettingType.NEO4JURI),
+                    getSetting(SettingType.NEO4JUSER),
+                    getSetting(SettingType.NEO4JPASSWORD)
+                )
+                rep.saveGraph(graphVM)
+            }
+        } catch (e: Exception) {
+            logger.error { "Can't save graph: $name" }
         }
     }
 
-    fun initModel(index: Int, source: String) {
-        if (graphs.typeList[index] == GraphType.Directed) {
-            val graph = graphs.getDirected(index)
-            if (graph.initedGraph) return
-            else graph.initedGraph = true
-            if (graph.saveType == SaveType.SQLite) {
-                val connection = DriverManager.getConnection("$DB_DRIVER:$source.db")
-                val getGraphs by lazy { connection.prepareStatement("SELECT * FROM ${graph.name}") }
-                val getVertex by lazy { connection.prepareStatement("SELECT Vertexes FROM ${graph.name}") }
-                val resVertex = getVertex.executeQuery()
-                val resEdges = getGraphs.executeQuery()
-                while (resVertex.next()) {
-                    var vertexName = resVertex.getString("Vertexes")
-                    if (vertexName.length > 1) vertexName =
-                        vertexName.slice(1..vertexName.length - 1)
-                    graph.addVertex(vertexName)
-                }
-                while (resEdges.next()) {
-                    for (i in graph.graph.vertices) {
-                        val weight = resEdges.getString("V$i")
-                        var to = resEdges.getString("Vertexes")
-                        to = to.slice(1..<to.length)
-                        println(weight)
-                        if (weight != null) {
-                            graph.addEdge(to, i, weight.toInt())
-                        }
-                    }
-                }
-            }
-        }
-        if (graphs.typeList[index] == GraphType.Undirected) {
-            val graph = graphs.getUndirected(index)
-            if (graph.initedGraph) return
-            else graph.initedGraph = true
-            if (graph.saveType == SaveType.SQLite) {
-                val connection = DriverManager.getConnection("$DB_DRIVER:storage.db")
-                val getGraphs by lazy { connection.prepareStatement("SELECT * FROM ${graph.name}") }
-                val getVertex by lazy { connection.prepareStatement("SELECT Vertexes FROM ${graph.name}") }
-                val resVertex = getVertex.executeQuery()
-                val resEdges = getGraphs.executeQuery()
-                while (resVertex.next()) {
-                    var vertexName = resVertex.getString("Vertexes")
-                    if (vertexName.length > 1) vertexName =
-                        vertexName.slice(1..vertexName.length - 1)
-                    graph.addVertex(vertexName)
-                }
-                while (resEdges.next()) {
-                    for (i in graph.graph.vertices) {
-                        val weight = resEdges.getString("V$i")
-                        var to = resEdges.getString("Vertexes")
-                        to = to.slice(1..<to.length)
-                        if (weight != null) {
-                            graph.addEdge(to, i, weight.toInt())
-                        }
-                    }
-                }
-            }
-        }
+    fun getGraph(name: String): AbstractGraphViewModel<String> {
+        return graphs[name]
+            ?: throw IllegalStateException("Can't find graph with name $name")
     }
 
-    fun graphInit(source: String) {
-        val DB_DRIVER = "jdbc:sqlite"
-        val connection = DriverManager.getConnection("$DB_DRIVER:$source.db")
-            ?: throw SQLException("Cannot connect to database")
-        val createIndex = ("CREATE TABLE BEBRA_KILLER (name TEXT, type TEXT);")
+    fun initGraph(name: String, sourceSQLite: String) {
+        val graphVM = getGraph(name)
+        if (graphVM.isInited) return
+        if (saveType == "sqlite") {
+            SQLiteRepository.initGraph(graphVM, sourceSQLite)
+        } else if (saveType == "neo4j") {
+            val rep = Neo4jRepository<String>(
+                getSetting(SettingType.NEO4JURI),
+                getSetting(SettingType.NEO4JUSER),
+                getSetting(SettingType.NEO4JPASSWORD)
+            )
+            graphs[name] = rep.getGraph(name)
+        }
+        graphVM.isInited = true
 
-        connection.createStatement().also { stmt ->
+    }
+
+    fun initGraphList(sourceSQLite: String) {
+        if (saveType == "sqlite") {
+            SQLiteRepository.initGraphList("storage", this)
+        } else if (saveType == "neo4j") {
+            val rep = try {
+                Neo4jRepository<String>(
+                    getSetting(SettingType.NEO4JURI),
+                    getSetting(SettingType.NEO4JUSER),
+                    getSetting(SettingType.NEO4JPASSWORD)
+                )
+            } catch (e: Exception) {
+                logger.info { "Could not start a neo4j session in repository with given data" }
+                return
+            }
+            rep.initGraphList(this)
+        }
+        inited = true
+    }
+
+    fun removeGraph(name: String) {
+        if (saveType == "sqlite") {
             try {
-                stmt.execute(createIndex)
-                println("Tables created or already exists")
-            } catch (ex: Exception) {
-                println("Cannot create table in database")
-                println(ex)
-            } finally {
-                stmt.close()
-            }
-        }
-        val getGraphs by lazy { connection.prepareStatement("SELECT * FROM BEBRA_KILLER") }
-        val resSet = getGraphs.executeQuery()
-        while (resSet.next()) {
-            if (resSet.getString("type") == "Directed") {
-                addGraph(resSet.getString("name"), "directed", SaveType.SQLite)
-            } else if (resSet.getString("type") == "Undirected") {
-                addGraph(resSet.getString("name"), "undirected", SaveType.SQLite)
-            }
-        }
-        connection.close()
-    }
-
-    enum class graphType() {
-        Undirected,
-        Directed,
-    }
-
-    inner class GraphStorage() {
-        fun getName(index: Int): String {
-            when (graphs.typeList[index]) {
-                GraphType.Undirected -> {
-                    return graphs.undirectedGraphs[findGraph(index)].name
-                }
-
-                GraphType.Directed -> {
-                    return graphs.directedGraphs[findGraph(index)].name
-                }
-            }
-        }
-
-        internal fun findGraph(index: Int): Int {
-            var indexAr = 0
-            when (graphs.typeList[index]) {
-                GraphType.Undirected -> {
-                    for (i in 0..index) if (graphs.typeList[i] == GraphType.Undirected) indexAr += 1
-                }
-
-                GraphType.Directed -> {
-                    for (i in 0..index) if (graphs.typeList[i] == GraphType.Directed) indexAr += 1
-                }
-            }
-            return indexAr - 1
-        }
-
-        fun removeGraph(index: Int) {
-            val DB_DRIVER = "jdbc:sqlite"
-            val delTable = "DROP TABLE ${getName(index)}"
-            val delIndexRec = "DELETE FROM BEBRA_KILLER WHERE name='${getName(index)}';"
-            val connection = DriverManager.getConnection("$DB_DRIVER:storage.db")
-                ?: throw SQLException("Cannot connect to database")
-            connection.createStatement().also { stmt ->
-                try {
-                    stmt.execute(delTable)
-                    stmt.execute(delIndexRec)
-                    println("Tables created or already exists")
-                } catch (ex: Exception) {
-                    println("Cannot create table in database")
-                    println(ex)
-                } finally {
-                    stmt.close()
-                }
-            }
-            when (graphs.typeList[index]) {
-                GraphType.Undirected -> {
-                    graphs.undirectedGraphs.removeAt(findGraph(index))
-                    graphs.typeList.removeAt(index)
-                }
-
-                GraphType.Directed -> {
-                    graphs.directedGraphs.removeAt(findGraph(index))
-                    graphs.typeList.removeAt(index)
-                }
+                SQLiteRepository.removeGraph(name)
+            } catch (e: Exception) {
             }
 
+        } else if (saveType == "neo4j") {
+            val rep = Neo4jRepository<String>(
+                getSetting(SettingType.NEO4JURI),
+                getSetting(SettingType.NEO4JUSER),
+                getSetting(SettingType.NEO4JPASSWORD)
+            )
+            rep.removeGraph(name)
         }
-
-        fun getUndirected(index: Int): UndirectedGraphViewModel<String> {
-            return undirectedGraphs[findGraph(index)]
-        }
-
-        fun getDirected(index: Int): DirectedGraphViewModel<String> {
-            return directedGraphs[findGraph(index)]
-        }
-
-        var undirectedGraphs = mutableStateListOf<UndirectedGraphViewModel<String>>()
-        var directedGraphs = mutableStateListOf<DirectedGraphViewModel<String>>()
-        var typeList = mutableStateListOf<GraphType>()
+        graphs.remove(name)
+        graphsNames.remove(name)
     }
 }

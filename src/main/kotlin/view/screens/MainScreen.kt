@@ -30,6 +30,7 @@ import viewmodel.MainScreenViewModel
 import viewmodel.SaveType
 import java.io.File
 
+
 @Composable
 fun MainScreen(navController: NavController, mainScreenViewModel: MainScreenViewModel) {
     var search by remember { mutableStateOf("") }
@@ -39,9 +40,9 @@ fun MainScreen(navController: NavController, mainScreenViewModel: MainScreenView
     val expandedDropDown = remember { mutableStateOf(false) }
     val selectedOptionTextDropDown = remember { mutableStateOf(optionsDropDown[0]) }
 
+
     if (!mainScreenViewModel.inited) {
-        mainScreenViewModel.graphInit("storage")
-        mainScreenViewModel.inited = true
+        mainScreenViewModel.initGraphList("storage")
     }
     Column(modifier = Modifier.fillMaxSize().background(DefaultColors.background).padding(16.dp)) {
         Row(modifier = Modifier.fillMaxWidth().height(100.dp)) {
@@ -178,8 +179,8 @@ fun MainScreen(navController: NavController, mainScreenViewModel: MainScreenView
                         mainScreenViewModel.addGraph(
                             graphName,
                             selectedOptionTextDropDown.value,
-                            SaveType.Internal
                         )
+                        mainScreenViewModel.saveGraph(graphName)
                         graphName = ""
                         dialogState.value = false
                     }
@@ -253,29 +254,20 @@ fun MainScreen(navController: NavController, mainScreenViewModel: MainScreenView
         Spacer(modifier = Modifier.height(30.dp))
 
         LazyColumn(modifier = Modifier.fillMaxWidth()) {
-            itemsIndexed(mainScreenViewModel.graphs.typeList) { index, _ ->
-                if (!mainScreenViewModel.graphs.getName(index)
-                        .startsWith(search)
-                ) return@itemsIndexed
+            itemsIndexed(mainScreenViewModel.graphsNames) { index, name ->
+                if (!name.startsWith(search)) return@itemsIndexed
                 // To GraphScreen
+                val graphVM = mainScreenViewModel.getGraph(name)
                 Row(modifier = Modifier.padding(vertical = 15.dp)) {
                     Button(
                         onClick = {
-                            if (mainScreenViewModel.graphs.typeList[index] == GraphType.Directed) {
-                                mainScreenViewModel.initModel(index, "storage")
-                            }
-                            if (mainScreenViewModel.graphs.typeList[index] == GraphType.Undirected) {
-                                mainScreenViewModel.initModel(index, "storage")
-                            }
-                            navController.navigate(
-                                when (mainScreenViewModel.graphs.typeList[index]) {
-                                    GraphType.Undirected -> {
-                                        "${Screen.UndirectedGraphScreen.route}/$index"
-                                    }
-
-                                    GraphType.Directed -> "${Screen.DirectedGraphScreen.route}/$index"
-
-                                }
+                            mainScreenViewModel.initGraph(name, "storage")
+                            if (graphVM.graphType == GraphType.Undirected) {
+                                navController.navigate(
+                                    "${Screen.UndirectedGraphScreen.route}/$name"
+                                )
+                            } else navController.navigate(
+                                "${Screen.DirectedGraphScreen.route}/$name"
                             )
                         },
                         modifier = Modifier
@@ -311,13 +303,14 @@ fun MainScreen(navController: NavController, mainScreenViewModel: MainScreenView
                                 )
                             }
                         }
+
                     }
 
                     Spacer(modifier = Modifier.width(10.dp))
 
                     // Remove Graph
                     IconButton(
-                        onClick = { mainScreenViewModel.graphs.removeGraph(index) },
+                        onClick = { mainScreenViewModel.removeGraph(name) },
                         modifier = Modifier
                             .padding(horizontal = 10.dp)
                             .size(100.dp)

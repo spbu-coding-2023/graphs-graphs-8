@@ -21,8 +21,6 @@ class DirectedGraphViewModel<V>(
     val graph: DirectedGraph<V> = DirectedGraph()
 ) : AbstractGraphViewModel<V>(name, graph) {
 
-    private val DB_DRIVER = "jdbc:sqlite"
-    var initedGraph = false
     override val graphType = GraphType.Directed
 
     override fun addEdge(from: V, to: V, weight: Int) {
