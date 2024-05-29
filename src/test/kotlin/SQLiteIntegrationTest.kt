@@ -1,4 +1,3 @@
-
 import model.graph.DirectedGraph
 import model.graph.Edge
 import viewmodel.MainScreenViewModel
@@ -23,16 +22,16 @@ internal class SQLiteIntegrationTest {
             this.addEdge(2, 3, 3)
             this.addEdge(3, 4, 1)
         }
-        graph.saveSQLite("TEST_DEFAULT", "Directed", "test")
+        graph.saveSQLite("someName", "Directed", "test")
 
-        val graphVM = MainScreenViewModel()
-        graphVM.graphInit("test")
-        graphVM.initModel(0, "test")
-        val loadedGraph = graphVM.graphs.getDirected(0).graph
-        val result = Dijkstra(loadedGraph, 4).dijkstra("1", "4")
+        val mainScreenVM = MainScreenViewModel("sqlite")
+        mainScreenVM.initGraphList("test")
+        mainScreenVM.initGraph("someName", "test")
+        val loadedGraph = mainScreenVM.getGraph("someName")
+        val result = Dijkstra(loadedGraph.model, 4).dijkstra("1", "4")
         val shortestLengthExpected = 6
         var shortestLengthActual = 0
-        for (i in result){
+        for (i in result) {
             shortestLengthActual += i.weight
         }
         assertNotNull(shortestLengthActual)

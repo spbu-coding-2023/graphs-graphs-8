@@ -21,8 +21,20 @@
       "localisation": "Add vertex"
     },
     {
+      "code": "saving",
+      "localisation": "Saving"
+    },
+    {
+      "code": "language",
+      "localisation": "Language"
+    },
+    {
+      "code": "neo4j_data",
+      "localisation": "Neo4j data"
+    },
+    {
       "code": "open_edge",
-      "localisation":"Add edge"
+      "localisation": "Add edge"
     },
     {
       "code": "add_edge",

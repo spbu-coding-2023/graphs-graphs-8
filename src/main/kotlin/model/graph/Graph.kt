@@ -39,10 +39,10 @@ abstract class Graph<V>() {
         return graph[vertex]?.size ?: 0
     }
 
-    fun saveSQLite(name: String, type: String, bdName: String){
+    fun saveSQLite(name: String, type: String, bdName: String) {
         var parameterCreate = "( Vertexes String,"
         var parameterInput = "( Vertexes,"
-        var create = ("CREATE TABLE $name ")
+        var create = ("CREATE TABLE $name")
         val createIndex = ("CREATE TABLE BEBRA_KILLER (name TEXT, type TEXT);")
         val insertIndex = ("INSERT INTO BEBRA_KILLER (name, type) VALUES('$name', '$type');")
         for (i in graph.entries) {

@@ -1,4 +1,4 @@
-package viewmodel.io.neo4j
+package viewmodel.io
 
 
 import mu.KotlinLogging
@@ -6,6 +6,7 @@ import org.neo4j.driver.AuthTokens
 import org.neo4j.driver.GraphDatabase
 import org.neo4j.driver.TransactionContext
 import viewmodel.DirectedGraphViewModel
+import viewmodel.MainScreenViewModel
 import viewmodel.UndirectedGraphViewModel
 import viewmodel.graph.AbstractGraphViewModel
 import java.io.Closeable
@@ -15,6 +16,7 @@ import java.io.Closeable
 private val logger = KotlinLogging.logger { }
 
 class Neo4jRepository<V>(uri: String, user: String, password: String) : Closeable {
+
     val driver = GraphDatabase.driver(uri, AuthTokens.basic(user, password))
     val session = driver.session()
 
@@ -23,7 +25,7 @@ class Neo4jRepository<V>(uri: String, user: String, password: String) : Closeabl
         val graphType = graphVM.graphType
         // remove old graph if exist
         session.executeWrite { tx ->
-            removeGraph(tx, graphVM)
+            removeGraph(tx, graphName)
         }
         // create graph
         session.executeWrite { tx ->
@@ -61,21 +63,21 @@ class Neo4jRepository<V>(uri: String, user: String, password: String) : Closeabl
                 )
             }
         }
+        println("fds")
     }
 
-    fun removeGraph(graphVM: AbstractGraphViewModel<V>) {
+    fun removeGraph(name: String) {
         session.executeWrite { tx ->
-            removeGraph(tx, graphVM)
+            removeGraph(tx, name)
         }
     }
 
     private fun removeGraph(
         tx: TransactionContext,
-        graphVM: AbstractGraphViewModel<V>,
+        name: String,
     ) {
-        val graphName = graphVM.name
         val check = tx.run(
-            "MATCH (graph: Graph) WHERE graph.name = '$graphName' RETURN graph.name as name;"
+            "MATCH (graph: Graph) WHERE graph.name = '$name' RETURN graph.name as name;"
         ).list()
 
         if (check.size == 0) return
@@ -84,9 +86,9 @@ class Neo4jRepository<V>(uri: String, user: String, password: String) : Closeabl
             return
         }
         tx.run(
-            "OPTIONAL MATCH (n: $graphName)" +
-                    "OPTIONAL MATCH (graph: Graph) WHERE graph.name = '$graphName'" +
-                    " DETACH DELETE n, graph;"
+            "OPTIONAL MATCH (n: $name)" +
+                    "OPTIONAL MATCH (graph: Graph) WHERE graph.name = '$name'" +
+                    "DETACH DELETE n, graph;"
         )
     }
 
@@ -106,7 +108,7 @@ class Neo4jRepository<V>(uri: String, user: String, password: String) : Closeabl
         val graphData = session.executeRead() { tx ->
             val result =
                 tx.run("MATCH (graph: Graph) WHERE graph.name = '$graphName' RETURN graph.name as name, graph.type as type")
-            return@executeRead result.single().asMap()
+            return@executeRead result.list().first().asMap()
         }
         val graph: AbstractGraphViewModel<String>
         if (graphData["type"] == "Undirected") {
@@ -132,6 +134,17 @@ class Neo4jRepository<V>(uri: String, user: String, password: String) : Closeabl
             }
         }
         return graph
+    }
+
+    fun initGraphList(mainScreenViewModel: MainScreenViewModel) {
+        val graphs = session.executeRead { tx ->
+            val result =
+                tx.run("MATCH (graph: Graph) RETURN graph.name as name, graph.type as type")
+            return@executeRead result.list() { it.asMap() }
+        }
+        for (graph in graphs) {
+            mainScreenViewModel.addGraph(graph["name"].toString(), graph["type"].toString())
+        }
     }
 
     fun clearDB() {

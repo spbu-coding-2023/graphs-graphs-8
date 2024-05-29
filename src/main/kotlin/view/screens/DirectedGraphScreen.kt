@@ -24,16 +24,16 @@ import kotlinx.coroutines.launch
 import model.algos.ForceAtlas2
 import view.common.*
 import view.graph.DirectedGraphView
+import viewmodel.DirectedGraphViewModel
 import viewmodel.MainScreenViewModel
 
 @OptIn(ExperimentalComposeUiApi::class, ExperimentalFoundationApi::class)
 @Composable
 fun DirectedGraphScreen(
-    navController: NavController,
     mainScreenViewModel: MainScreenViewModel,
-    graphId: Int
+    navController: NavController,
+    graphVM: DirectedGraphViewModel<String>
 ) {
-    val graphVM by mutableStateOf(mainScreenViewModel.graphs.getDirected(graphId))
 
     Box(
         modifier = Modifier
@@ -93,7 +93,7 @@ fun DirectedGraphScreen(
         Spacer(modifier = Modifier.height(10.dp))
 
         // Save button
-        DefaultShortButton({ graphVM.saveSQLite() }, "save")
+        DefaultShortButton({ mainScreenViewModel.saveGraph(graphVM.name) }, "save")
         Spacer(modifier = Modifier.height(16.dp))
 
         // Visualization Button
