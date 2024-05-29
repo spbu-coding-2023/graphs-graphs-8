@@ -6,9 +6,9 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.sp
 
 val defaultStyle = TextStyle(fontSize = 28.sp)
-val microDickSize = TextStyle(fontSize = 18.sp,  textAlign = TextAlign.Center)
-val smallDickSize = TextStyle(fontSize = 22.sp,  textAlign = TextAlign.Center)
-val mediumDickSize = TextStyle(fontSize = 26.sp,  textAlign = TextAlign.Center)
+val microSize = TextStyle(fontSize = 18.sp, textAlign = TextAlign.Center)
+val smallSize = TextStyle(fontSize = 22.sp, textAlign = TextAlign.Center)
+val mediumSize = TextStyle(fontSize = 26.sp, textAlign = TextAlign.Center)
 
 val bigStyle = TextStyle(fontSize = 50.sp)
 

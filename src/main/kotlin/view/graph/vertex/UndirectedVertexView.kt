@@ -13,9 +13,11 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.zIndex
 import view.graph.edge.UndirectedEdgeView
 import viewmodel.UndirectedGraphViewModel
 import viewmodel.graph.VertexViewModel
+import kotlin.math.min
 
 @Composable
 fun <V> UndirectedVertexView(vertexVM: VertexViewModel<V>, graphVM: UndirectedGraphViewModel<V>) {
@@ -48,6 +50,28 @@ fun <V> UndirectedVertexView(vertexVM: VertexViewModel<V>, graphVM: UndirectedGr
                 .wrapContentSize()
                 .offset(y = (-vertexVM.vertexSize / 10).dp),
         )
+        if (graphVM.visibleCentrality) {
+            Text(
+                "${vertexVM.centrality}", fontSize = (28 * graphVM.zoom).sp,
+                modifier = Modifier.wrapContentSize().offset(y = (-vertexVM.vertexSize - 10).dp)
+            )
+        }
+    }
+    if (graphVM.visibleCentrality) {
+        Box(modifier = Modifier.zIndex(-3f)) {
+            var centrality = vertexVM.centrality.toString()
+            centrality = centrality.substring(0, min(4, centrality.length))
+            Text(
+                centrality, fontSize = (28 * graphVM.zoom).sp,
+                color = Color.LightGray,
+                modifier = Modifier
+                    .wrapContentSize()
+                    .offset(
+                        x = (vertexVM.offsetX + vertexVM.vertexSize / 7 * graphVM.zoom).dp,
+                        y = (vertexVM.offsetY - vertexVM.vertexSize * 0.7 * graphVM.zoom).dp
+                    )
+            )
+        }
     }
 
     for (edgeVM in vertexVM.edges) {

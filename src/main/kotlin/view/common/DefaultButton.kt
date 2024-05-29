@@ -18,7 +18,7 @@ import localisation.localisation
 fun DefaultButton(
     onClick: () -> Unit,
     localisationCode: String,
-    style: TextStyle,
+    style: TextStyle = defaultStyle,
     color: Color = DefaultColors.primary,
     width: androidx.compose.ui.unit.Dp = 240.dp,
     height: androidx.compose.ui.unit.Dp = 80.dp,

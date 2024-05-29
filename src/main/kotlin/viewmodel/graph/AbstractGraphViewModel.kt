@@ -27,6 +27,7 @@ abstract class AbstractGraphViewModel<V>(_name: String, graph: Graph<V>) : ViewM
         get() = graphModel.isWeighted
     val negativeWeights
         get() = graphModel.negativeWeights
+    var visibleCentrality by mutableStateOf(false)
     val model
         get() = graphModel
     val verticesVM
@@ -41,6 +42,7 @@ abstract class AbstractGraphViewModel<V>(_name: String, graph: Graph<V>) : ViewM
             }
             return result.toList()
         }
+
     var saveType = SaveType.SQLite
     abstract val graphType: GraphType
     var zoom by mutableStateOf(1f)
@@ -77,6 +79,8 @@ abstract class AbstractGraphViewModel<V>(_name: String, graph: Graph<V>) : ViewM
         graphVM = mutableMapOf<V, VertexViewModel<V>>()
         graphVM = keep
     }
+
+    abstract fun drawBetweennessCentrality()
 
     fun drawDijkstra(start: V, end: V) {
         if (this.negativeWeights) return
@@ -126,5 +130,6 @@ abstract class AbstractGraphViewModel<V>(_name: String, graph: Graph<V>) : ViewM
         for (vertexVM in verticesVM) {
             vertexVM.color = DefaultColors.primary
         }
+        visibleCentrality = false
     }
 }

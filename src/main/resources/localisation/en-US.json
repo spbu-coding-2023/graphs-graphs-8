@@ -22,7 +22,7 @@
     },
     {
       "code": "open_edge",
-      "localisation":"Add edge"
+      "localisation": "Add edge"
     },
     {
       "code": "add_edge",
@@ -63,6 +63,10 @@
     {
       "code": "dijkstra",
       "localisation": "Dijkstra Path"
+    },
+    {
+      "code": "betweenness_centrality",
+      "localisation": "Betweenness Centrality"
     },
     {
       "code": "ford_bellman",

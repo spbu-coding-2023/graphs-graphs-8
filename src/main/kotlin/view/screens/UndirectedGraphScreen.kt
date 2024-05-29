@@ -82,10 +82,13 @@ fun UndirectedGraphScreen(
         Spacer(modifier = Modifier.height(10.dp))
 
         // Add vertex Button
-        DefaultShortButton({ isOpenedVertexMenu = !isOpenedVertexMenu }, "add_vertex", when(language) {
-            ("en-US") -> defaultStyle
-            ("ru-RU") -> smallDickSize
-            else -> defaultStyle })
+        DefaultShortButton(
+            { isOpenedVertexMenu = !isOpenedVertexMenu }, "add_vertex", when (language) {
+                ("en-US") -> defaultStyle
+                ("ru-RU") -> smallSize
+                else -> defaultStyle
+            }
+        )
         Spacer(modifier = Modifier.height(10.dp))
 
         // Add edge button
@@ -108,50 +111,75 @@ fun UndirectedGraphScreen(
                 } else {
                     scope.coroutineContext.cancelChildren()
                 }
-            }, "visualize",  defaultStyle,
+            }, "visualize", defaultStyle,
             if (isVisualizationRunning) Color.Red else Color(0xffFFCB32)
         )
         Spacer(modifier = Modifier.height(10.dp))
 
         // Reset colors Button
-        DefaultShortButton({ graphVM.resetColors() }, "reset", when(language) {
-            ("en-US") -> defaultStyle
-            ("ru-RU") -> smallDickSize
-            else -> defaultStyle }, Color.LightGray)
+        DefaultShortButton(
+            { graphVM.resetColors() }, "reset", when (language) {
+                ("en-US") -> defaultStyle
+                ("ru-RU") -> smallSize
+                else -> defaultStyle
+            }, Color.LightGray
+        )
+        Spacer(modifier = Modifier.height(10.dp))
+
+        DefaultShortButton(
+            { graphVM.drawBetweennessCentrality() },
+            "betweenness_centrality",
+            microSize
+        )
         Spacer(modifier = Modifier.height(10.dp))
 
         // Dijkstra Button
-        DefaultShortButton({ isDijkstraMenu = !isDijkstraMenu }, "dijkstra", when(language) {
-            ("en-US") -> defaultStyle
-            ("ru-RU") -> smallDickSize
-            ("cn-CN") -> smallDickSize
-            else -> defaultStyle })
+        DefaultShortButton(
+            { isDijkstraMenu = !isDijkstraMenu }, "dijkstra", when (language) {
+                ("en-US") -> defaultStyle
+                ("ru-RU") -> smallSize
+                ("cn-CN") -> smallSize
+                else -> defaultStyle
+            }
+        )
         Spacer(modifier = Modifier.height(10.dp))
 
         // FordBellman Button
-        DefaultShortButton({ isFordBellmanMenu = !isFordBellmanMenu }, "ford_bellman", when(language) {
-            ("en-US") -> defaultStyle
-            ("ru-RU") -> microDickSize
-            ("cn-CN") -> smallDickSize
-            else -> defaultStyle })
+        DefaultShortButton(
+            { isFordBellmanMenu = !isFordBellmanMenu }, "ford_bellman", when (language) {
+                ("en-US") -> defaultStyle
+                ("ru-RU") -> microSize
+                ("cn-CN") -> smallSize
+                else -> defaultStyle
+            }
+        )
         Spacer(modifier = Modifier.height(10.dp))
 
-        DefaultShortButton(onClick = { graphVM.drawMst() }, "find_mst", when(language) {
-            ("en-US") -> smallDickSize
-            ("ru-RU") -> microDickSize
-            else -> defaultStyle })
+        DefaultShortButton(
+            onClick = { graphVM.drawMst() }, "find_mst", when (language) {
+                ("en-US") -> smallSize
+                ("ru-RU") -> microSize
+                else -> defaultStyle
+            }
+        )
         Spacer(modifier = Modifier.height(10.dp))
 
-        DefaultShortButton(onClick = { graphVM.drawCycles("1") }, "find_cycles", when(language) {
-            ("en-US") -> defaultStyle
-            ("ru-RU") -> mediumDickSize
-            else -> defaultStyle })
+        DefaultShortButton(
+            onClick = { graphVM.drawCycles("1") }, "find_cycles", when (language) {
+                ("en-US") -> defaultStyle
+                ("ru-RU") -> mediumSize
+                else -> defaultStyle
+            }
+        )
         Spacer(modifier = Modifier.height(10.dp))
 
-        DefaultShortButton(onClick = { graphVM.drawBridges() }, "find_bridges", when(language) {
-            ("en-US") -> defaultStyle
-            ("ru-RU") -> smallDickSize
-            else -> defaultStyle })
+        DefaultShortButton(
+            onClick = { graphVM.drawBridges() }, "find_bridges", when (language) {
+                ("en-US") -> defaultStyle
+                ("ru-RU") -> smallSize
+                else -> defaultStyle
+            }
+        )
         Spacer(modifier = Modifier.height(10.dp))
 
         // Add vertex Dialog
