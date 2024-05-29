@@ -13,9 +13,11 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.zIndex
 import view.graph.edge.DirectedEdgeView
 import viewmodel.DirectedGraphViewModel
 import viewmodel.graph.VertexViewModel
+import kotlin.math.min
 
 @Composable
 fun <V> DirectedVertexView(
@@ -51,6 +53,22 @@ fun <V> DirectedVertexView(
                 .wrapContentSize()
                 .offset(y = (-vertexVM.vertexSize / 10).dp),
         )
+    }
+    if (graphVM.visibleCentrality) {
+        Box(modifier = Modifier.zIndex(-3f)) {
+            var centrality = vertexVM.centrality.toString()
+            centrality = centrality.substring(0, min(4, centrality.length))
+            Text(
+                centrality, fontSize = (28 * graphVM.zoom).sp,
+                color = Color.LightGray,
+                modifier = Modifier
+                    .wrapContentSize()
+                    .offset(
+                        x = (vertexVM.offsetX).dp,
+                        y = (vertexVM.offsetY - vertexVM.vertexSize * 0.7 * graphVM.zoom).dp
+                    )
+            )
+        }
     }
 
     for (edgeVM in vertexVM.edges) {

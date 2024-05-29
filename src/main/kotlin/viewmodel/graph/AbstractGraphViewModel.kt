@@ -27,6 +27,7 @@ abstract class AbstractGraphViewModel<V>(_name: String, graph: Graph<V>) : ViewM
     val negativeWeights
         get() = graphModel.negativeWeights
     var isInited = false
+    var visibleCentrality by mutableStateOf(false)
     val model
         get() = graphModel
     val verticesVM
@@ -77,6 +78,8 @@ abstract class AbstractGraphViewModel<V>(_name: String, graph: Graph<V>) : ViewM
         graphVM = keep
     }
 
+    abstract fun drawBetweennessCentrality()
+
     fun drawDijkstra(start: V, end: V) {
         if (this.negativeWeights) return
         val result = Dijkstra(graphModel, graphModel.size).dijkstra(start, end)
@@ -125,5 +128,6 @@ abstract class AbstractGraphViewModel<V>(_name: String, graph: Graph<V>) : ViewM
         for (vertexVM in verticesVM) {
             vertexVM.color = DefaultColors.primary
         }
+        visibleCentrality = false
     }
 }

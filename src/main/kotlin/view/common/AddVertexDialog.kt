@@ -29,7 +29,7 @@ fun AddVertexDialog(
         visible = visible,
         title = "New Vertices",
         onCloseRequest = onClose,
-        state = rememberDialogState(height = 320.dp, width = 570.dp)
+        state = rememberDialogState(height = 420.dp, width = 800.dp)
     ) {
         var verticesNumber by remember { mutableStateOf("1") }
         val textWidth = 130.dp
@@ -83,9 +83,9 @@ fun AddVertexDialog(
                     visible = false
 
                 }
-                DefaultButton(onClick, "add_edge")
+                DefaultButton(onClick, "add_edge", defaultStyle)
                 Spacer(modifier = Modifier.width(30.dp))
-                DefaultButton(onClose, "back", Color.Red)
+                DefaultButton(onClose, "back", defaultStyle, Color.Red)
             }
         }
     }

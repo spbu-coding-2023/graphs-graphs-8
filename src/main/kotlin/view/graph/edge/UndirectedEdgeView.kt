@@ -9,6 +9,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.drawText
 import androidx.compose.ui.text.rememberTextMeasurer
+import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
 import viewmodel.UndirectedGraphViewModel
@@ -29,12 +30,12 @@ fun <V> UndirectedEdgeView(
         val second = edgeVM.toVM
         drawLine(
             start = Offset(
-                first.offsetX + vertexSizeZoomed / 2,
-                first.offsetY + vertexSizeZoomed / 2
+                (first.offsetX + vertexSizeZoomed / 2).dp.toPx(),
+                (first.offsetY + vertexSizeZoomed / 2).dp.toPx()
             ),
             end = Offset(
-                second.offsetX + vertexSizeZoomed / 2,
-                second.offsetY + vertexSizeZoomed / 2
+                (second.offsetX + vertexSizeZoomed / 2).dp.toPx(),
+                (second.offsetY + vertexSizeZoomed / 2).dp.toPx()
             ),
             strokeWidth = 5f * graphVM.zoom,
             color = edgeVM.color,
@@ -43,8 +44,8 @@ fun <V> UndirectedEdgeView(
             drawText(
                 textMeasurer, edgeVM.weight.toString(),
                 topLeft = Offset(
-                    (first.offsetX + vertexSizeZoomed + second.offsetX) / 2 - edgeVM.weight.toString().length * 5.5f * graphVM.zoom,
-                    (first.offsetY + vertexSizeZoomed + second.offsetY) / 2 - 9 * graphVM.zoom
+                    ((first.offsetX + vertexSizeZoomed + second.offsetX) / 2 - edgeVM.weight.toString().length * 5.5f * graphVM.zoom).dp.toPx(),
+                    ((first.offsetY + vertexSizeZoomed + second.offsetY) / 2 - 9 * graphVM.zoom).dp.toPx()
                 ),
                 style = TextStyle(background = Color.White, fontSize = 20.sp)
             )

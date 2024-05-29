@@ -90,9 +90,9 @@ fun DirectedAlgorithmDialog(
                 } else {
                     {}
                 }
-                DefaultButton(onClick, "start")
+                DefaultButton(onClick, "start", defaultStyle)
                 Spacer(modifier = Modifier.width(30.dp))
-                DefaultButton(onCloseRequest, "back", Color.Red)
+                DefaultButton(onCloseRequest, "back", defaultStyle, Color.Red)
             }
         }
     }

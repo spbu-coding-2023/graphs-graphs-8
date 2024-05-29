@@ -3,9 +3,8 @@ package view.screens
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.PointerMatcher
-import androidx.compose.foundation.gestures.*
+import androidx.compose.foundation.gestures.detectDragGestures
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
@@ -21,6 +20,7 @@ import androidx.navigation.NavController
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.cancelChildren
 import kotlinx.coroutines.launch
+import localisation.getLocalisation
 import model.algos.ForceAtlas2
 import view.common.*
 import view.graph.DirectedGraphView
@@ -34,15 +34,15 @@ fun DirectedGraphScreen(
     navController: NavController,
     graphVM: DirectedGraphViewModel<String>
 ) {
-
+    val language = getLocalisation()
     Box(
         modifier = Modifier
             .fillMaxSize()
             .onPointerEvent(PointerEventType.Scroll) {
                 if (it.changes.first().scrollDelta.y > 0) {
-                    graphVM.zoom = (graphVM.zoom - graphVM.zoom / 8).coerceIn(0.01f, 15f)
+                    graphVM.zoom = (graphVM.zoom - graphVM.zoom / 8).coerceIn(0.01f, 15f).dp.toPx()
                 } else {
-                    graphVM.zoom = (graphVM.zoom + graphVM.zoom / 8).coerceIn(0.01f, 15f)
+                    graphVM.zoom = (graphVM.zoom + graphVM.zoom / 8).coerceIn(0.01f, 15f).dp.toPx()
 
                     val awtEvent = it.awtEventOrNull
                     if (awtEvent != null) {
@@ -50,17 +50,17 @@ fun DirectedGraphScreen(
                         val yPosition = awtEvent.y.toFloat()
                         val pointerVector =
                             (Offset(
-                                xPosition,
-                                yPosition
+                                xPosition.dp.toPx(),
+                                yPosition.dp.toPx()
                             ) - (graphVM.canvasSize / 2f)) * (1 / graphVM.zoom)
-                        graphVM.center += pointerVector * 0.15f
+                        graphVM.center += pointerVector * (0.15f.dp.toPx())
                     }
                 }
             }.pointerInput(Unit) {
                 detectDragGestures(
                     matcher = PointerMatcher.Primary
                 ) {
-                    graphVM.center -= it * (1 / graphVM.zoom)
+                    graphVM.center -= it * (1 / graphVM.zoom).dp.toPx()
                 }
             }.pointerHoverIcon(PointerIcon.Hand)
             .onSizeChanged {
@@ -72,8 +72,6 @@ fun DirectedGraphScreen(
     }
 
     Column(modifier = Modifier.zIndex(1f).padding(16.dp).width(300.dp)) {
-        Text("directed")
-
         var isOpenedVertexMenu by remember { mutableStateOf(false) }
         var isOpenedEdgeMenu by remember { mutableStateOf(false) }
         var isOpenedDijkstraMenu by remember { mutableStateOf(false) }
@@ -81,15 +79,21 @@ fun DirectedGraphScreen(
         var isVisualizationRunning by remember { mutableStateOf(false) }
 
         // To MainScreen
-        DefaultShortButton({ navController.popBackStack() }, "home")
+        DefaultShortButton({ navController.popBackStack() }, "home", defaultStyle)
         Spacer(modifier = Modifier.height(10.dp))
 
         // Add vertex Button
-        DefaultShortButton({ isOpenedVertexMenu = !isOpenedVertexMenu }, "add_vertex")
+        DefaultShortButton(
+            { isOpenedVertexMenu = !isOpenedVertexMenu }, "add_vertex", when (language) {
+                ("en-US") -> defaultStyle
+                ("ru-RU") -> smallSize
+                else -> defaultStyle
+            }
+        )
         Spacer(modifier = Modifier.height(10.dp))
 
         // Add edge Button
-        DefaultShortButton({ isOpenedEdgeMenu = !isOpenedEdgeMenu }, "open_edge")
+        DefaultShortButton({ isOpenedEdgeMenu = !isOpenedEdgeMenu }, "open_edge", defaultStyle)
         Spacer(modifier = Modifier.height(10.dp))
 
         // Save button
@@ -108,30 +112,78 @@ fun DirectedGraphScreen(
                 } else {
                     scope.coroutineContext.cancelChildren()
                 }
-            }, "visualize",
+            }, "visualize", defaultStyle,
             if (isVisualizationRunning) Color.Red else Color(0xffFFCB32)
         )
         Spacer(modifier = Modifier.height(10.dp))
 
-        DefaultShortButton({ graphVM.resetColors() }, "reset", Color.LightGray)
+        DefaultShortButton(
+            { graphVM.resetColors() }, "reset", when (language) {
+                ("en-US") -> defaultStyle
+                ("ru-RU") -> smallSize
+                else -> defaultStyle
+            }, Color.LightGray
+        )
         Spacer(modifier = Modifier.height(10.dp))
 
-        DefaultShortButton({ graphVM.drawStrongConnections() }, "find_strong_connections")
+        DefaultShortButton(
+            { graphVM.drawBetweennessCentrality() },
+            "betweenness_centrality",
+            microSize
+        )
         Spacer(modifier = Modifier.height(10.dp))
 
-        DefaultShortButton({ graphVM.chinaWhisperCluster() }, "find_clusters")
+        DefaultShortButton(
+            { graphVM.chinaWhisperCluster() }, "find_clusters", when (language) {
+                ("en-US") -> defaultStyle
+                ("ru-RU") -> smallSize
+                else -> defaultStyle
+            }
+        )
+        Spacer(modifier = Modifier.height(10.dp))
+
+        DefaultShortButton(
+            { graphVM.drawStrongConnections() }, "find_strong_connections", when (language) {
+                ("en-US") -> smallSize
+                ("ru-RU") -> microSize
+                ("cn-CN") -> microSize
+                else -> defaultStyle
+            }
+        )
         Spacer(modifier = Modifier.height(10.dp))
 
         // Dijkstra Button
-        DefaultShortButton({ isOpenedDijkstraMenu = !isOpenedDijkstraMenu }, "dijkstra")
+        DefaultShortButton(
+            { isOpenedDijkstraMenu = !isOpenedDijkstraMenu }, "dijkstra", when (language) {
+                ("en-US") -> defaultStyle
+                ("ru-RU") -> smallSize
+                ("cn-CN") -> smallSize
+                else -> defaultStyle
+            }
+        )
         Spacer(modifier = Modifier.height(10.dp))
 
         // FordBellman Button
-        DefaultShortButton({ isOpenedFordBellmanMenu = !isOpenedFordBellmanMenu }, "ford_bellman")
+        DefaultShortButton(
+            { isOpenedFordBellmanMenu = !isOpenedFordBellmanMenu },
+            "ford_bellman",
+            when (language) {
+                ("en-US") -> defaultStyle
+                ("ru-RU") -> microSize
+                ("cn-CN") -> smallSize
+                else -> defaultStyle
+            }
+        )
         Spacer(modifier = Modifier.height(10.dp))
 
         // Cycles Button
-        DefaultShortButton(onClick = { graphVM.drawCycles("1") }, "find_cycles")
+        DefaultShortButton(
+            onClick = { graphVM.drawCycles("1") }, "find_cycles", when (language) {
+                ("en-US") -> defaultStyle
+                ("ru-RU") -> mediumSize
+                else -> defaultStyle
+            }
+        )
         Spacer(modifier = Modifier.height(10.dp))
 
         // Add vertex Dialog

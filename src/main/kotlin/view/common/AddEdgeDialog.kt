@@ -147,9 +147,9 @@ fun AddEdgeDialog(
                     visible = false
 
                 }
-                DefaultButton(onClick, "add_edge")
+                DefaultButton(onClick, "add_edge", defaultStyle)
                 Spacer(modifier = Modifier.width(30.dp))
-                DefaultButton(onClose, "back", Color.Red)
+                DefaultButton(onClose, "back", defaultStyle, Color.Red)
             }
         }
     }

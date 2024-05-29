@@ -41,7 +41,8 @@ class VertexViewModel<V>(
     val offsetY
         get() = (graphVM.canvasSize.y / 2) + ((y - graphVM.center.y) * graphVM.zoom)
 
-    val vertexSize = 60f
+    var vertexSize by mutableStateOf(60f)
+    var centrality by mutableStateOf(0.0)
     var color by mutableStateOf(DefaultColors.primary)
     val degree
         get() = edges.size

@@ -38,18 +38,17 @@ class MainScreenViewModel(val saveType: String = getSetting(SettingType.BD)) : V
             else -> {
                 graphVM = DirectedGraphViewModel(name)
             }
-
         }
         graphs[name] = graphVM
         graphsNames.add(name)
     }
 
-    fun saveGraph(name: String) {
+    fun saveGraph(name: String, bdName: String = "storage") {
         try {
 
             val graphVM = getGraph(name)
             if (saveType == "sqlite") {
-                graphVM.model.saveSQLite(name, graphVM.graphType.toString(), "storage")
+                graphVM.model.saveSQLite(name, graphVM.graphType.toString(), bdName)
             } else if (saveType == "neo4j") {
                 val rep = Neo4jRepository<String>(
                     getSetting(SettingType.NEO4JURI),
