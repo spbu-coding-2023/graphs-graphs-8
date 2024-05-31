@@ -36,6 +36,7 @@ dependencies {
     // logging
     implementation("io.github.microutils", "kotlin-logging-jvm", "2.0.6")
     implementation("org.slf4j", "slf4j-simple", "1.7.29")
+    implementation(compose.components.resources)
 
     testImplementation(kotlin("test"))
 }
@@ -54,5 +55,27 @@ compose.desktop {
 tasks {
     test {
         useJUnitPlatform()
+    }
+}
+
+tasks.withType<Jar> {
+
+    manifest {
+        attributes["Main-Class"] = "MainKt"
+    }
+
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+    exclude("src/main/resources")
+}
+
+tasks.withType<ProcessResources> {
+    duplicatesStrategy = DuplicatesStrategy.INCLUDE
+}
+
+sourceSets {
+    main {
+        resources {
+            srcDir("src/main/resources")
+        }
     }
 }

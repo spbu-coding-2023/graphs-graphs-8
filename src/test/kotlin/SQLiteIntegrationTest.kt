@@ -1,4 +1,6 @@
 import model.graph.Edge
+import view.screens.settings.SettingType
+import view.screens.settings.makeSetting
 import viewmodel.GraphType
 import viewmodel.MainScreenViewModel
 import java.io.File
@@ -11,6 +13,7 @@ internal class SQLiteIntegrationTest {
 
     @Test
     fun `SQLite integrable test`() {
+        makeSetting(SettingType.BD, "sqlite")
         val mainScreenVM = MainScreenViewModel()
         mainScreenVM.addGraph("someName", GraphType.Directed)
         val graph = mainScreenVM.getGraph("someName")
@@ -26,7 +29,6 @@ internal class SQLiteIntegrationTest {
         mainScreenVM.saveGraph("someName", "test")
 
         mainScreenVM.initGraphList("test")
-        mainScreenVM.saveType = "sqlite"
         mainScreenVM.loadGraph("someName", "test")
         val loadedGraph = mainScreenVM.getGraph("someName")
         val result = Dijkstra(loadedGraph.model, 4).dijkstra("1", "4")

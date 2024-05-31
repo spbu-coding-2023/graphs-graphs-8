@@ -74,7 +74,7 @@ abstract class AbstractGraphViewModel<V>(_name: String, graph: Graph<V>) : ViewM
 
     fun updateView() {
         val keep = graphVM
-        graphVM = mutableMapOf<V, VertexViewModel<V>>()
+        graphVM = mutableMapOf()
         graphVM = keep
     }
 

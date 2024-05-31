@@ -1,13 +1,9 @@
 package io
 
-import model.graph.DirectedGraph
 import org.junit.Test
-import view.graph.UndirectedGraphView
-import view.screens.UndirectedGraphScreen
-import viewmodel.DirectedGraphViewModel
-import viewmodel.UndirectedGraphViewModel
+import viewmodel.graph.DirectedGraphViewModel
+import viewmodel.graph.UndirectedGraphViewModel
 import viewmodel.io.Neo4jRepository
-import kotlin.test.assertContentEquals
 import kotlin.test.assertEquals
 
 internal class Neo4jTest {

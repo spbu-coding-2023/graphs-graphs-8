@@ -1,4 +1,4 @@
-package viewmodel
+package viewmodel.graph
 
 import androidx.compose.ui.graphics.Color
 import model.algos.StrongConnections
@@ -9,9 +9,7 @@ import model.algos.BetweenesCentralityDirected
 import model.graph.DirectedGraph
 import model.graph.Edge
 import mu.KotlinLogging
-import viewmodel.graph.AbstractGraphViewModel
-import viewmodel.graph.EdgeViewModel
-import viewmodel.graph.VertexViewModel
+import viewmodel.GraphType
 import kotlin.random.Random
 
 private val logger = KotlinLogging.logger { }
@@ -99,9 +97,5 @@ class DirectedGraphViewModel<V>(
                 }
             }
         }
-    }
-
-    fun saveSQLite() {
-        graph.saveSQLite(name, "Directed", "storage")
     }
 }

@@ -20,7 +20,7 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.DialogState
 import androidx.compose.ui.window.DialogWindow
 import androidx.navigation.NavController
-import localisation.localisation
+import view.screens.settings.localisation
 import view.common.DefaultColors
 import view.common.bigStyle
 import view.common.bounceClick

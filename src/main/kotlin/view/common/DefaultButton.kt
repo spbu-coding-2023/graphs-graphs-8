@@ -12,7 +12,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
-import localisation.localisation
+import view.screens.settings.localisation
 
 @Composable
 fun DefaultButton(
