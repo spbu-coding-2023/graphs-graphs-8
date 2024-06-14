@@ -1,6 +1,11 @@
 # Graph Visualizer
 ## About
 Application for graph analysis using embedded algorithms
+
+
+https://github.com/odiumuniverse/GraphVisualizer/assets/143432879/9789b03c-3728-4bea-9389-9c795d12b611
+
+
 ## Quick start
 ### Pre-requisites
 - Kotlin 1.9.23
@@ -8,6 +13,7 @@ Application for graph analysis using embedded algorithms
 - JDK 21
 #### Start
 Clone repository
+
 ```
 git clone git@github.com:odiumuniverse/GraphVisualizer.git //SSH
 ```
