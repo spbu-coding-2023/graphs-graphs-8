@@ -19,12 +19,12 @@ import androidx.navigation.NavController
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.cancelChildren
 import kotlinx.coroutines.launch
-import localisation.getLocalisation
+import view.screens.settings.getLocalisation
 import model.algos.ForceAtlas2
 import view.common.*
 import view.graph.UndirectedGraphView
 import viewmodel.MainScreenViewModel
-import viewmodel.UndirectedGraphViewModel
+import viewmodel.graph.UndirectedGraphViewModel
 
 @OptIn(ExperimentalComposeUiApi::class, ExperimentalFoundationApi::class)
 @Composable

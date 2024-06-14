@@ -17,8 +17,8 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.DialogWindow
 import androidx.compose.ui.window.rememberDialogState
-import localisation.getLocalisation
-import localisation.localisation
+import view.screens.settings.getLocalisation
+import view.screens.settings.localisation
 import viewmodel.graph.AbstractGraphViewModel
 
 @Composable
@@ -130,7 +130,7 @@ fun AddEdgeDialog(
                     modifier = Modifier.align(Alignment.CenterVertically),
                     checked = notWeighted,
                     onCheckedChange = {
-                        notWeighted = it;
+                        notWeighted = it
                         weight = if (notWeighted) "1" else ""
                     }
                 )

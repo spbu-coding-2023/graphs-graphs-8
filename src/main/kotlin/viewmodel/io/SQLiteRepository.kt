@@ -1,10 +1,10 @@
 package viewmodel.io
 
-import viewmodel.DirectedGraphViewModel
 import viewmodel.GraphType
 import viewmodel.MainScreenViewModel
-import viewmodel.UndirectedGraphViewModel
 import viewmodel.graph.AbstractGraphViewModel
+import viewmodel.graph.DirectedGraphViewModel
+import viewmodel.graph.UndirectedGraphViewModel
 import java.sql.DriverManager
 import java.sql.SQLException
 
@@ -19,7 +19,6 @@ object SQLiteRepository {
         connection.createStatement().also { stmt ->
             try {
                 stmt.execute(createIndex)
-                println("Tables created or already exists")
             } catch (ex: Exception) {
                 println("Cannot create table in database")
                 println(ex)
