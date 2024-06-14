@@ -5,7 +5,6 @@ Application for graph analysis using embedded algorithms
 ## Quick start
 ### Pre-requisites
 - Kotlin 1.9.23
-- Gradle 8.5
 - JDK 21
 #### Start
 Clone repository
