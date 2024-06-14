@@ -7,19 +7,7 @@ Application for graph analysis using embedded algorithms
 - Kotlin 1.9.23
 - JDK 21
 #### Start
-Clone repository
-
-```
-git clone git@github.com:odiumuniverse/GraphVisualizer.git //SSH
-```
-```
-git clone https://github.com/odiumuniverse/GraphVisualizer.git //HTTPS
-```
-Go to the application folder
-```
-cd GraphVisualizer
-```
-Now, run it by
+Run it by
 ```
 ./gradlew run
 ```
