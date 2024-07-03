@@ -1,9 +1,12 @@
 # Graph Visualizer
 ## About
-Application for graph analysis using embedded algorithms
+Application for creating graphs and visualisation graph algorithms.
+
+[dsfds.webm](https://github.com/spbu-coding-2023/graphs-graphs-8/assets/135718038/5fbf7226-122b-412e-b1c4-bb05ad998f0e)
+
 
 ## Quick start
-### Pre-requisites
+### Requirements
 - Kotlin 1.9.23
 - JDK 21
 #### Start
@@ -11,22 +14,22 @@ Run it by
 ```
 ./gradlew run
 ```
-### Import and Exports
-You can import and export graphs using SQLite and Neo4j
-- When using Neo4j you have to enter your data (we do not use your data)
-- SQLite is a local database, you don't need to do anything, just select it in the application settings
+### Saving graphs
+You can save graphs graphs using SQLite and Neo4j
+- When using Neo4j you have to enter uri, username and password to establish a connection.
+- SQLite is a local database, you don't need to do anything, just select it in the application settings.
 
 ## Features
 #### You can use basic algorithms
-- Searching for clusters
-- Betweenness centrality
-- Graph layout
+- Searching for clusters.
+- Betweenness centrality.
+- Graph force-directed drawing algorithm.
 #### There are also other algorithms
-- Finding bridges
-- Finding cycles
-- Finding the shortest path using Ford-Bellman and Dijkstra algorithms
-- Finding strong connectivity components
-- Constructing a minimal island tree
+- Find bridges.
+- Find cycles.
+- Find the shortest path using Ford-Bellman and Dijkstra algorithms.
+- Find strongly connected components.
+- Constructing a minimal spanning tree.
 
 ## Licence
 The app is distributed under [Unlicence](https://unlicense.org/), meaning we are putting this project into the public domain
@@ -36,4 +39,3 @@ The app is distributed under [Unlicence](https://unlicense.org/), meaning we are
 - [Aleksey Dmitrievtsev](https://github.com/admitrievtsev)
 - [Gleb Nasretdinov](https://github.com/Ycyken)
 - [Azamat Ishbaev](https://github.com/odiumuniverse)
-
