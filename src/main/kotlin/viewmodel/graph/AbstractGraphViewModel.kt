@@ -112,7 +112,7 @@ abstract class AbstractGraphViewModel<V>(_name: String, graph: Graph<V>) : ViewM
         return graphVM[vertex]?.edges?.toList() ?: emptyList()
     }
 
-    fun addVertex(vertex: V, centerCoordinates: Boolean = false) {
+    fun addVertex(vertex: V, centerCoordinates: Boolean = true) {
         size += 1
         graphVM.putIfAbsent(
             vertex,

@@ -14,7 +14,7 @@ class VertexViewModel<V>(
     _vertex: V,
     _edges: MutableList<EdgeViewModel<V>> = mutableListOf(),
     graphVM: AbstractGraphViewModel<V>,
-    centerCoordinates: Boolean = false
+    centerCoordinates: Boolean = true
 ) :
     ViewModel() {
     val vertex: V = _vertex
