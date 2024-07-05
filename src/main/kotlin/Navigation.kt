@@ -5,9 +5,10 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import view.screens.*
-import viewmodel.DirectedGraphViewModel
+import view.screens.settings.SettingsScreen
 import viewmodel.MainScreenViewModel
-import viewmodel.UndirectedGraphViewModel
+import viewmodel.graph.DirectedGraphViewModel
+import viewmodel.graph.UndirectedGraphViewModel
 
 @Composable
 fun Navigation() {

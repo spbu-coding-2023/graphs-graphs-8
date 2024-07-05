@@ -2,8 +2,6 @@ package algos
 
 import model.algos.FindCycle
 import model.graph.DirectedGraph
-import model.graph.UndirectedGraph
-import model.graph.Edge
 import kotlin.test.Test
 import kotlin.test.assertContentEquals
 import kotlin.test.assertNotNull

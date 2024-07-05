@@ -15,7 +15,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
 import view.graph.edge.DirectedEdgeView
-import viewmodel.DirectedGraphViewModel
+import viewmodel.graph.DirectedGraphViewModel
 import viewmodel.graph.VertexViewModel
 import kotlin.math.min
 

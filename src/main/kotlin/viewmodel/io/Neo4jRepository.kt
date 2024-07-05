@@ -5,11 +5,11 @@ import mu.KotlinLogging
 import org.neo4j.driver.AuthTokens
 import org.neo4j.driver.GraphDatabase
 import org.neo4j.driver.TransactionContext
-import viewmodel.DirectedGraphViewModel
 import viewmodel.GraphType
 import viewmodel.MainScreenViewModel
-import viewmodel.UndirectedGraphViewModel
 import viewmodel.graph.AbstractGraphViewModel
+import viewmodel.graph.DirectedGraphViewModel
+import viewmodel.graph.UndirectedGraphViewModel
 import java.io.Closeable
 
 // penguin-carlo-ceramic-invite-wheel-2163

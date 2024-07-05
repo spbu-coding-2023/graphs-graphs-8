@@ -6,9 +6,11 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import mu.KotlinLogging
-import view.screens.SettingType
-import view.screens.getSetting
+import view.screens.settings.SettingType
+import view.screens.settings.getSetting
 import viewmodel.graph.AbstractGraphViewModel
+import viewmodel.graph.DirectedGraphViewModel
+import viewmodel.graph.UndirectedGraphViewModel
 import viewmodel.io.Neo4jRepository
 import viewmodel.io.SQLiteRepository
 

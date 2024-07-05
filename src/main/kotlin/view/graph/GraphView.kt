@@ -3,8 +3,8 @@ package view.graph
 import androidx.compose.runtime.Composable
 import view.graph.vertex.DirectedVertexView
 import view.graph.vertex.UndirectedVertexView
-import viewmodel.DirectedGraphViewModel
-import viewmodel.UndirectedGraphViewModel
+import viewmodel.graph.DirectedGraphViewModel
+import viewmodel.graph.UndirectedGraphViewModel
 
 @Composable
 fun <V> UndirectedGraphView(graphVM: UndirectedGraphViewModel<V>) {

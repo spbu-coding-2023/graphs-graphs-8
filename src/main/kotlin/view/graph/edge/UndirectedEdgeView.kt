@@ -12,8 +12,8 @@ import androidx.compose.ui.text.rememberTextMeasurer
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
-import viewmodel.UndirectedGraphViewModel
 import viewmodel.graph.EdgeViewModel
+import viewmodel.graph.UndirectedGraphViewModel
 
 @Composable
 fun <V> UndirectedEdgeView(
