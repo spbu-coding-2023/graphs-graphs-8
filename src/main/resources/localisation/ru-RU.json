@@ -1,0 +1,120 @@
+{
+  "transList": [
+    {
+      "code": "settings",
+      "localisation": "Настройки"
+    },
+    {
+      "code": "back",
+      "localisation": "Назад"
+    },
+    {
+      "code": "enter_graph_name",
+      "localisation": "Введите название графа"
+    },
+    {
+      "code": "home",
+      "localisation": "На главную"
+    },
+    {
+      "code": "saving",
+      "localisation": "Сохранение"
+    },
+    {
+      "code": "neo4j_data",
+      "localisation": "Данные для Neo4j"
+    },
+    {
+      "code": "language",
+      "localisation": "Язык"
+    },
+    {
+      "code": "add_vertex",
+      "localisation": "Добавить вершину"
+    },
+    {
+      "code": "add_edge",
+      "localisation": "Добавить ребро"
+    },
+    {
+      "code": "add",
+      "localisation": "Добавить"
+    },
+    {
+      "code": "write_name",
+      "localisation": "Введите название"
+    },
+    {
+      "code": "enter_new_graph_name",
+      "localisation": "Создание нового графа"
+    },
+    {
+      "code": "betweenness_centrality",
+      "localisation": "Ключевые вершины"
+    },
+    {
+      "code": "save",
+      "localisation": "Сохранить"
+    },
+    {
+      "code": "visualize",
+      "localisation": "Раскладка"
+    },
+    {
+      "code": "reset",
+      "localisation": "Сбросить цвета"
+    },
+    {
+      "code": "find_strong_connections",
+      "localisation": "Компоненты Сильной Связности"
+    },
+    {
+      "code": "find_clusters",
+      "localisation": "Найти Кластеры"
+    },
+    {
+      "code": "dijkstra",
+      "localisation": "Алгоритм Дейкстры"
+    },
+    {
+      "code": "ford_bellman",
+      "localisation": "Алгоритм Форда Беллмана"
+    },
+    {
+      "code": "find_cycles",
+      "localisation": "Найти циклы"
+    },
+    {
+      "code": "find_mst",
+      "localisation": "Минимальное остовное дерево"
+    },
+    {
+      "code": "find_bridges",
+      "localisation": "Найти мосты"
+    },
+    {
+      "code": "center_coordinates",
+      "localisation": "Центрировать координаты"
+    },
+    {
+      "code": "number",
+      "localisation": "Количество"
+    },
+    {
+      "code": "unweighted",
+      "localisation": "Невзвешенный"
+    },
+    {
+      "code": "start",
+      "localisation": "Начало"
+    },
+    {
+      "code": "end",
+      "localisation": "Конец"
+    },
+    {
+      "code": "weight",
+      "localisation": "вес"
+    }
+  ]
+}
