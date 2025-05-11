@@ -7,8 +7,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.sp
-import view.screens.SettingType
-import view.screens.getSetting
+import view.screens.settings.SettingType
+import view.screens.settings.getSetting
 
 val defaultStyle = TextStyle(fontSize = 28.sp)
 val microStyle = TextStyle(fontSize = 18.sp, textAlign = TextAlign.Center)

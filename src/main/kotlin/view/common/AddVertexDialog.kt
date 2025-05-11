@@ -14,8 +14,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.DialogWindow
 import androidx.compose.ui.window.rememberDialogState
-import localisation.getLocalisation
-import localisation.localisation
+import view.screens.settings.localisation
 import viewmodel.graph.AbstractGraphViewModel
 
 @Composable
@@ -33,7 +32,6 @@ fun AddVertexDialog(
         state = rememberDialogState(height = 340.dp, width = 560.dp)
     ) {
         var verticesNumber by remember { mutableStateOf("1") }
-        val language = getLocalisation()
         Column(modifier = Modifier.padding(30.dp, 24.dp)) {
             Row(modifier = Modifier.fillMaxWidth()) {
                 Text(

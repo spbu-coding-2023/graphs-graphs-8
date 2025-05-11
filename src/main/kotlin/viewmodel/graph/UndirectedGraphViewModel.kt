@@ -1,18 +1,13 @@
-package viewmodel
+package viewmodel.graph
 
 import androidx.compose.ui.graphics.Color
-import model.algos.BetweenesCentralityDirected
 import model.algos.BetweenesCentralityUndirected
 import model.algos.Prim
 import model.algos.findBridges
-import model.graph.DirectedGraph
 import model.graph.Edge
 import model.graph.UndirectedGraph
 import mu.KotlinLogging
 import viewmodel.GraphType
-import viewmodel.graph.AbstractGraphViewModel
-import viewmodel.graph.EdgeViewModel
-import viewmodel.graph.VertexViewModel
 
 private val logger = KotlinLogging.logger { }
 
@@ -76,9 +71,5 @@ class UndirectedGraphViewModel<V>(
     fun drawBridges() {
         val result = findBridges(graphModel as UndirectedGraph<V>)
         drawEdges(result, Color.Yellow)
-    }
-
-    fun saveSQLite() {
-        graph.saveSQLite(name, "Undirected", "storage")
     }
 }

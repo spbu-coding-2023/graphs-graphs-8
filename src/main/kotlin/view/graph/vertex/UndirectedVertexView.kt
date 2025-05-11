@@ -15,7 +15,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
 import view.graph.edge.UndirectedEdgeView
-import viewmodel.UndirectedGraphViewModel
+import viewmodel.graph.UndirectedGraphViewModel
 import viewmodel.graph.VertexViewModel
 import kotlin.math.min
 

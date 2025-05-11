@@ -82,7 +82,6 @@ abstract class Graph<V>() {
             try {
                 stmt.execute(createIndex)
                 stmt.execute(create)
-                println("Tables created or already exists")
             } catch (ex: Exception) {
                 println("Cannot create table in database")
                 println(ex)
@@ -94,7 +93,7 @@ abstract class Graph<V>() {
             try {
                 stmt.execute(insertIndex)
             } catch (ex: Exception) {
-                println("Unsuccessful")
+                println("Unsuccessful insert vertices in sqlite graph table")
                 println(ex)
             } finally {
                 stmt.close()

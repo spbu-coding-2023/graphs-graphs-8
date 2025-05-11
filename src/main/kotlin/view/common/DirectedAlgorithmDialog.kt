@@ -13,9 +13,11 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.DialogWindow
 import androidx.compose.ui.window.rememberDialogState
-import localisation.localisation
+import view.screens.settings.localisation
+import mu.KotlinLogging
 import viewmodel.graph.AbstractGraphViewModel
 
+private val logger = KotlinLogging.logger { }
 
 @Composable
 fun DirectedAlgorithmDialog(
@@ -83,12 +85,13 @@ fun DirectedAlgorithmDialog(
             Row {
                 val dijkstra = { graphVM.drawDijkstra(source, destination) }
                 val fordBellman = { graphVM.drawFordBellman(source, destination) }
-                val onClick = if (action == "Dijkstra") {
-                    dijkstra
-                } else if (action == "FordBellman") {
-                    fordBellman
-                } else {
-                    {}
+                val onClick = when (action) {
+                    "Dijkstra" -> dijkstra
+                    "FordBellman" -> fordBellman
+                    else -> run {
+                        logger.warn("Unrecognised action: $action in DirectedAlgorithmDialog")
+                        fun() = Unit
+                    }
                 }
                 DefaultButton(onClick, "start", defaultStyle)
                 Spacer(modifier = Modifier.width(30.dp))

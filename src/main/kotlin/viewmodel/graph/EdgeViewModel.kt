@@ -15,7 +15,7 @@ class EdgeViewModel<V>(
     ViewModel() {
     val fromVM = vertexFromVM
     val toVM = vertexToVM
-    
+
     val weight by mutableStateOf(edge.weight)
     val from by mutableStateOf(edge.from)
     val to by mutableStateOf(edge.to)
